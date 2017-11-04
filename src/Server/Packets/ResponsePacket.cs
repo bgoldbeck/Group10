@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-class ManagerTerminal : OperatorTerminal
+namespace ChocAnServer.Packets
 {
+    class ResponsePacket : BasePacket
+    {
+    }
 }
-

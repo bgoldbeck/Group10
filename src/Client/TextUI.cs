@@ -12,28 +12,43 @@ class TextUI
     private int nCols;
     private int nRows;
     private int cursorLinePosition;
-    private string[] rows;
+    private string[] outputBuffer;
 
     public TextUI()
     {
-        nCols = 80;
-        nRows = 20;
-        cursorLinePosition = 1;
-        rows = new string[nRows];
+        this.nCols = 80;
+        this.nRows = 20;
+        this.outputBuffer = new string[nRows];
         ClearBuffer();
     }
-
-    public TextUI(int row, int col)
+    /// <summary>
+    /// This is my summary for the public constructor.
+    /// </summary>
+    /// <param name="nRows"></param>
+    /// <param name="nCols"></param>
+    public TextUI(int nRows, int nCols)
     {
-        nCols = col;
-        nRows = row;
-        cursorLinePosition = 1;
-        rows = new string[nRows];
+        this.nCols = nCols;
+        this.nRows = nRows;
+        this.outputBuffer = new string[nRows];
         ClearBuffer();
     }
 
     ~TextUI()
     {
+    }
+    /// <summary>
+    /// Returns the index of the currentCursorPosition.
+    /// </summary>
+    /// <returns>cursorLinePosition</returns>
+    public int CurrentCursorPosition()
+    {
+        return cursorLinePosition;
+    }
+
+    public int MaximumCursorPosition()
+    {
+        return nRows;
     }
 
     public void ClearBuffer()
@@ -41,26 +56,26 @@ class TextUI
         // Reset cursor position to the top.
         cursorLinePosition = 1;
 
-        rows[0] = "";
+        outputBuffer[0] = "";
         for (int i = 0; i < nCols; ++i)
         {
-            rows[0] += "#";
+            outputBuffer[0] += "#";
         }
 
         for (int i = 1; i < nRows - 1; ++i)
         {
-            rows[i] = "#";
+            outputBuffer[i] = "#";
             for (int j = 1; j < nCols - 1; ++j)
             {
-                rows[i] += " ";
+                outputBuffer[i] += " ";
             }
-            rows[i] += "#";
+            outputBuffer[i] += "#";
         }
 
-        rows[nRows - 1] = "";
+        outputBuffer[nRows - 1] = "";
         for (int i = 0; i < nCols; ++i)
         {
-            rows[nRows - 1] += "#";
+            outputBuffer[nRows - 1] += "#";
         }
         return;
     }
@@ -71,7 +86,7 @@ class TextUI
         for (int i = 0; i < nRows; ++i)
         {
             //Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(rows[i]);
+            Console.WriteLine(outputBuffer[i]);
         }
 
         return;
@@ -100,7 +115,7 @@ class TextUI
                 output = output.Substring(0, nCols - 2);
         }
 
-        rows[cursorLinePosition] = "#";
+        outputBuffer[cursorLinePosition] = "#";
 
         // Any justification must be accounted for after the string is output.
         int j = 0;
@@ -112,7 +127,7 @@ class TextUI
                 int r = (int)(output.Length * .5);
                 for (int i = 0; i < (q - r); ++i)
                 {
-                    rows[cursorLinePosition] += " ";
+                    outputBuffer[cursorLinePosition] += " ";
                 }
                 // We justified our text.
                 j = q - r;
@@ -125,14 +140,14 @@ class TextUI
                 break;
         }
 
-        rows[cursorLinePosition] += output;
+        outputBuffer[cursorLinePosition] += output;
    
         for (int i = 0; i < (nCols - output.Length - 2 - j); ++i)
         {
-            rows[cursorLinePosition] += " ";
+            outputBuffer[cursorLinePosition] += " ";
         }
 
-        rows[cursorLinePosition++] += "#";
+        outputBuffer[cursorLinePosition++] += "#";
             
         if (cursorLinePosition >= nRows)
         {
