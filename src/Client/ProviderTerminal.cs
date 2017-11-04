@@ -33,40 +33,16 @@ namespace HealthcareClientSystem
             {
                 // Exception.
             }
-            tui.WriteLine("Manager Terminal [Menu]", TextUI.TextUIJustify.CENTER);
+            tui.WriteLine("Provider Terminal [Menu]", TextUI.TextUIJustify.CENTER);
             //tui.WriteLine("        " + (frame++).ToString());
             tui.WriteLine("");
             tui.WriteLine("");
             tui.WriteLine("");
             tui.WriteLine("    MENU OPTIONS ");
-            tui.WriteLine("\ta) Add Member");
-            tui.WriteLine("\td) Deactivate Member");
-            tui.WriteLine("\ts) Update Member");
-
-            tui.WriteLine(" ");
-
-            tui.WriteLine("\tu) Add Provider");
-            tui.WriteLine("\ti) Deactive Provider");
-            tui.WriteLine("\to) Update Provider");
-
-            tui.WriteLine(" ");
-
-            tui.WriteLine("\tq) Add Service Code");
-            tui.WriteLine("\tw) Update Service Code");
-            tui.WriteLine("\te) Remove Service Code");
-
-            tui.WriteLine(" ");
-
-            tui.WriteLine("\tz) Custom Member Report");
-            tui.WriteLine("\tx) Custom Provider Report");
-
-            tui.WriteLine(" ");
-
-            tui.WriteLine("\tf) Add Invoice");
-
-            tui.WriteLine(" ");
-
-            tui.WriteLine("\tm) Execute Main Accounting Procedure");
+            tui.WriteLine("\t1) View Provider Directory");
+           
+            
+          
 
             tui.WriteLine(" ");
             tui.WriteLine("\tl) Logout");
