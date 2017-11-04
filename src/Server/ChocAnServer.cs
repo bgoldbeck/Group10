@@ -8,8 +8,8 @@ using ChocAnServer.Packets;
 using SQLLiteDatabaseCenter;
 
 namespace ChocAnServer
-{ 
-    class ChocAnServer
+{
+    public class ChocAnServer
     {
         private DatabaseCenter database;
 

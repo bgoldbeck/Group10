@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HealthcareClientSystem
 {
-    class ManagerTerminal : OperatorTerminal
+    public class ManagerTerminal : OperatorTerminal
     {
 
         public ManagerTerminal()

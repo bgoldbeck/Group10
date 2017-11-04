@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChocAnServer.Packets
 {
-    class InvoicePacket : BasePacket
+    public class InvoicePacket : BasePacket
     {
     }
 }

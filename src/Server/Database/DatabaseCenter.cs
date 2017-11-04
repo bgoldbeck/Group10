@@ -9,8 +9,8 @@ using System.Data.SQLite;
 using System.IO;
 
 namespace SQLLiteDatabaseCenter
-{ 
-    class DatabaseCenter
+{
+    public class DatabaseCenter
     {
         private string filepath;
         private SQLiteConnection dbConnection;

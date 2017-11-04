@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChocAnServer.Packets
 {
-    class DateRangePacket : BasePacket
+    public class DateRangePacket : BasePacket
     {
     }
 }
