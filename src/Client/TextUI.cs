@@ -16,11 +16,11 @@ namespace HealthcareClientSystem
         private int cursorLinePosition;
         private string[] outputBuffer;
 
+
+
         public TextUI()
         {
-            this.nCols = 80;
-            this.nRows = 20;
-            this.outputBuffer = new string[nRows];
+            Resize(80, 25);
             ClearBuffer();
         }
         /// <summary>
@@ -30,9 +30,7 @@ namespace HealthcareClientSystem
         /// <param name="nCols"></param>
         public TextUI(int nRows, int nCols)
         {
-            this.nCols = nCols;
-            this.nRows = nRows;
-            this.outputBuffer = new string[nRows];
+            Resize(nRows, nCols);
             ClearBuffer();
         }
 
@@ -50,7 +48,16 @@ namespace HealthcareClientSystem
 
         public int MaximumCursorPosition()
         {
-            return nRows;
+            return nRows - 1;
+        }
+
+        public void Resize(int nRows, int nCols)
+        {
+            this.nCols = nCols;
+            this.nRows = nRows;
+            this.outputBuffer = new string[nRows];
+            ClearBuffer();
+            return;
         }
 
         public void ClearBuffer()
@@ -58,27 +65,23 @@ namespace HealthcareClientSystem
             // Reset cursor position to the top.
             cursorLinePosition = 1;
 
-            outputBuffer[0] = "";
-            for (int i = 0; i < nCols; ++i)
-            {
-                outputBuffer[0] += "#";
+            for (int i = 0; i < nRows; ++i)
+            { 
+                outputBuffer[i] = " ";
             }
 
-            for (int i = 1; i < nRows - 1; ++i)
-            {
-                outputBuffer[i] = "#";
-                for (int j = 1; j < nCols - 1; ++j)
-                {
-                    outputBuffer[i] += " ";
-                }
-                outputBuffer[i] += "#";
-            }
+            // Fill the entire top row with #'s
+            FillRow(0, '#');
 
-            outputBuffer[nRows - 1] = "";
-            for (int i = 0; i < nCols; ++i)
-            {
-                outputBuffer[nRows - 1] += "#";
-            }
+            // Fill the entire bottom row with #'s
+            FillRow(nRows - 1, '#');
+
+            // Fill the left side of the UI with #'s
+            FillColumn(0, '#');
+
+            // Fill the right side of the UI with #'s
+            FillColumn(nCols - 1, '#');
+            
             return;
         }
 
@@ -94,9 +97,9 @@ namespace HealthcareClientSystem
             return;
         }
 
-        public void WriteLine(string output, TextUIJustify justify = TextUIJustify.LEFT)
+        public int WriteLine(string output, TextUIJustify justify = TextUIJustify.LEFT)
         {
-            if (output.Length < 1) return;
+            if (output.Length < 1) return CurrentCursorPosition();
 
             output = output.Replace("\t", "    ");
 
@@ -108,7 +111,7 @@ namespace HealthcareClientSystem
                 {
                     WriteLine(sp, justify);
                 }
-                return;
+                return CurrentCursorPosition();
             }
 
 
@@ -155,7 +158,7 @@ namespace HealthcareClientSystem
             {
                 // Overflow
             }
-            return;
+            return CurrentCursorPosition();
         }
 
         public void WriteList(string[] s, int groupSize = 10)
@@ -189,5 +192,49 @@ namespace HealthcareClientSystem
             Console.ReadLine();
         }
 
+        private void FillRow(int row, char ch)
+        {
+            if (row < 0 || row > nRows)
+            {
+                // Exception.
+            }
+            for (int i = 0; i < this.nCols; ++i)
+            { 
+                outputBuffer[row] += ch;
+            }
+            return;
+        }
+
+        private void FillColumn(int col, char ch)
+        {
+            if (col < 0 || col > nCols)
+            {
+                // Exception.
+            }
+
+            for (int i = 0; i < this.nRows; ++i)
+            {
+                string row = outputBuffer[i];
+                if (row == null)
+                {
+                    row = " ";
+                }
+
+                StringBuilder stringBuilder = new StringBuilder(row);
+
+                if (row.Length < col)
+                {
+                    stringBuilder.Length = col + 1;
+                }
+
+                stringBuilder[col] = '#';
+
+                row = stringBuilder.ToString();
+                outputBuffer[i] = row;
+                //row[col] = ch;
+
+            }
+            return;
+        }
     }
 }

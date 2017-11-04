@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthcareClientSystem
 {
-    class OperatorTerminal
+    public class OperatorTerminal
     {
         protected TextUI tui;
 
