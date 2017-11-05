@@ -12,15 +12,25 @@ namespace SQLLiteDatabaseCenter
 {
     public class DatabaseCenter
     {
+        private static readonly DatabaseCenter instance = new DatabaseCenter();
+        
         private string filepath;
         private SQLiteConnection dbConnection;
         private SQLiteCommand dbCommand;
 
-        public DatabaseCenter()
+        private DatabaseCenter()
         {
             filepath = "";
             dbConnection = null;
             dbCommand = null;
+        }
+
+        public static DatabaseCenter Singelton
+        {
+            get
+            {  
+                return instance;
+            }
         }
 
         public bool Initialize(string filepath = "database.db")

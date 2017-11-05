@@ -11,11 +11,11 @@ namespace ChocAnServer
 {
     public class ChocAnServer
     {
-        private DatabaseCenter database;
+        DatabaseCenter database;
 
         public ChocAnServer()
         {
-            database = new DatabaseCenter();
+            database = DatabaseCenter.Singelton;
             database.Initialize();
         }
 
