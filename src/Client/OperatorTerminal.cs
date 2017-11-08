@@ -10,7 +10,7 @@ namespace HealthcareClientSystem
     {
         protected TextUI tui;
 
-        protected enum TerminalState { LOGIN, MENU, VIEW_PROVIDER_DIRECTORY, COUNT };
+        protected enum TerminalState { LOGIN, MENU, VIEW_PROVIDER_DIRECTORY, ADD_MEMBER, COUNT };
 
         protected TerminalState currentState;
 

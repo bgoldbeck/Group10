@@ -12,12 +12,29 @@ namespace HealthcareClientSystem
 
         public ManagerTerminal()
         {
-            updateDelegates[(int)TerminalState.VIEW_PROVIDER_DIRECTORY] = ViewProviderDirectoryUpdate;
+            updateDelegates[(int)TerminalState.ADD_MEMBER] = AddMemberUpdate;
         }
 
 
-        protected bool ViewProviderDirectoryUpdate()
+        protected bool AddMemberUpdate()
         {
+
+            // FOr fun.
+            StringBuilder spaces = new StringBuilder("");
+            for (int i = -80; i < 80; ++i)
+            {
+                if (i < 0)
+                {
+                    spaces.Append(' ');
+                }
+                else
+                    spaces.Remove(0, 1);
+
+                tui.WriteLine(spaces + "Hello World");
+                tui.Render();
+                System.Threading.Thread.Sleep(10);
+                tui.ClearBuffer();
+            }
 
             string[] s = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m" };
             int groupSize = 5;
@@ -79,7 +96,8 @@ namespace HealthcareClientSystem
             // Depending on user input, we change the state to match.
             switch (userInput)
             {
-                case "1":
+                case "a":
+                    currentState = TerminalState.ADD_MEMBER;
                     break;
                 case "2":
                     break;
