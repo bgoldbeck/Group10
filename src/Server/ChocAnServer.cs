@@ -23,39 +23,90 @@ namespace ChocAnServer
         {
         }
 
-        ResponsePacket ProcessAction(BasePacket basePacket)
+        public ResponsePacket ProcessAction(BasePacket basePacket)
         {
+            if (basePacket == null)
+            {
+                // Throw argument exception.
+            }
+
             ResponsePacket responsePacket = null;
+
             switch (basePacket.Action())
             {
-                case "AddMember":
+                case "ADD_MEMBER":
                     if (basePacket is MemberPacket)
                     { 
+                        responsePacket = RequestMemberStatus((MemberPacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected MemberPacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "MEMBER_STATUS":
+                    if (basePacket is MemberPacket)
+                    {
                         responsePacket = RequestAddMember((MemberPacket)basePacket);
                     }
                     else
                     {
-                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type ",
-                            basePacket.Action()), "basePacket");
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected MemberPacket", basePacket.Action()), "basePacket");
                     }
                     break;
                 default:
                     break;
-
             }
 
             return responsePacket;
         }
 
-        ResponsePacket RequestAddMember(MemberPacket packet)
+        private ResponsePacket RequestAddMember(MemberPacket packet)
         {
+            if (packet == null)
+            {
+                // Exception.
+            }
             ResponsePacket responsePacket = null;
             
+            // These values must be filled later with packet data.
             database.ExecuteQuery("INSERT INTO members(memberID, memberName, memberAddress, memberCity, " +
                 "memberState, memberZip, memberValid, memberEmail, memberStatus) VALUES( " +
-                "123456789, 'Brandon Goldbeck', '1055 NW Gravel Road', 'Hillsboro', 'OR', " +
-                "'97124', 1, 'bg@psu.edu', 'ACTIVE'" +
+                "111111111, 'Jordan Green', '666 Devil's Way', 'PDX Close Enough', 'OR', " +
+                "'95555', 1, 'JG@PDX.PSU.EDU', 'ACTIVE'" +
                 ");");
+            // We dont care what the database returns in this case.
+            
+            return responsePacket;
+        }
+
+        private ResponsePacket RequestMemberStatus(MemberPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket();
+
+            // These values must be filled later with packet data
+            object[][] data = database.ExecuteQuery("SELECT memberStatus FROM members WHERE " +
+             "memberID=123456789" +
+             ";");
+
+            // This is just an example of looping through the data that gets returned.
+            if (data != null)
+            { 
+                for (int i = 0; i < data.Length; i++)
+                {
+                    for (int j = 0; j < data[i].Length; j++)
+                    {
+                        Console.WriteLine(data[i][j].ToString());
+                    }
+                }
+            }
             return responsePacket;
         }
 
