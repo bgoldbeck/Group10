@@ -15,7 +15,7 @@ namespace ChocAnServer.Packets
 
         /// <summary>
         /// This is the default constructor for the base packet class to set the
-        /// fields in the class to a default value. It's also private so only this
+        /// fields in the class to a default value. It's also protected so only this
         /// class has access to invoke this constructor.
         /// </summary>
         protected BasePacket()
@@ -40,7 +40,7 @@ namespace ChocAnServer.Packets
         /// <returns></returns>
         public string Action()
         {
-            return action;
+            return this.action;
         }
         /// <summary>
         /// This method returns the string stored in the session ID data member.
@@ -48,7 +48,7 @@ namespace ChocAnServer.Packets
         /// <returns></returns>
         public string SessionID()
         {
-            return sessionID;
+            return this.sessionID;
         }
     }
 }
