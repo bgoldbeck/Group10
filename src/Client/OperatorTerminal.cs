@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ChocAnServer;
+
 namespace HealthcareClientSystem
 {
     public class OperatorTerminal
@@ -20,6 +22,8 @@ namespace HealthcareClientSystem
 
         protected int columnSize;
         protected int rowSize;
+
+        protected ChocAnServer.ChocAnServer server;
 
         public OperatorTerminal()
         {
@@ -38,6 +42,8 @@ namespace HealthcareClientSystem
             // Set each updateDelegate.
             updateDelegates[(int)TerminalState.LOGIN] = LoginUpdate;
             updateDelegates[(int)TerminalState.MENU] = MenuUpdate;
+
+            server = new ChocAnServer.ChocAnServer();
 
         }
 
