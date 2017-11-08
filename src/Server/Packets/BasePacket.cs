@@ -31,8 +31,9 @@ namespace ChocAnServer.Packets
         /// <param name="newSessionID"></param>
         public BasePacket(string newAction, string newSessionID)
         {
-            this.action = newAction;
-            this.sessionID = newSessionID;
+            this.action = newAction ?? throw new NullReferenceException("Action");
+            this.sessionID = newSessionID ?? throw new NullReferenceException
+                ("Session ID");
         }
         /// <summary>
         /// This method returns the string stored in the action data member.
@@ -49,6 +50,24 @@ namespace ChocAnServer.Packets
         public string SessionID()
         {
             return this.sessionID;
+        }
+        /// <summary>
+        /// Checks whether an inputted string is an integer and the right size.
+        /// </summary>
+        /// <param name="inputString"></param>
+        /// <param name="lower"></param>
+        /// <param name="upper"></param>
+        protected void CheckInt(string inputString,int lower, int upper)
+        {
+            int temp;
+            if (!int.TryParse(inputString, out temp))
+            {
+                throw new ArgumentException("ID");
+            }
+            else if (temp < lower || temp > upper)
+            {
+                throw new ArgumentOutOfRangeException("ID");
+            }
         }
     }
 }

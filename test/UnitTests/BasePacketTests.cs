@@ -17,5 +17,26 @@ namespace UnitTests
             Assert.AreEqual(sessionID, testPacket.SessionID());
             return;
         }
+
+        [TestMethod]
+        public void TestNullActionBasePacket()
+        {
+            string action = null;
+            string sessionID = "1209384209385";
+            BasePacket testPacket;
+            Assert.ThrowsException<NullReferenceException>(
+                () => testPacket = new BasePacket(action, sessionID));
+            return;
+        }
+        [TestMethod]
+        public void TestNullSessionBasePacket()
+        {
+            string action = "Add Member";
+            string sessionID = null;
+            BasePacket testPacket;
+            Assert.ThrowsException<NullReferenceException>(
+                () => testPacket = new BasePacket(action, sessionID));
+            return;
+        }
     }
 }
