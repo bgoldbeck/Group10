@@ -176,7 +176,7 @@ namespace SQLLiteDatabaseCenter
                     ");");
 
             }
-           
+         
             return success;
         }
 
@@ -185,8 +185,9 @@ namespace SQLLiteDatabaseCenter
             // Selects a single Item
             if (query == null) return null;
 
-            
+            // Object table to return.
             object[][] ret = null;
+
             try
             {
                 SQLiteCommand command = connection.CreateCommand();
@@ -200,12 +201,14 @@ namespace SQLLiteDatabaseCenter
             {
                 Console.WriteLine("SQLiteExcpetion: " + query + "\n"+ e.ToString());
             }
+
             return ret;
         }
 
         private object[][] SQLRetrieveFromReader(SQLiteDataReader dataReader)
         {
             List<List<object>> retrieval = new List<List<object>>();
+
             while (this.reader.Read())
             {
                 List<object> row = new List<object>();

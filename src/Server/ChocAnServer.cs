@@ -91,10 +91,13 @@ namespace ChocAnServer
 
             ResponsePacket responsePacket = new ResponsePacket();
 
-            // These values must be filled later with packet data
-            object[][] data = database.ExecuteQuery("SELECT memberStatus FROM members WHERE " +
-             "memberID=123456789" +
-             ";");
+            // Build the query string from the packet.
+            string query = "SELECT memberStatus FROM members WHERE " +
+             "memberID='" + packet.ID().ToString() + "'" +
+             ";";
+
+            // 
+            object[][] data = database.ExecuteQuery(query);
 
             // This is just an example of looping through the data that gets returned.
             if (data != null)
