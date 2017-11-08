@@ -117,6 +117,7 @@ namespace SQLLiteDatabaseCenter
                     "timestamp TEXT NOT NULL," +
                     "serviceCode INTEGER NOT NULL," +
                     "serviceDate TEXT NOT NULL" +
+                    "comments TEXT NOT NULL" +
                     ");");
 
                 Console.WriteLine("Building provider directory.");
