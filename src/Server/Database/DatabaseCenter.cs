@@ -54,7 +54,40 @@ namespace SQLLiteDatabaseCenter
             return success;
         }
 
+        public bool ExecuteNonQuery(string sql, List<SQLiteParameter> parameters)
+        {
+            bool success = true;
 
+            try
+            {
+                SQLiteCommand command = new SQLiteCommand(sql, this.dbConnection);
+                command.Parameters.AddRange(parameters.ToArray());
+                command.ExecuteNonQuery();
+            }
+            catch (SQLiteException exception)
+            {
+                Console.WriteLine("Could not execute SQL command because " + exception.Message);
+                success = false;
+            }
+            
+            return success;
+        }
+
+        public SQLiteDataReader ExecuteReaderQuery(string sql, List<SQLiteParameter> parameters)
+        {
+            try
+            {
+                SQLiteCommand command = new SQLiteCommand(sql, this.dbConnection);
+                command.Parameters.AddRange(parameters.ToArray());
+                return command.ExecuteReader();
+            }
+            catch (SQLiteException exception)
+            {
+                Console.WriteLine("Could not execute SQL command because " + exception.Message);
+            }
+
+            return null;
+        }
     }
 
 }
