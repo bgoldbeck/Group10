@@ -8,7 +8,7 @@ namespace UnitTests
     public class BasePacketTests
     {
         [TestMethod]
-        public void TestPacketConstructor()
+        public void TestBasePacketConstructor()
         {
             string action = "Add Member";
             string sessionID = "1209384209385";
