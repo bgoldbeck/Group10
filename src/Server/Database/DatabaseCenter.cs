@@ -44,12 +44,7 @@ namespace SQLLiteDatabaseCenter
             }
             return;
         }
-//         ^ ^
-//        (0,0)
-//        (  ()
-//        _| _|
-
-
+        
         public bool Initialize(string filepath = "db.sqlite")
         {
             bool success = true;

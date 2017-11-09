@@ -11,12 +11,17 @@ namespace ChocAnServer
 {
     public class ChocAnServer
     {
-        DatabaseCenter database;
+        private DatabaseCenter database;
+        private string logFilepath = "log.txt";
 
         public ChocAnServer()
         {
-            database = DatabaseCenter.Singelton;
-            database.Initialize();
+            this.database = DatabaseCenter.Singelton;
+            this.database.Initialize();
+
+            // Open the log file, clear the contents, add the datetime to the top, close the file.
+            System.IO.File.WriteAllLines(this.logFilepath, 
+                new string[] { "Initialize: " + DateTime.Now.ToString() });
         }
 
         ~ChocAnServer()
