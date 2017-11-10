@@ -134,6 +134,19 @@ namespace ChocAnServer
             return sBuilder.ToString();
         }
 
+        //If session is valid return userid, otherwise empty string.
+        private string GetUserIDBySession(string sessionKey)
+        {
+            object[][] sessionTable = database.ExecuteQuery(String.Format("SELECT * FROM sessions WHERE sessionKey = '{0}' LIMIT 1;", sessionKey));
+
+            if(sessionTable.Length != 0 && sessionTable[0].Length != 0)
+            {
+                return sessionTable[0][1].ToString();
+            }
+
+            return "";
+        }
+
         private ResponsePacket RequestLogin(LoginPacket packet)
         {
             if(packet == null)
@@ -179,7 +192,9 @@ namespace ChocAnServer
                 response = "Login Successful";
             }
 
-            ResponsePacket responsePacket = new ResponsePacket("LOGIN", "", sessionID, response);
+            
+
+            ResponsePacket responsePacket = new ResponsePacket("LOGIN", "", sessionID, GetUserIDBySession(sessionID)/*response*/);
 
             return responsePacket;
         }
@@ -242,6 +257,10 @@ namespace ChocAnServer
             {
                 // Exception.
             }
+            //Get the user id if the session is valid.
+            string userID = GetUserIDBySession(packet.SessionID());
+
+            //Some sort of accesslevel authentication is needed now...
             
             // Build the query string from the packet.
             string query = "SELECT memberStatus FROM members WHERE " +
