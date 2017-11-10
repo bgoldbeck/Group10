@@ -9,20 +9,18 @@ namespace HealthcareClientSystem
 { 
     public class TextUI
     {
-        
         public enum TextUIJustify { LEFT, CENTER, RIGHT, COUNT };
         private int nCols;
         private int nRows;
         private int cursorLinePosition;
         private string[] outputBuffer;
-
-
-
+        
         public TextUI()
         {
             Resize(80, 25);
             ClearBuffer();
         }
+
         /// <summary>
         /// This is my summary for the public constructor.
         /// </summary>
@@ -34,11 +32,9 @@ namespace HealthcareClientSystem
             ClearBuffer();
         }
 
-        ~TextUI()
-        {
-        }
+
         /// <summary>
-        /// Returns the index of the currentCursorPosition.
+        /// Returns the index of the current cursor position.
         /// </summary>
         /// <returns>cursorLinePosition</returns>
         public int CurrentCursorPosition()
@@ -46,11 +42,20 @@ namespace HealthcareClientSystem
             return cursorLinePosition;
         }
 
+        /// <summary>
+        /// Return the index of the maximum cursor position.
+        /// </summary>
+        /// <returns></returns>
         public int MaximumCursorPosition()
         {
             return nRows - 1;
         }
 
+        /// <summary>
+        /// Resize the TextUI draw window.
+        /// </summary>
+        /// <param name="nRows"></param>
+        /// <param name="nCols"></param>
         public void Resize(int nRows, int nCols)
         {
             this.nCols = nCols;
@@ -60,6 +65,10 @@ namespace HealthcareClientSystem
             return;
         }
 
+        /// <summary>
+        /// Clear the contents of the buffer string table. Reset the 
+        /// screen contents with default draw box.
+        /// </summary>
         public void ClearBuffer()
         {
             // Reset cursor position to the top.
@@ -85,6 +94,9 @@ namespace HealthcareClientSystem
             return;
         }
 
+        /// <summary>
+        /// Draw everything from the buffer to the console.
+        /// </summary>
         public void Render()
         {
             Console.Clear();
@@ -97,6 +109,12 @@ namespace HealthcareClientSystem
             return;
         }
 
+        /// <summary>
+        /// Write output text to the current cursor index position in the buffer.
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="justify"></param>
+        /// <returns></returns>
         public int WriteLine(string output, TextUIJustify justify = TextUIJustify.LEFT)
         {
             if (output.Length < 1) return CurrentCursorPosition();
@@ -161,6 +179,12 @@ namespace HealthcareClientSystem
             return CurrentCursorPosition();
         }
 
+        /// <summary>
+        /// Write a string array to the buffer, breaking it up into groups.
+        /// The user will need to cycle through the list.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="groupSize"></param>
         public void WriteList(string[] s, int groupSize = 10)
         {
 
@@ -191,7 +215,12 @@ namespace HealthcareClientSystem
             this.ClearBuffer();
             Console.ReadLine();
         }
-
+        
+        /// <summary>
+        /// Write a specified character to a single row in the buffer.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="ch"></param>
         private void FillRow(int row, char ch)
         {
             if (row < 0 || row > nRows)
@@ -205,12 +234,19 @@ namespace HealthcareClientSystem
             return;
         }
 
+        /// <summary>
+        /// Write a specified character to a single col in the buffer.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="ch"></param>
         private void FillColumn(int col, char ch)
         {
             if (col < 0 || col > nCols)
             {
                 // Exception.
+                throw new IndexOutOfRangeException();
             }
+            
 
             for (int i = 0; i < this.nRows; ++i)
             {
@@ -231,7 +267,6 @@ namespace HealthcareClientSystem
 
                 row = stringBuilder.ToString();
                 outputBuffer[i] = row;
-                //row[col] = ch;
 
             }
             return;

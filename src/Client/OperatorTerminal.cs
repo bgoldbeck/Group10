@@ -33,7 +33,7 @@ namespace HealthcareClientSystem
             Console.SetWindowSize(columnSize + 1, rowSize + 2);
 
             tui = new TextUI(rowSize, columnSize);
-
+            
             currentState = TerminalState.LOGIN;
 
             // Setup the array of updateDelegates.
