@@ -141,7 +141,17 @@ namespace ChocAnServer
 
             if(sessionTable.Length != 0 && sessionTable[0].Length != 0)
             {
-                return sessionTable[0][1].ToString();
+                DateTime timeNow = new DateTime(DateTime.Now.Ticks);
+                DateTime sessTime;
+
+                if(DateTime.TryParse(sessionTable[0][2].ToString(), out sessTime))
+                {
+                    //If the time now is before the session expiration...
+                    if (timeNow.CompareTo(sessTime) <= 0)
+                        return sessionTable[0][1].ToString();
+                }
+
+                
             }
 
             return "";
@@ -177,16 +187,20 @@ namespace ChocAnServer
                 Random rng = new Random();
                 sessionID = GetMD5Hash(rng.Next().ToString());
 
+                DateTime date = new DateTime(DateTime.Now.Ticks);
+                date = date.AddHours(18); //Add 18 hours so the session expires 18 hours from NOW.
+                
+
                 object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions WHERE userID = '{0}' LIMIT 1;", userdata[0][0]));
 
                 if(session.Length != 0)
                 {
-                    database.ExecuteQuery(String.Format("UPDATE sessions SET sessionKey = '{0}' WHERE userID = '{1}';", sessionID, userdata[0][0]));
+                    database.ExecuteQuery(String.Format("UPDATE sessions SET sessionKey = '{0}', expirationTime = '{1}' WHERE userID = '{2}';", sessionID, date.ToString(), userdata[0][0]));
                 }
                 else
                 {
                     database.ExecuteQuery(String.Format("INSERT INTO sessions(userID, expirationTime, sessionKey) " +
-                        "VALUES( '{0}', '{1}', '{2}' );", userdata[0][0], "NEVAR", sessionID));
+                        "VALUES( '{0}', '{1}', '{2}' );", userdata[0][0], date.ToString(), sessionID));
                 }
 
                 response = "Login Successful";
@@ -194,7 +208,7 @@ namespace ChocAnServer
 
             
 
-            ResponsePacket responsePacket = new ResponsePacket("LOGIN", "", sessionID, GetUserIDBySession(sessionID)/*response*/);
+            ResponsePacket responsePacket = new ResponsePacket("LOGIN", "", sessionID, response);
 
             return responsePacket;
         }
