@@ -80,7 +80,7 @@ namespace ChocAnServer
                     else
                     {
                         throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
-                            "Expected InvoicePacket", basePacket.Action()), "basePacket");
+                            "Expected ServiceCodePacket", basePacket.Action()), "basePacket");
                     }
                     break;
                 case "ADD_PROVIDER":
