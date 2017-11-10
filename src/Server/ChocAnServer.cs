@@ -61,9 +61,75 @@ namespace ChocAnServer
                             "Expected MemberPacket", basePacket.Action()), "basePacket");
                     }
                     break;
+                case "ADD_INVOICE":
+                    if(basePacket is InvoicePacket)
+                    {
+                        responsePacket = RequestAddInvoice((InvoicePacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected InvoicePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "ADD_SERVICECODE":
+                    if (basePacket is ServiceCodePacket)
+                    {
+                        responsePacket = RequestAddServiceCode((ServiceCodePacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected InvoicePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "ADD_PROVIDER":
+                    if (basePacket is ProviderPacket)
+                    {
+                        responsePacket = RequestAddProvider((ProviderPacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected ProviderPacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
                 default:
                     break;
             }
+
+            return responsePacket;
+        }
+
+        private ResponsePacket RequestAddServiceCode(ServiceCodePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+            ResponsePacket responsePacket = null;
+
+            return responsePacket;
+        }
+
+        private ResponsePacket RequestAddProvider(ProviderPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+            ResponsePacket responsePacket = null;
+
+            return responsePacket;
+        }
+
+        private ResponsePacket RequestAddInvoice(InvoicePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+            ResponsePacket responsePacket = null;
 
             return responsePacket;
         }
