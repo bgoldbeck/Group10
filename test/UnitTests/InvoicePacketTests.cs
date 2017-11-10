@@ -40,7 +40,7 @@ namespace UnitTests
             string serviceCode = "123456";
             string comments = "This customer got a massage for chocolate cramps.";
             InvoicePacket testPacket;
-            Assert.ThrowsException<NullReferenceException>(
+            Assert.ThrowsException<ArgumentException>(
                 () => testPacket = new InvoicePacket(action, sessionID,
                 currentDateTime, dateServiceProvided, providerID, memberID,
                 serviceCode, comments));
@@ -58,7 +58,7 @@ namespace UnitTests
             string serviceCode = "123456";
             string comments = "This customer got a massage for chocolate cramps.";
             InvoicePacket testPacket;
-            Assert.ThrowsException<NullReferenceException>(
+            Assert.ThrowsException<ArgumentException>(
                 () => testPacket = new InvoicePacket(action, sessionID,
                 currentDateTime, dateServiceProvided, providerID, memberID,
                 serviceCode, comments));

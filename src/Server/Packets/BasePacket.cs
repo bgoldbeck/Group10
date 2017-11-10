@@ -69,5 +69,13 @@ namespace ChocAnServer.Packets
                 throw new ArgumentOutOfRangeException("ID");
             }
         }
+        public void CheckDate(string inputString)
+        {
+            System.DateTime temp;
+            if(!System.DateTime.TryParse(inputString,out temp))
+            {
+                throw new ArgumentException("Date");
+            }
+        }
     }
 }
