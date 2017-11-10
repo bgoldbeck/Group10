@@ -1,5 +1,5 @@
-# TEAM: Make Exceptions, Not SegFaults
-## CS 300 Fall 2017 Term Project Definition: Chocoholics Anonymous  
+﻿# TEAM: Make Exceptions, Not SegFaults
+## CS 300 Fall 2017 Term Project Definition: Chocoholics Anonymous   
 
     Chocoholics Anonymous (ChocAn) is an organization dedicated to helping people addicted to chocolate in all its glorious forms.  Members pay a monthly fee to ChocAn.  For this fee they are entitled to unlimited consultations and treatments with health care professionals, namely, dietitians, internists, and exercise specialists.  Every member is given a plastic card embossed with the member’s name and a nine digit member number and incorporating a magnetic strip on which that information is encoded.  Each health care professional (provider) who provides services to ChocAn members has a specially designed ChocAn computer terminal, similar to a credit card machine in a shop. When a provider’s terminal is switched on, the provider is asked to enter his or her provider number. 
 
