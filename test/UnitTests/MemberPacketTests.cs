@@ -227,7 +227,7 @@ namespace UnitTests
         {
             string action = "add member";
             string sessionID = "1234";
-            string id = "123456789";
+            string id = "1234567890";
             string status = "valid";
             string name = "John Smith";
             string address = "12345 Street Address rd";
