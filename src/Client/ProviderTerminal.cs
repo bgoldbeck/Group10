@@ -105,6 +105,11 @@ namespace HealthcareClientSystem
             
             return (userInput.Equals("0") == true) ? false : true;
         }
+
+        protected override int AccessLevel()
+        {
+            return 0;
+        }
     }
 
 }

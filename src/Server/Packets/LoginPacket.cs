@@ -11,7 +11,7 @@ namespace ChocAnServer.Packets
     {
         private string id;
         private string password;
-
+        private int accessLevel;
         /// <summary>
         /// This is the default constructor for the base packet class to set the
         /// fields in the class to a default value. It's also protected so only this
@@ -21,6 +21,7 @@ namespace ChocAnServer.Packets
         {
             this.id = null;
             this.password = null;
+            this.accessLevel = -1;
         }
 
         /// <summary>
@@ -32,13 +33,15 @@ namespace ChocAnServer.Packets
         /// <param name="newID"></param>
         /// <param name="newPassword"></param>
         public LoginPacket(string newAction, string newSessionID, 
-            string newID, string newPassword) :base(newAction,newSessionID)
+            string newID, string newPassword, int newLevel) 
+            :base(newAction,newSessionID)
         {
             base.CheckInt(newID, 100000000, 999999999);
             this.id = newID ??
                 throw new NullReferenceException("ID");
             this.password = newPassword ??
                 throw new NullReferenceException("Password");
+            this.accessLevel = newLevel;
         }
 
         /// <summary>
@@ -56,6 +59,10 @@ namespace ChocAnServer.Packets
         public string Password()
         {
             return this.password;
+        }
+        public int AccessLevel()
+        {
+            return this.accessLevel;
         }
     }
 }

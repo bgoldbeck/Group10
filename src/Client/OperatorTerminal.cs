@@ -116,7 +116,7 @@ namespace HealthcareClientSystem
             tui.Render(true);
 
             //Do login packet here.
-            LoginPacket lp = new LoginPacket("LOGIN", "", username, password);
+            LoginPacket lp = new LoginPacket("LOGIN", "", username, password, AccessLevel());
 
             ResponsePacket rp = server.ProcessAction(lp);
 
@@ -145,6 +145,11 @@ namespace HealthcareClientSystem
         {
 
             return true;
+        }
+
+        protected virtual int AccessLevel()
+        {
+            return -1;
         }
 
     }
