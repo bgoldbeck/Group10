@@ -31,7 +31,7 @@ namespace UnitTests
             string dateEnd = "11-07-2017";
             string id = "987654321";
             DateRangePacket testPacket;
-            Assert.ThrowsException<NullReferenceException>(
+            Assert.ThrowsException<ArgumentException>(
                 () => testPacket = new DateRangePacket(action, sessionID,
                 dateStart, dateEnd, id));
             return;
@@ -45,7 +45,7 @@ namespace UnitTests
             string dateEnd = null;
             string id = "987654321";
             DateRangePacket testPacket;
-            Assert.ThrowsException<NullReferenceException>(
+            Assert.ThrowsException<ArgumentException>(
                 () => testPacket = new DateRangePacket(action, sessionID,
                 dateStart, dateEnd, id));
             return;
@@ -103,6 +103,34 @@ namespace UnitTests
             string id = "1000000000";
             DateRangePacket testPacket;
             Assert.ThrowsException<ArgumentOutOfRangeException>(
+                () => testPacket = new DateRangePacket(action, sessionID,
+                dateStart, dateEnd, id));
+            return;
+        }
+        [TestMethod]
+        public void InvalidStartDateDateRangePacket()
+        {
+            string action = "Add Member";
+            string sessionID = "1209384209385";
+            string dateStart = "hi";
+            string dateEnd = "11-07-2017";
+            string id = "987654321";
+            DateRangePacket testPacket;
+            Assert.ThrowsException<ArgumentException>(
+                () => testPacket = new DateRangePacket(action, sessionID,
+                dateStart, dateEnd, id));
+            return;
+        }
+        [TestMethod]
+        public void InvalidEndDateDateRangePacket()
+        {
+            string action = "Add Member";
+            string sessionID = "1209384209385";
+            string dateStart = "11-01-2017";
+            string dateEnd = "hi";
+            string id = "987654321";
+            DateRangePacket testPacket;
+            Assert.ThrowsException<ArgumentException>(
                 () => testPacket = new DateRangePacket(action, sessionID,
                 dateStart, dateEnd, id));
             return;

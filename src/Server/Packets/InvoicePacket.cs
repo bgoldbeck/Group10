@@ -53,6 +53,8 @@ namespace ChocAnServer.Packets
             base.CheckInt(newProviderID, 100000000, 999999999);
             base.CheckInt(newMemberID, 100000000, 999999999);
             base.CheckInt(newServiceCode, 100000, 999999);
+            base.CheckDate(newCurrentDateTime);
+            base.CheckDate(newDateServiceProvided);
             this.currentDateTime = newCurrentDateTime ??
                 throw new NullReferenceException("Current Date");
             this.dateServiceProvided = newDateServiceProvided ??

@@ -40,6 +40,8 @@ namespace ChocAnServer.Packets
             : base(newAction, newSessionID)
         {
             base.CheckInt(newID, 100000000, 999999999);
+            base.CheckDate(newDateStart);
+            base.CheckDate(newDateEnd);
             this.dateStart = newDateStart ?? 
                 throw new NullReferenceException("Start Date");
             this.dateEnd = newDateEnd ?? 

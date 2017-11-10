@@ -52,14 +52,23 @@ namespace ChocAnServer.Packets
             string newAddress, string newCity, string newState, string newZip,
             string newEmail) :base(newAction,newSessionID)
         {
-            this.id = newID;
-            this.status = newStatus;
-            this.name = newName;
-            this.address = newAddress;
-            this.city = newCity;
-            this.state = newState;
-            this.zip = newZip;
-            this.email = newEmail;
+            base.CheckInt(newID, 100000000, 999999999);
+            this.id = newID ??
+                throw new NullReferenceException("ID");
+            this.status = newStatus ??
+                throw new NullReferenceException("Status");
+            this.name = newName ??
+                throw new NullReferenceException("Name");
+            this.address = newAddress ??
+                throw new NullReferenceException("Address");
+            this.city = newCity ??
+                throw new NullReferenceException("City");
+            this.state = newState ??
+                throw new NullReferenceException("State");
+            this.zip = newZip ??
+                throw new NullReferenceException("Zip");
+            this.email = newEmail ??
+                throw new NullReferenceException("Email");
         }
 
         /// <summary>
