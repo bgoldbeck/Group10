@@ -164,11 +164,11 @@ namespace ChocAnServer
                 Random rng = new Random();
                 sessionID = GetMD5Hash(rng.Next().ToString());
 
-                object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions WHERE userid = {0} LIMIT 1;", userdata[0][0]));
+                object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions WHERE userID = '{0}' LIMIT 1;", userdata[0][0]));
 
                 if(session.Length != 0)
                 {
-                    database.ExecuteQuery(String.Format("UPDATE sessions SET sessionKey = {0} WHERE userID = {1} LIMIT 1;", sessionID, userdata[0][0]));
+                    database.ExecuteQuery(String.Format("UPDATE sessions SET sessionKey = '{0}' WHERE userID = '{1}';", sessionID, userdata[0][0]));
                 }
                 else
                 {
