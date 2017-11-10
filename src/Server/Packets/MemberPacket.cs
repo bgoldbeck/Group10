@@ -38,6 +38,8 @@ namespace ChocAnServer.Packets
         /// This is the constructor takes in inputs for each data member and sets
         /// them.
         /// </summary>
+        /// <param name="newAction"></param>
+        /// <param name="newSessionID"></param>
         /// <param name="newID"></param>
         /// <param name="newStatus"></param>
         /// <param name="newName"></param>
@@ -46,9 +48,9 @@ namespace ChocAnServer.Packets
         /// <param name="newState"></param>
         /// <param name="newZip"></param>
         /// <param name="newEmail"></param>
-        public MemberPacket(string newID,string newStatus, string newName,
+        public MemberPacket(string newAction, string newSessionID,string newID,string newStatus, string newName,
             string newAddress, string newCity, string newState, string newZip,
-            string newEmail)
+            string newEmail) :base(newAction,newSessionID)
         {
             this.id = newID;
             this.status = newStatus;

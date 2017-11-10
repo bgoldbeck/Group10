@@ -94,7 +94,7 @@ namespace ChocAnServer
                 // Exception.
             }
 
-            ResponsePacket responsePacket = new ResponsePacket();
+            ResponsePacket responsePacket = null;
 
             // Build the query string from the packet.
             string query = "SELECT memberStatus FROM members WHERE " +
