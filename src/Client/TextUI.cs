@@ -97,7 +97,7 @@ namespace HealthcareClientSystem
         /// <summary>
         /// Draw everything from the buffer to the console.
         /// </summary>
-        public void Render()
+        public void Render(Boolean clearBuffer = false)
         {
             Console.Clear();
             for (int i = 0; i < nRows; ++i)
@@ -105,6 +105,9 @@ namespace HealthcareClientSystem
                 //Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(outputBuffer[i]);
             }
+
+            if(clearBuffer)
+                ClearBuffer();
 
             return;
         }
