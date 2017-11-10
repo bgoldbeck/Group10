@@ -14,12 +14,26 @@ public class Program
         // Mmmmm. This new background color is nice.
         Console.BackgroundColor = ConsoleColor.Blue;
 
-        // We need to incorporate the kind of terminal the user wants.
-        OperatorTerminal terminal = new ManagerTerminal();
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("Select the terminal you would like to use:\n1. Provider Terminal\n2. Manager Terminal\n3. Quit");
+            string input = Console.ReadLine();
 
-        // Loop the program until the user wants to quit.
-        // Or maybe something goes wrong, like really, really wrong.
-        terminal.Loop();
+            OperatorTerminal terminal = null;
+
+            if (input.Equals("1"))
+                terminal = new ProviderTerminal();
+            else if (input.Equals("2"))
+                terminal = new ManagerTerminal();
+            else if (input.Equals("3"))
+                break;
+
+            // Loop the program until the user wants to quit.
+            // Or maybe something goes wrong, like really, really wrong.
+            if(terminal != null)
+                terminal.Loop();
+        }
 
         // Force a close on the database, this will hopefully make Daniel happy.
         // Here is an owl.
