@@ -27,6 +27,19 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestGetMD5Hash()
+        {
+            string str = "abcdefg";
+            string md5 = "7ac66c0f148de9519b8bd264312c4d64";
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            PrivateObject obj = new PrivateObject(server);
+            string retVal = obj.Invoke("GetMD5Hash", str).ToString();
+
+            Assert.AreEqual(retVal, md5);
+            return;
+        }
+
+        [TestMethod]
         public void TestRequestAddMember()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
