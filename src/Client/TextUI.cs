@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 
 namespace HealthcareClientSystem
-{ 
+{
     public class TextUI
     {
         public enum TextUIJustify { LEFT, CENTER, RIGHT, COUNT };
@@ -14,7 +14,7 @@ namespace HealthcareClientSystem
         private int nRows;
         private int cursorLinePosition;
         private string[] outputBuffer;
-        
+
         public TextUI()
         {
             Resize(80, 25);
@@ -75,7 +75,7 @@ namespace HealthcareClientSystem
             cursorLinePosition = 1;
 
             for (int i = 0; i < nRows; ++i)
-            { 
+            {
                 outputBuffer[i] = " ";
             }
 
@@ -90,7 +90,7 @@ namespace HealthcareClientSystem
 
             // Fill the right side of the UI with #'s
             FillColumn(nCols - 1, '#');
-            
+
             return;
         }
 
@@ -106,7 +106,7 @@ namespace HealthcareClientSystem
                 Console.WriteLine(outputBuffer[i]);
             }
 
-            if(clearBuffer)
+            if (clearBuffer)
                 ClearBuffer();
 
             return;
@@ -127,7 +127,7 @@ namespace HealthcareClientSystem
             string[] split = output.Split('\n');
 
             if (split.Length > 1)
-            { 
+            {
                 foreach (string sp in split)
                 {
                     WriteLine(sp, justify);
@@ -137,8 +137,8 @@ namespace HealthcareClientSystem
 
 
             if (output.Length > (nCols - 2))
-            { 
-                    output = output.Substring(0, nCols - 2);
+            {
+                output = output.Substring(0, nCols - 2);
             }
 
             outputBuffer[cursorLinePosition] = "#";
@@ -167,17 +167,18 @@ namespace HealthcareClientSystem
             }
 
             outputBuffer[cursorLinePosition] += output;
-   
+
             for (int i = 0; i < (nCols - output.Length - 2 - j); ++i)
             {
                 outputBuffer[cursorLinePosition] += " ";
             }
 
             outputBuffer[cursorLinePosition++] += "#";
-            
+
             if (cursorLinePosition >= nRows)
             {
-                // Overflow
+                // Overflow, reset cursor to index 0 + 1.
+                cursorLinePosition = 1;
             }
             return CurrentCursorPosition();
         }
@@ -190,13 +191,21 @@ namespace HealthcareClientSystem
         /// <param name="groupSize"></param>
         public void WriteList(string[] s, int groupSize = 10)
         {
+            if (groupSize <= 0)
+            {
+                // Throw exception.
+            }
+            if (s == null)
+            {
+                // Throw exception.
+            }
 
             int n = s.Length;
 
             int d = groupSize; // n things at a time.
             int q = n / d;
             int r = n % d;
-            
+
             //C
             for (int i = 0; i < q; ++i)
             {
@@ -218,7 +227,7 @@ namespace HealthcareClientSystem
             this.ClearBuffer();
             Console.ReadLine();
         }
-        
+
         /// <summary>
         /// Write a specified character to a single row in the buffer.
         /// </summary>
@@ -231,7 +240,7 @@ namespace HealthcareClientSystem
                 // Exception.
             }
             for (int i = 0; i < this.nCols; ++i)
-            { 
+            {
                 outputBuffer[row] += ch;
             }
             return;
@@ -249,7 +258,7 @@ namespace HealthcareClientSystem
                 // Exception.
                 throw new IndexOutOfRangeException();
             }
-            
+
 
             for (int i = 0; i < this.nRows; ++i)
             {
