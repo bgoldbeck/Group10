@@ -16,7 +16,7 @@ namespace UnitTests
             string password = "Admin";
 
             LoginPacket testPacket = new LoginPacket(action, sessionID,
-            userID, password);
+            userID, password,0);
             Assert.AreEqual(userID, testPacket.ID());
             Assert.AreEqual(password, testPacket.Password());
         }
@@ -31,7 +31,7 @@ namespace UnitTests
             LoginPacket testPacket;
             Assert.ThrowsException<ArgumentException>(
                 () => testPacket = new LoginPacket(action, sessionID,
-                userID, password));
+                userID, password,0));
         }
         [TestMethod]
         public void NullPasswordInvoicePacket()
@@ -44,7 +44,7 @@ namespace UnitTests
             LoginPacket testPacket;
             Assert.ThrowsException<NullReferenceException>(
                 () => testPacket = new LoginPacket(action, sessionID,
-                userID, password));
+                userID, password,0));
         }
         [TestMethod]
         public void IDTooSmallInvoicePacket()
@@ -57,7 +57,7 @@ namespace UnitTests
             LoginPacket testPacket;
             Assert.ThrowsException<ArgumentOutOfRangeException>(
                 () => testPacket = new LoginPacket(action, sessionID,
-                userID, password));
+                userID, password,0));
         }
         [TestMethod]
         public void IDTooLargeInvoicePacket()
@@ -70,7 +70,7 @@ namespace UnitTests
             LoginPacket testPacket;
             Assert.ThrowsException<ArgumentOutOfRangeException>(
                 () => testPacket = new LoginPacket(action, sessionID,
-                userID, password));
+                userID, password,0));
         }
     }
 }
