@@ -72,6 +72,11 @@ namespace HealthcareClientSystem
             tui.WriteLine(userInput, TextUI.TextUIJustify.CENTER);
             return (userInput.Equals("0") == true) ? false : true;
         }
+
+        protected override int AccessLevel()
+        {
+            return 0;
+        }
     }
 
 }
