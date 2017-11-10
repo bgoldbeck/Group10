@@ -179,9 +179,11 @@ namespace ChocAnServer
             if (userdata.Length == 0)
                 response = "Login Failed: Invalid UserID";
             else if (!userdata[0][1].ToString().Equals(packet.Password(), StringComparison.Ordinal))
-                response = String.Format("Login Failed: Incorrect Password {0} != {1}", userdata[0][1].ToString(), packet.Password());
+                response = String.Format("Login Failed: Incorrect password {0} != {1}", userdata[0][1].ToString(), packet.Password());
             else if (Convert.ToInt32(userdata[0][2]) != 1)
-                response = "Login Failed: Account Inactive";
+                response = "Login Failed: Account inactive";
+            else if (Convert.ToInt32(userdata[0][4]) != packet.AccessLevel())
+                response = "Login Failed: You do not have access to this terminal";
             else
             {
                 Random rng = new Random();
@@ -189,11 +191,11 @@ namespace ChocAnServer
 
                 DateTime date = new DateTime(DateTime.Now.Ticks);
                 date = date.AddHours(18); //Add 18 hours so the session expires 18 hours from NOW.
-                
+
 
                 object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions WHERE userID = '{0}' LIMIT 1;", userdata[0][0]));
 
-                if(session.Length != 0)
+                if (session.Length != 0)
                 {
                     database.ExecuteQuery(String.Format("UPDATE sessions SET sessionKey = '{0}', expirationTime = '{1}' WHERE userID = '{2}';", sessionID, date.ToString(), userdata[0][0]));
                 }
