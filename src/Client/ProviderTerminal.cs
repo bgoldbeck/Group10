@@ -13,12 +13,36 @@ namespace HealthcareClientSystem
         public ProviderTerminal()
         {
             updateDelegates[(int)TerminalState.VIEW_PROVIDER_DIRECTORY] = ViewProviderDirectoryUpdate;
+            updateDelegates[(int)TerminalState.CHECK_MEMBER_STATUS] = CheckMemberStatus;
+            updateDelegates[(int)TerminalState.CREATE_SERVICE_RECORD] = CreateServiceRecordUpdate;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected bool CheckMemberStatus()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected bool CreateServiceRecordUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected bool ViewProviderDirectoryUpdate()
         {
-
             string[] s = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m" };
             int groupSize = 5;
             tui.WriteList(s, groupSize);
@@ -27,6 +51,10 @@ namespace HealthcareClientSystem
             return true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected override bool MenuUpdate()
         {
             if (tui == null)
@@ -44,8 +72,10 @@ namespace HealthcareClientSystem
             
           
 
-            tui.WriteLine(" ");
-            tui.WriteLine("\tl) Logout");
+            tui.WriteLine("\t2) Check Member Status");
+            tui.WriteLine("\t3) Create Service Record");
+            
+            tui.WriteLine("\t9) Logout");
             tui.WriteLine("\t0) Exit Program");
 
             tui.Render();
@@ -57,19 +87,22 @@ namespace HealthcareClientSystem
             switch (userInput)
             {
                 case "1":
-                    break;
-                case "2":
-                    break;
-                case "3":
                     currentState = TerminalState.VIEW_PROVIDER_DIRECTORY;
                     break;
-                case "4":
+                case "2":
+                    currentState = TerminalState.CHECK_MEMBER_STATUS;
+                    break;
+                case "3":
+                    currentState = TerminalState.CREATE_SERVICE_RECORD;
+                    break;
+                case "9":
+                    currentState = TerminalState.LOGIN;
+                    sessionID = "";
                     break;
                 default:
                     break;
             }
-
-            tui.WriteLine(userInput, TextUI.TextUIJustify.CENTER);
+            
             return (userInput.Equals("0") == true) ? false : true;
         }
     }

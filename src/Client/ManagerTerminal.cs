@@ -14,38 +14,155 @@ namespace HealthcareClientSystem
         public ManagerTerminal()
         {
             updateDelegates[(int)TerminalState.ADD_MEMBER] = AddMemberUpdate;
-            
+            updateDelegates[(int)TerminalState.ADD_PROVIDER] = AddProviderUpdate;
+            updateDelegates[(int)TerminalState.ADD_SERVICE_CODE] = AddServiceCodeUpdate;
+            updateDelegates[(int)TerminalState.ADD_SERVICE_RECORD] = AddServiceRecordUpdate;
+            updateDelegates[(int)TerminalState.REMOVE_MEMBER] = RemoveMemberUpdate;
+            updateDelegates[(int)TerminalState.REMOVE_PROVIDER] = RemoveProviderUpdate;
+            updateDelegates[(int)TerminalState.REMOVE_SERVICE_RECORD] = RemoveServiceRecordUpdate;
+            updateDelegates[(int)TerminalState.CUSTOM_MEMBER_REPORT] = CustomMemberReportUpdate;
+            updateDelegates[(int)TerminalState.CUSTOM_PROVIDER_REPORT] = CustomProviderReportUpdate;
+            updateDelegates[(int)TerminalState.UPDATE_MEMBER] = UpdateMemberUpdate;
+            updateDelegates[(int)TerminalState.UPDATE_PROVIDER] = UpdateProviderUpdate;
+            updateDelegates[(int)TerminalState.UPDATE_SERVICE_CODE] = UpdateServiceCodeUpdate;
+            updateDelegates[(int)TerminalState.MAIN_ACCOUNTING_PROCEDURE] = MainAccountingProcedureUpdate;
+
         }
 
-
-        protected bool AddMemberUpdate()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool AddMemberUpdate()
         {
-
-            // FOr fun.
-            StringBuilder spaces = new StringBuilder("");
-            for (int i = -80; i < 80; ++i)
-            {
-                if (i < 0)
-                {
-                    spaces.Append(' ');
-                }
-                else
-                    spaces.Remove(0, 1);
-
-                tui.WriteLine(spaces + "Hello World");
-                tui.Render();
-                System.Threading.Thread.Sleep(10);
-                tui.ClearBuffer();
-            }
-
-            string[] s = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m" };
-            int groupSize = 5;
-            tui.WriteList(s, groupSize);
-
             currentState = TerminalState.MENU;
             return true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool AddProviderUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool AddServiceCodeUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool AddServiceRecordUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool RemoveMemberUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool RemoveProviderUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool RemoveServiceRecordUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool CustomMemberReportUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool CustomProviderReportUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool UpdateMemberUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool UpdateProviderUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool UpdateServiceCodeUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool MainAccountingProcedureUpdate()
+        {
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected override bool MenuUpdate()
         {
             if (tui == null)
@@ -65,7 +182,7 @@ namespace HealthcareClientSystem
             tui.WriteLine(" ");
 
             tui.WriteLine("\tu) Add Provider");
-            tui.WriteLine("\ti) Deactive Provider");
+            tui.WriteLine("\ti) Deactivate Provider");
             tui.WriteLine("\to) Update Provider");
 
             tui.WriteLine(" ");
@@ -88,7 +205,7 @@ namespace HealthcareClientSystem
             tui.WriteLine("\tm) Execute Main Accounting Procedure");
 
             tui.WriteLine(" ");
-            tui.WriteLine("\tl) Logout");
+            tui.WriteLine("\t9) Logout");
             tui.WriteLine("\t0) Exit Program");
 
             tui.Render();
@@ -101,12 +218,42 @@ namespace HealthcareClientSystem
                 case "a":
                     currentState = TerminalState.ADD_MEMBER;
                     break;
-                case "2":
+                case "d":
+                    currentState = TerminalState.REMOVE_MEMBER;
                     break;
-                case "3":
-                    currentState = TerminalState.VIEW_PROVIDER_DIRECTORY;
+                case "s":
+                    currentState = TerminalState.UPDATE_MEMBER;
                     break;
-                case "4":
+                case "u":
+                    currentState = TerminalState.ADD_PROVIDER;
+                    break;
+                case "i":
+                    currentState = TerminalState.REMOVE_PROVIDER;
+                    break;
+                case "o":
+                    currentState = TerminalState.UPDATE_PROVIDER;
+                    break;
+                case "q":
+                    currentState = TerminalState.ADD_SERVICE_CODE;
+                    break;
+                case "w":
+                    currentState = TerminalState.UPDATE_SERVICE_CODE;
+                    break;
+                case "e":
+                    currentState = TerminalState.REMOVE_SERVICE_CODE;
+                    break;
+                case "z":
+                    currentState = TerminalState.CUSTOM_MEMBER_REPORT;
+                    break;
+                case "x":
+                    currentState = TerminalState.CUSTOM_PROVIDER_REPORT;
+                    break;
+                case "m":
+                    currentState = TerminalState.MAIN_ACCOUNTING_PROCEDURE;
+                    break;
+                case "9":
+                    currentState = TerminalState.LOGIN;
+                    sessionID = "";
                     break;
                 default:
                     break;
