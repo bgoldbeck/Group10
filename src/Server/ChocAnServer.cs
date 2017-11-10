@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 using ChocAnServer.Packets;
 using SQLLiteDatabaseCenter;
@@ -94,9 +95,91 @@ namespace ChocAnServer
                             "Expected ProviderPacket", basePacket.Action()), "basePacket");
                     }
                     break;
+                case "LOGIN":
+                    if (basePacket is LoginPacket)
+                    {
+                        responsePacket = RequestLogin((LoginPacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected LoginPacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
                 default:
                     break;
             }
+
+            return responsePacket;
+        }
+
+        private string GetMD5Hash(string input)
+        {
+            MD5 md5Hash = MD5.Create();
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
+        }
+
+        private ResponsePacket RequestLogin(LoginPacket packet)
+        {
+            if(packet == null)
+            {
+                // Exception.
+            }
+
+            string sessionID = "";
+            string response = "";
+
+            object[][] userdata = database.ExecuteQuery(String.Format("SELECT * FROM users WHERE userID = {0} LIMIT 1;", packet.ID()));
+
+            /*string resp = "";
+
+            for (int i = 0; i < data[0].Length; i++)
+            {
+                resp += String.Format("{0} ", data[0][i]);
+            }*/
+
+            if (userdata.Length == 0)
+                response = "Login Failed: Invalid UserID";
+            else if (!userdata[0][1].ToString().Equals(packet.Password(), StringComparison.Ordinal))
+                response = String.Format("Login Failed: Incorrect Password {0} != {1}", userdata[0][1].ToString(), packet.Password());
+            else if (Convert.ToInt32(userdata[0][2]) != 1)
+                response = "Login Failed: Account Inactive";
+            else
+            {
+                Random rng = new Random();
+                sessionID = GetMD5Hash(rng.Next().ToString());
+
+                object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions WHERE userid = {0} LIMIT 1;", userdata[0][0]));
+
+                if(session.Length != 0)
+                {
+                    database.ExecuteQuery(String.Format("UPDATE sessions SET sessionKey = {0} WHERE userID = {1} LIMIT 1;", sessionID, userdata[0][0]));
+                }
+                else
+                {
+                    database.ExecuteQuery(String.Format("INSERT INTO sessions(userID, expirationTime, sessionKey) " +
+                        "VALUES( '{0}', '{1}', '{2}' );", userdata[0][0], "NEVAR", sessionID));
+                }
+
+                response = "Login Successful";
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket("LOGIN", "", sessionID, response);
 
             return responsePacket;
         }
@@ -164,11 +247,11 @@ namespace ChocAnServer
             string query = "SELECT memberStatus FROM members WHERE " +
              "memberID='" + packet.ID().ToString() + "'" +
              ";";
-            
+
             object[][] data = database.ExecuteQuery(query);
             
 
-            return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, "");
+            return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data[0][0].ToString(), "");
         }
 
     }

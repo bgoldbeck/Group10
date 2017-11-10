@@ -9,8 +9,8 @@ namespace ChocAnServer.Packets
 {
     public class ResponsePacket : BasePacket
     {
-        private object[][] data;
-        private string error;
+        private string data;
+        private string response;
 
         /// <summary>
         /// This is the default constructor for the base packet class to set the
@@ -20,7 +20,7 @@ namespace ChocAnServer.Packets
         protected ResponsePacket()
         {
             this.data = null;
-            this.error = null;
+            this.response = null;
         }
         /// <summary>
         /// This is the constructor takes in inputs for each data member and sets
@@ -31,16 +31,16 @@ namespace ChocAnServer.Packets
         /// <param name="newData"></param>
         /// <param name="newError"></param>
         public ResponsePacket(string newAction, string newSessionID, 
-            object[][] newData, string newError):base(newAction,newSessionID)
+            string newData, string newResponse):base(newAction,newSessionID)
         {
             this.data = newData;
-            this.error = newError;
+            this.response = newResponse;
         }
         /// <summary>
         /// This functions returns the array of data stored in this class.
         /// </summary>
         /// <returns></returns>
-        public object[][] Data()
+        public string Data()
         {
             return this.data;
         }
@@ -48,9 +48,9 @@ namespace ChocAnServer.Packets
         /// This functions returns the error string stored in this class.
         /// </summary>
         /// <returns></returns>
-        public string Error()
+        public string Response()
         {
-            return this.error;
+            return this.response;
         }
     }
 }

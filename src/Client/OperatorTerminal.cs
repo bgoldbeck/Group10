@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ChocAnServer;
+using ChocAnServer.Packets;
 
 namespace HealthcareClientSystem
 {
@@ -22,6 +23,8 @@ namespace HealthcareClientSystem
 
         protected int columnSize;
         protected int rowSize;
+
+        protected string sessionID;
 
         protected ChocAnServer.ChocAnServer server;
 
@@ -81,15 +84,37 @@ namespace HealthcareClientSystem
 
             tui.WriteLine("");
             tui.WriteLine("");
-            tui.WriteLine("Please \ntype \nanything \nto \ncontinue", TextUI.TextUIJustify.CENTER);
+            tui.WriteLine("Enter your userID:\n", TextUI.TextUIJustify.CENTER);
 
-            tui.Render();
-            //tui.ClearBuffer();
+            tui.Render(true);
 
-            int userInput = Console.Read();
-            tui.WriteLine(userInput.ToString(), TextUI.TextUIJustify.CENTER);
-            // Handle state transition here?
-            currentState = TerminalState.MENU;
+            string username = Console.ReadLine();
+            //string formattedoutput = String.Format("{0} {1}", username, username.Length);
+            tui.WriteLine(String.Format("UserID: {0}\nEnter your password:\n", username), TextUI.TextUIJustify.CENTER);
+            tui.Render(true);
+
+            string password = Console.ReadLine();
+
+            tui.WriteLine(String.Format("UserID: {0}\nPassword: {1}\n", username, password), TextUI.TextUIJustify.CENTER);
+            tui.Render(true);
+
+            //Do login packet here.
+            LoginPacket lp = new LoginPacket("LOGIN", "", username, password);
+
+            ResponsePacket rp = server.ProcessAction(lp);
+
+            this.sessionID = rp.Data();
+
+
+            // If we got a valid session from the server (md5 is length 32)
+            if (this.sessionID.Length == 32)
+                currentState = TerminalState.MENU;
+            else
+            {
+                tui.WriteLine(String.Format("The server gave the response:\n Status: {0} SessionID: {1}\nPress any key to continue...", rp.Response(), rp.Data()), TextUI.TextUIJustify.CENTER);
+                tui.Render(true);
+                Console.ReadKey();
+            }
 
             return true;
         }
