@@ -13,7 +13,14 @@ namespace HealthcareClientSystem
     {
         protected TextUI tui;
 
-        protected enum TerminalState { LOGIN, MENU, VIEW_PROVIDER_DIRECTORY, ADD_MEMBER, COUNT };
+        protected enum TerminalState {
+            LOGIN, MENU, VIEW_PROVIDER_DIRECTORY,
+            ADD_MEMBER, CHECK_MEMBER_STATUS, CREATE_SERVICE_RECORD,
+            UPDATE_MEMBER, REMOVE_MEMBER, ADD_PROVIDER, 
+            ADD_SERVICE_CODE, REMOVE_SERVICE_CODE, ADD_SERVICE_RECORD,
+            REMOVE_SERVICE_RECORD, MAIN_ACCOUNTING_PROCEDURE, REMOVE_PROVIDER,
+            UPDATE_PROVIDER, UPDATE_SERVICE_CODE,
+            CUSTOM_MEMBER_REPORT, CUSTOM_PROVIDER_REPORT, COUNT };
 
         protected TerminalState currentState;
 
@@ -28,6 +35,9 @@ namespace HealthcareClientSystem
 
         protected ChocAnServer.ChocAnServer server;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public OperatorTerminal()
         {
             columnSize = 100;
@@ -50,6 +60,9 @@ namespace HealthcareClientSystem
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Loop()
         {
             //string userInput = Console.ReadLine();
@@ -69,6 +82,10 @@ namespace HealthcareClientSystem
             return;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private bool LoginUpdate()
         {
             if (tui == null)
@@ -120,9 +137,13 @@ namespace HealthcareClientSystem
         }
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected virtual bool MenuUpdate()
         {
+
             return true;
         }
 
