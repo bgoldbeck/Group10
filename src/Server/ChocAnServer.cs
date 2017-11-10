@@ -93,29 +93,16 @@ namespace ChocAnServer
             {
                 // Exception.
             }
-
-            ResponsePacket responsePacket = null;
-
+            
             // Build the query string from the packet.
             string query = "SELECT memberStatus FROM members WHERE " +
              "memberID='" + packet.ID().ToString() + "'" +
              ";";
-
-            // 
+            
             object[][] data = database.ExecuteQuery(query);
+            
 
-            // This is just an example of looping through the data that gets returned.
-            if (data != null)
-            { 
-                for (int i = 0; i < data.Length; i++)
-                {
-                    for (int j = 0; j < data[i].Length; j++)
-                    {
-                        Console.WriteLine(data[i][j].ToString());
-                    }
-                }
-            }
-            return responsePacket;
+            return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, "");
         }
 
     }
