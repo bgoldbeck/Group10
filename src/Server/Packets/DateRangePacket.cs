@@ -12,7 +12,7 @@ namespace ChocAnServer.Packets
     {
         private string dateStart;
         private string dateEnd;
-        int id;
+        private string id;
 
         /// <summary>
         /// This is the default constructor for the base packet class to set the
@@ -23,20 +23,29 @@ namespace ChocAnServer.Packets
         {
             this.dateStart = null;
             this.dateEnd = null;
-            this.id = 0;
+            this.id = null;
         }
 
         /// <summary>
         /// This is the constructor takes in inputs for each data member and sets
         /// them.
         /// </summary>
+        /// <param name="newAction"></param>
+        /// <param name="newSessionID"></param>
         /// <param name="newDateStart"></param>
         /// <param name="newDateEnd"></param>
         /// <param name="newID"></param>
-        public DateRangePacket(string newDateStart, string newDateEnd, int newID)
+        public DateRangePacket(string newAction, string newSessionID, 
+            string newDateStart, string newDateEnd, string newID)
+            : base(newAction, newSessionID)
         {
-            this.dateStart = newDateStart;
-            this.dateEnd = newDateEnd;
+            base.CheckInt(newID, 100000000, 999999999);
+            base.CheckDate(newDateStart);
+            base.CheckDate(newDateEnd);
+            this.dateStart = newDateStart ?? 
+                throw new NullReferenceException("Start Date");
+            this.dateEnd = newDateEnd ?? 
+                throw new NullReferenceException("End Date");
             this.id = newID;
         }
 
@@ -62,7 +71,7 @@ namespace ChocAnServer.Packets
         /// This method returns the string stored in the id data member.
         /// </summary>
         /// <returns></returns>
-        public int ID()
+        public string ID()
         {
             return this.id;
         }

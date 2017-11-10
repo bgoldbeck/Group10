@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ChocAnServer;
+
 namespace HealthcareClientSystem
 {
     public class OperatorTerminal
@@ -21,6 +23,8 @@ namespace HealthcareClientSystem
         protected int columnSize;
         protected int rowSize;
 
+        protected ChocAnServer.ChocAnServer server;
+
         public OperatorTerminal()
         {
             columnSize = 100;
@@ -29,7 +33,7 @@ namespace HealthcareClientSystem
             Console.SetWindowSize(columnSize + 1, rowSize + 2);
 
             tui = new TextUI(rowSize, columnSize);
-
+            
             currentState = TerminalState.LOGIN;
 
             // Setup the array of updateDelegates.
@@ -38,6 +42,8 @@ namespace HealthcareClientSystem
             // Set each updateDelegate.
             updateDelegates[(int)TerminalState.LOGIN] = LoginUpdate;
             updateDelegates[(int)TerminalState.MENU] = MenuUpdate;
+
+            server = new ChocAnServer.ChocAnServer();
 
         }
 

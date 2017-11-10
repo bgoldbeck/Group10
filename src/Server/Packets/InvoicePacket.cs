@@ -12,9 +12,9 @@ namespace ChocAnServer.Packets
     {
         private string currentDateTime;
         private string dateServiceProvided;
-        private int providerID;
-        private int memberID;
-        private int serviceCode;
+        private string providerID;
+        private string memberID;
+        private string serviceCode;
         private string comments;
 
         /// <summary>
@@ -26,9 +26,9 @@ namespace ChocAnServer.Packets
         {
             this.currentDateTime = null;
             this.dateServiceProvided = null;
-            this.providerID = 0;
-            this.memberID = 0;
-            this.serviceCode = 0;
+            this.providerID = null;
+            this.memberID = null;
+            this.serviceCode = null;
             this.comments = null;
         }
 
@@ -36,21 +36,37 @@ namespace ChocAnServer.Packets
         /// This is the constructor takes in inputs for each data member and sets
         /// them.
         /// </summary>
+        /// <param name="newAction"></param>
+        /// <param name="newSessionID"></param>
         /// <param name="newCurrentDateTime"></param>
         /// <param name="newDateServiceProvided"></param>
         /// <param name="newProviderID"></param>
         /// <param name="newMemberID"></param>
         /// <param name="newServiceCode"></param>
         /// <param name="newComments"></param>
-        public InvoicePacket(string newCurrentDateTime, string newDateServiceProvided,
-            int newProviderID, int newMemberID, int newServiceCode, string newComments)
+        public InvoicePacket(string newAction, string newSessionID,
+            string newCurrentDateTime, string newDateServiceProvided,
+            string newProviderID, string newMemberID, string newServiceCode,
+            string newComments)
+            :base(newAction,newSessionID)
         {
-            this.currentDateTime = newCurrentDateTime;
-            this.dateServiceProvided = newDateServiceProvided;
-            this.providerID = newProviderID;
-            this.memberID = newMemberID;
-            this.serviceCode = newServiceCode;
-            this.comments = newComments;
+            base.CheckInt(newProviderID, 100000000, 999999999);
+            base.CheckInt(newMemberID, 100000000, 999999999);
+            base.CheckInt(newServiceCode, 100000, 999999);
+            base.CheckDate(newCurrentDateTime);
+            base.CheckDate(newDateServiceProvided);
+            this.currentDateTime = newCurrentDateTime ??
+                throw new NullReferenceException("Current Date");
+            this.dateServiceProvided = newDateServiceProvided ??
+                throw new NullReferenceException("Service Date");
+            this.providerID = newProviderID ??
+                throw new NullReferenceException("Provider ID");
+            this.memberID = newMemberID ??
+                throw new NullReferenceException("Member ID");
+            this.serviceCode = newServiceCode ??
+                throw new NullReferenceException("Service Code");
+            this.comments = newComments ??
+                throw new NullReferenceException("Comments");
         }
 
         /// <summary>
@@ -73,7 +89,7 @@ namespace ChocAnServer.Packets
         /// This method returns the integer stored in the providerID data member.
         /// </summary>
         /// <returns></returns>
-        public int ProviderID()
+        public string ProviderID()
         {
             return this.providerID;
         }
@@ -81,7 +97,7 @@ namespace ChocAnServer.Packets
         /// This method returns the integer stored in the memberID data member.
         /// </summary>
         /// <returns></returns>
-        public int MemberID()
+        public string MemberID()
         {
             return this.memberID;
         }
@@ -89,7 +105,7 @@ namespace ChocAnServer.Packets
         /// This method returns the integer stored in the serviceCode data member.
         /// </summary>
         /// <returns></returns>
-        public int ServiceCode()
+        public string ServiceCode()
         {
             return this.serviceCode;
         }

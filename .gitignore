@@ -3,5 +3,7 @@
 [Rr]elease/
 [Bb]in/
 [Oo]bj/
-
+packages/
+/packages/
 .vs/
+/.vs

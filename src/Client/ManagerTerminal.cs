@@ -9,10 +9,12 @@ namespace HealthcareClientSystem
 {
     public class ManagerTerminal : OperatorTerminal
     {
+        
 
         public ManagerTerminal()
         {
             updateDelegates[(int)TerminalState.ADD_MEMBER] = AddMemberUpdate;
+            
         }
 
 
