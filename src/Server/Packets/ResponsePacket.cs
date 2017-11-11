@@ -52,5 +52,15 @@ namespace ChocAnServer.Packets
         {
             return this.response;
         }
+
+        public override string ToString()
+        {
+            return String.Format(
+                "ACTION: {0}\n" +
+                "SESSION_ID: {1}\n" +
+                "DATA: {2}\n" +
+                "RESPONSE: {3}\n",
+                Action(), SessionID(), Data(), Response());
+        }
     }
 }

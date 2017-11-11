@@ -66,13 +66,19 @@ namespace SQLLiteDatabaseCenter
             return success;
         }
 
-        public object[][] ExecuteQuery(string query)
+        public object[][] ExecuteQuery(string query, out int affectedRecords)
         {
             // Selects a single Item
-            if (query == null) return null;
+            if (query == null)
+            {
+                // Throw exception.
+                affectedRecords = 0;
+                throw new ArgumentNullException(query, "Argument passed in was null, expected string type.");
+            }
 
             // Object table to return.
             object[][] ret = null;
+            affectedRecords = 0;
 
             try
             {
@@ -81,7 +87,7 @@ namespace SQLLiteDatabaseCenter
 
                 this.reader = command.ExecuteReader();
                 ret = SQLRetrieveFromReader(this.reader);
-
+                affectedRecords = reader.RecordsAffected;
             }
             catch (SQLiteException e)
             {

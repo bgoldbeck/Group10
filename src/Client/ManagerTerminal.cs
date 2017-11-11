@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ChocAnServer;
+using ChocAnServer.Packets;
 
 namespace HealthcareClientSystem
 {
@@ -35,6 +37,23 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         private bool AddMemberUpdate()
         {
+            tui.WriteLine("ADD MEMBER", TextUI.TextUIJustify.CENTER);
+
+            tui.WriteLine("\tPlease enter the member's details.");
+
+            Console.ReadLine();
+
+            MemberPacket memberPacket = new MemberPacket("ADD_MEMBER", sessionID, "321654987", "ACTIVE", "Bob",
+                "123 Bob Road", "PDX", "OR", "97777", "bob@aol.com");
+
+            ResponsePacket responsePacket = server.ProcessAction(memberPacket);
+
+            tui.WriteLine(responsePacket.ToString());
+
+            tui.Render(true);
+
+            Console.ReadLine();
+
             currentState = TerminalState.MENU;
             return true;
         }

@@ -43,7 +43,7 @@ namespace ChocAnServer
                 case "ADD_MEMBER":
                     if (basePacket is MemberPacket)
                     { 
-                        responsePacket = RequestMemberStatus((MemberPacket)basePacket);
+                        responsePacket = RequestAddMember((MemberPacket)basePacket);
                     }
                     else
                     {
@@ -54,7 +54,7 @@ namespace ChocAnServer
                 case "MEMBER_STATUS":
                     if (basePacket is MemberPacket)
                     {
-                        responsePacket = RequestAddMember((MemberPacket)basePacket);
+                        responsePacket = RequestMemberStatus((MemberPacket)basePacket);
                     }
                     else
                     {
@@ -137,21 +137,26 @@ namespace ChocAnServer
         //If session is valid return userid, otherwise empty string.
         private string GetUserIDBySession(string sessionKey)
         {
-            object[][] sessionTable = database.ExecuteQuery(String.Format("SELECT * FROM sessions WHERE sessionKey = '{0}' LIMIT 1;", sessionKey));
-
+            if (sessionKey == null)
+            {
+                throw new ArgumentNullException("sessionKey", "Argument passed in was null, expected string type.");
+            }
+            
+            object[][] sessionTable = database.ExecuteQuery(String.Format("SELECT * FROM sessions " +
+                "WHERE sessionKey = '{0}' LIMIT 1;", sessionKey), out int affectedRows);
+            
             if(sessionTable.Length != 0 && sessionTable[0].Length != 0)
             {
                 DateTime timeNow = new DateTime(DateTime.Now.Ticks);
-                DateTime sessTime;
 
-                if(DateTime.TryParse(sessionTable[0][2].ToString(), out sessTime))
+                if (DateTime.TryParse(sessionTable[0][2].ToString(), out DateTime sessTime))
                 {
                     //If the time now is before the session expiration...
                     if (timeNow.CompareTo(sessTime) <= 0)
                         return sessionTable[0][1].ToString();
                 }
 
-                
+
             }
 
             return "";
@@ -167,7 +172,8 @@ namespace ChocAnServer
             string sessionID = "";
             string response = "";
 
-            object[][] userdata = database.ExecuteQuery(String.Format("SELECT * FROM users WHERE userID = {0} LIMIT 1;", packet.ID()));
+            object[][] userdata = database.ExecuteQuery(String.Format("SELECT * FROM users " +
+                "WHERE userID = {0} LIMIT 1;", packet.ID()), out int affectedRows);
 
             /*string resp = "";
 
@@ -193,26 +199,25 @@ namespace ChocAnServer
                 date = date.AddHours(18); //Add 18 hours so the session expires 18 hours from NOW.
 
 
-                object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions WHERE userID = '{0}' LIMIT 1;", userdata[0][0]));
+                object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions " +
+                    "WHERE userID = '{0}' LIMIT 1;", userdata[0][0]), out affectedRows);
 
                 if (session.Length != 0)
                 {
-                    database.ExecuteQuery(String.Format("UPDATE sessions SET sessionKey = '{0}', expirationTime = '{1}' WHERE userID = '{2}';", sessionID, date.ToString(), userdata[0][0]));
+                    database.ExecuteQuery(String.Format("UPDATE sessions " +
+                        "SET sessionKey = '{0}', expirationTime = '{1}' " +
+                        "WHERE userID = '{2}';", sessionID, date.ToString(), userdata[0][0]), out affectedRows);
                 }
                 else
                 {
                     database.ExecuteQuery(String.Format("INSERT INTO sessions(userID, expirationTime, sessionKey) " +
-                        "VALUES( '{0}', '{1}', '{2}' );", userdata[0][0], date.ToString(), sessionID));
+                        "VALUES( '{0}', '{1}', '{2}' );", userdata[0][0], date.ToString(), sessionID), out affectedRows);
                 }
 
                 response = "Login Successful";
             }
-
             
-
-            ResponsePacket responsePacket = new ResponsePacket("LOGIN", "", sessionID, response);
-
-            return responsePacket;
+            return new ResponsePacket("LOGIN", "", sessionID, response); 
         }
 
         private ResponsePacket RequestAddServiceCode(ServiceCodePacket packet)
@@ -253,18 +258,34 @@ namespace ChocAnServer
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected MemberPacket type.");
             }
-            ResponsePacket responsePacket = null;
             
-            // These values must be filled later with packet data.
-            database.ExecuteQuery("INSERT INTO members(memberID, memberName, memberAddress, memberCity, " +
-                "memberState, memberZip, memberValid, memberEmail, memberStatus) VALUES( " +
-                "111111111, 'Jordan Green', '666 Devil's Way', 'PDX Close Enough', 'OR', " +
-                "'95555', 1, 'JG@PDX.PSU.EDU', 'ACTIVE'" +
-                ");");
-            // We dont care what the database returns in this case.
-            
-            return responsePacket;
+            // The member we are adding will have a valid state of 1, because we are 
+            // adding a new member, so of course they are valid.
+            int memberValid = 1;
+
+            string builtQuery = String.Format("INSERT INTO members(" +
+                "memberID, memberName, memberAddress, memberCity, memberState, " +
+                "memberZip, memberValid, memberEmail, memberStatus) VALUES(" +
+                "'{0}', '{1}', '{2}', '{3}', '{4}', '{5}', {6}, '{7}', '{8}');", 
+                packet.ID(), packet.Name(), packet.Address(), packet.City(), packet.State(),
+                packet.Zip(), memberValid, packet.Email(), packet.Status()).ToString();
+
+            database.ExecuteQuery(builtQuery, out int affectedRecords);
+
+            string response = "";
+
+            if (affectedRecords > 0)
+            {
+                response = "Member saved on record.";
+            }
+            else
+            {
+                response = "Failed to save member on record.";
+            }
+
+            return new ResponsePacket("ADD_MEMBER", packet.SessionID(), affectedRecords.ToString(), response);
         }
 
         private ResponsePacket RequestMemberStatus(MemberPacket packet)
@@ -273,20 +294,32 @@ namespace ChocAnServer
             {
                 // Exception.
             }
+
             //Get the user id if the session is valid.
             string userID = GetUserIDBySession(packet.SessionID());
 
             //Some sort of accesslevel authentication is needed now...
             
             // Build the query string from the packet.
-            string query = "SELECT memberStatus FROM members WHERE " +
-             "memberID='" + packet.ID().ToString() + "'" +
-             ";";
+            string query = String.Format("SELECT memberStatus FROM members WHERE " +
+             "memberID='{0}';", packet.ID().ToString());
 
-            object[][] data = database.ExecuteQuery(query);
+            object[][] table = database.ExecuteQuery(query, out int affectedRecords);
             
+            string response = "";
+            string data = "";
 
-            return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data[0][0].ToString(), "");
+            if (data == null)
+            {
+                response = "Could not find member in database.";
+            }
+            else
+            {
+                response = "Found member in database.";
+                data = table[0][0].ToString();
+            }
+
+            return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, response);
         }
 
     }
