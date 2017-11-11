@@ -11,7 +11,7 @@ namespace HealthcareClientSystem
     {
         
 
-        public ManagerTerminal()
+        public ManagerTerminal() : base()
         {
             updateDelegates[(int)TerminalState.ADD_MEMBER] = AddMemberUpdate;
             updateDelegates[(int)TerminalState.ADD_PROVIDER] = AddProviderUpdate;

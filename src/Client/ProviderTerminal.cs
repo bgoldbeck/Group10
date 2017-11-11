@@ -10,7 +10,7 @@ namespace HealthcareClientSystem
     public class ProviderTerminal : OperatorTerminal
     {
 
-        public ProviderTerminal()
+        public ProviderTerminal() : base()
         {
             updateDelegates[(int)TerminalState.VIEW_PROVIDER_DIRECTORY] = ViewProviderDirectoryUpdate;
             updateDelegates[(int)TerminalState.CHECK_MEMBER_STATUS] = CheckMemberStatus;

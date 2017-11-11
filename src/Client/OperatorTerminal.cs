@@ -56,6 +56,8 @@ namespace HealthcareClientSystem
             updateDelegates[(int)TerminalState.LOGIN] = LoginUpdate;
             updateDelegates[(int)TerminalState.MENU] = MenuUpdate;
 
+            sessionID = "";
+
             server = new ChocAnServer.ChocAnServer();
 
         }
@@ -63,7 +65,7 @@ namespace HealthcareClientSystem
         /// <summary>
         /// 
         /// </summary>
-        public void Loop()
+        public bool Loop()
         {
             //string userInput = Console.ReadLine();
             bool running = true;
@@ -79,7 +81,7 @@ namespace HealthcareClientSystem
                 }
 
             }
-            return;
+            return running;
         }
 
         /// <summary>
@@ -152,5 +154,9 @@ namespace HealthcareClientSystem
             return -1;
         }
 
+        public bool IsLoggedIn()
+        {
+            return sessionID != "";
+        }
     }
 }

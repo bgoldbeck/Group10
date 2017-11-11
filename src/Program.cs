@@ -13,8 +13,9 @@ public class Program
 
         // Mmmmm. This new background color is nice.
         Console.BackgroundColor = ConsoleColor.Blue;
+        bool running = true;
 
-        while (true)
+        while (running)
         {
             Console.Clear();
             Console.WriteLine("Select the terminal you would like to use:\n1. Provider Terminal\n2. Manager Terminal\n3. Quit");
@@ -27,12 +28,14 @@ public class Program
             else if (input.Equals("2"))
                 terminal = new ManagerTerminal();
             else if (input.Equals("3"))
-                break;
+                running = false;
 
             // Loop the program until the user wants to quit.
             // Or maybe something goes wrong, like really, really wrong.
-            if(terminal != null)
-                terminal.Loop();
+            if(terminal != null && running == true)
+            { 
+                running = terminal.Loop();
+            }
         }
 
         // Force a close on the database, this will hopefully make Daniel happy.
