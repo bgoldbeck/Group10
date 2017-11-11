@@ -17,7 +17,7 @@ namespace HealthcareClientSystem
         /// <param name="isPositive"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static string ReadLine(bool isDigit, bool isPositive, int length)
+        private static string ReadLine(bool isDigit, bool isPositive, int length)
         {
             if (length < 0)
             {
@@ -40,7 +40,7 @@ namespace HealthcareClientSystem
                 // Number should be positive.
                 if (isPositive)
                 {
-                    if (result <= 0)
+                    if (result < 0)
                     {
                         // Number should be positive, but isn't
                         line = "";
@@ -57,9 +57,50 @@ namespace HealthcareClientSystem
             return line;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="digits"></param>
+        /// <returns></returns>
+        public static int ReadNumeric(int digits, bool isPositive)
+        { 
+            string id = "";
 
+            while (id == "")
+            {
+                Console.Write("Enter ID: ");
+                id = InputController.ReadLine(true, isPositive, digits);
+                if (id == "")
+                { 
+                    Console.WriteLine("\n\tBad ID! Please try again.\n");
+                }
+            }
+            
+            return Convert.ToInt32(id);
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string ReadText(int length)
+        {
+            string text = "";
 
+            while (text == "")
+            {
+                Console.Write("Enter Text: ");
+                text = InputController.ReadLine(false, false, length);
+                if (text == "")
+                {
+                    Console.WriteLine("\n\tBad Text! Please try again.\n");
+                }
+            }
+            
+            return text;
+        }
 
+ 
     }
 }
