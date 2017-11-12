@@ -39,14 +39,7 @@ namespace HealthcareClientSystem
         {
             tui.WriteLine("ADD MEMBER", TextUI.TextUIJustify.CENTER);
 
-
-
-            // We need to get all the inputs from the user. This should probably be 
-            // Refactored to another class that handles building packets.
-            
-
             // Fill out the new member packet from the user input and send it off to the server.
-            // We get back a response packet to see how things went.
             ResponsePacket responsePacket = server.ProcessAction(
                 packetFactory.GetPacket(tui, "MemberPacket", "ADD_MEMBER", sessionID) as MemberPacket);
 
