@@ -41,11 +41,24 @@ namespace HealthcareClientSystem
 
             tui.WriteLine("\tPlease enter the member's details.");
 
+            string memberID = InputController.ReadNumeric(9, 9, true, "Member ID").ToString();
+            string memberActive = "ACTIVE";
+            string memberName = InputController.ReadText(1, 25, "Member Name");
+            string memberAddress = InputController.ReadText(1, 25, "Member Address");
+            string memberCity = InputController.ReadText(1, 14, "Member City");
+            string memberState = InputController.ReadText(1, 2, "Member State");
+            string memberZip = InputController.ReadNumeric(5, 5, true, "Member Zipcode").ToString();
+            string memberEmail = InputController.ReadText(2, 254, "Member Email");
+
+            tui.WriteLine("\tGot member.");
+            tui.Render(true);
+
             Console.ReadLine();
 
-            MemberPacket memberPacket = new MemberPacket("ADD_MEMBER", sessionID, "321654987", "ACTIVE", "Bob",
-                "123 Bob Road", "PDX", "OR", "97777", "bob@aol.com");
+            MemberPacket memberPacket = new MemberPacket("ADD_MEMBER", sessionID, memberID, memberActive, memberName,
+                memberAddress, memberCity, memberState, memberZip, memberEmail);
 
+            
             ResponsePacket responsePacket = server.ProcessAction(memberPacket);
 
             tui.WriteLine(responsePacket.ToString());

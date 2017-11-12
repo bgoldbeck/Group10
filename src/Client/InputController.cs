@@ -17,9 +17,9 @@ namespace HealthcareClientSystem
         /// <param name="isPositive"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private static string ReadLine(bool isDigit, bool isPositive, int length)
+        private static string ReadLine(bool isDigit, bool isPositive, int lengthMin, int lengthMax)
         {
-            if (length < 0)
+            if (lengthMin <= 0 || lengthMax <= 0 || lengthMin > lengthMax)
             {
                 return "";
             }
@@ -48,7 +48,7 @@ namespace HealthcareClientSystem
                 }
             }
 
-            if (line.Length != length)
+            if (line.Length < lengthMin || line.Length > lengthMax)
             {
                 // String input length doesn't match paramater length.
                 line = "";
@@ -62,14 +62,14 @@ namespace HealthcareClientSystem
         /// </summary>
         /// <param name="digits"></param>
         /// <returns></returns>
-        public static int ReadNumeric(int digits, bool isPositive)
+        public static int ReadNumeric(int digitsMin, int digitsMax, bool isPositive, string context = "ID")
         { 
             string id = "";
 
             while (id == "")
             {
-                Console.Write("Enter ID: ");
-                id = InputController.ReadLine(true, isPositive, digits);
+                Console.Write("Enter " + context + ": ");
+                id = InputController.ReadLine(true, isPositive, digitsMin, digitsMax);
                 if (id == "")
                 { 
                     Console.WriteLine("\n\tBad ID! Please try again.\n");
@@ -84,14 +84,14 @@ namespace HealthcareClientSystem
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static string ReadText(int length)
+        public static string ReadText(int lengthMin, int lengthMax, string context = "Text")
         {
             string text = "";
 
             while (text == "")
             {
-                Console.Write("Enter Text: ");
-                text = InputController.ReadLine(false, false, length);
+                Console.Write("Enter " + context + ": ");
+                text = InputController.ReadLine(false, false, lengthMin, lengthMax);
                 if (text == "")
                 {
                     Console.WriteLine("\n\tBad Text! Please try again.\n");
