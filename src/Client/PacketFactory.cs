@@ -27,6 +27,9 @@ namespace HealthcareClientSystem
                 case "MemberPacket":
                     packet = ReadMemberPacket(tui, action, sessionID);
                     break;
+                case "ProviderPacket":
+                    packet = ReadProviderPacket(tui, action, sessionID);
+                    break;
                 default:
                     break;
             }
@@ -95,6 +98,68 @@ namespace HealthcareClientSystem
                 action, sessionID, memberID, 
                 memberStatus, memberName, memberAddress,
                 memberCity, memberState, memberZip, memberEmail);
+        }
+
+        private ProviderPacket ReadProviderPacket(TextUI tui, string action, string sessionID)
+        {
+            tui.WriteLine("\tPlease enter the provider's details.");
+
+            tui.Render();
+
+            string providerID = InputController.ReadNumeric(9, 9, true, "Provider ID").ToString();
+
+            // The member is active because we are adding a NEW member.
+            string providerStatus = "ACTIVE";
+
+            tui.WriteLine("\tProviderID: " + providerID);
+            tui.WriteLine("\tProviderStatus: " + providerStatus);
+
+            tui.Refresh();
+
+            // Get the member's name.
+            string providerName = InputController.ReadText(1, 25, "Provider Name");
+
+            tui.WriteLine("\tProviderName: " + providerName);
+            tui.Refresh();
+
+            // Get the member's address.
+            string providerAddress = InputController.ReadText(1, 25, "Provider Address");
+
+            tui.WriteLine("\tProviderAddress: " + providerAddress);
+            tui.Refresh();
+
+            // Get the member's city.
+            string providerCity = InputController.ReadText(1, 14, "Provider City");
+
+            tui.WriteLine("\tProviderCity: " + providerCity);
+            tui.Refresh();
+
+            // Get the member's state.
+            string providerState = InputController.ReadText(2, 2, "Provider State");
+
+            tui.WriteLine("\tProviderState: " + providerState);
+            tui.Refresh();
+
+            // Get the member's zip code.
+            string providerZip = InputController.ReadNumeric(5, 5, true, "Provider Zip").ToString();
+
+            tui.WriteLine("\tProviderZip: " + providerZip);
+            tui.Refresh();
+
+            // Get the member's zip email address.
+            string providerEmail = InputController.ReadText(2, 254, "Provider Email");
+
+            tui.WriteLine("\tProviderEmail: " + providerEmail);
+            
+            // Get the member's zip email address.
+            string providerPassword = InputController.ReadText(3, 15, "Provider Password");
+
+            tui.WriteLine("\tProviderPassword: " + providerPassword);
+
+            return new ProviderPacket(
+                action, sessionID, providerID,
+                providerStatus, providerName, providerAddress,
+                providerCity, providerState, providerZip, providerEmail, providerPassword);
         }
     }
 }

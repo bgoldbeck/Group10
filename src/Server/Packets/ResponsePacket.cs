@@ -31,7 +31,7 @@ namespace ChocAnServer.Packets
         /// <param name="newData"></param>
         /// <param name="newError"></param>
         public ResponsePacket(string newAction, string newSessionID, 
-            string newData, string newResponse):base(newAction,newSessionID)
+            string newData, string newResponse) : base(newAction , newSessionID)
         {
             this.data = newData;
             this.response = newResponse;

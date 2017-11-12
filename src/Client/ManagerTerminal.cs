@@ -65,6 +65,24 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         private bool AddProviderUpdate()
         {
+            tui.WriteLine("ADD PROVIDER", TextUI.TextUIJustify.CENTER);
+
+            // Fill out the new member packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.GetPacket(tui, "ProviderPacket", "ADD_PROVIDER", sessionID) as ProviderPacket);
+
+            // Write the response packet to the screen buffer.
+            tui.WriteLine("\n \n \t[Response]");
+            tui.WriteLine(responsePacket.ToString());
+            tui.WriteLine("\n \nType some key(s) to continue.", TextUI.TextUIJustify.CENTER);
+
+            // Refresh the screen to see what our response was.
+            tui.Refresh();
+
+            // Pause for the user to look at the response.
+            Console.ReadLine();
+
+            // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
             return true;
         }

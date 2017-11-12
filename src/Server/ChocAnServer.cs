@@ -36,7 +36,9 @@ namespace ChocAnServer
                 // Throw argument exception.
             }
 
-            ResponsePacket responsePacket = null;
+            // Generic response if no action executes.
+            ResponsePacket responsePacket = new ResponsePacket(
+                basePacket.Action(), basePacket.SessionID(), "", "No Action Performed.");
 
             switch (basePacket.Action())
             {
@@ -237,7 +239,9 @@ namespace ChocAnServer
             {
                 // Exception.
             }
-            ResponsePacket responsePacket = null;
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
 
             return responsePacket;
         }
