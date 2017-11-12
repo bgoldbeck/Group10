@@ -35,6 +35,8 @@ namespace HealthcareClientSystem
 
         protected ChocAnServer.ChocAnServer server;
 
+        protected PacketFactory packetFactory;
+
         /// <summary>
         /// 
         /// </summary>
@@ -59,6 +61,8 @@ namespace HealthcareClientSystem
             sessionID = "";
 
             server = new ChocAnServer.ChocAnServer();
+
+            packetFactory = new PacketFactory();
 
         }
 
@@ -117,7 +121,7 @@ namespace HealthcareClientSystem
             tui.WriteLine(String.Format("UserID: {0}\nPassword: {1}\n", username, password), TextUI.TextUIJustify.CENTER);
             tui.Render(true);
 
-            //Do login packet here.
+            // Do login packet here.
             LoginPacket lp = new LoginPacket("LOGIN", "", username, password, AccessLevel());
 
             ResponsePacket rp = server.ProcessAction(lp);

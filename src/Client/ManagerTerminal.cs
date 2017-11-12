@@ -39,34 +39,29 @@ namespace HealthcareClientSystem
         {
             tui.WriteLine("ADD MEMBER", TextUI.TextUIJustify.CENTER);
 
-            tui.WriteLine("\tPlease enter the member's details.");
 
-            string memberID = InputController.ReadNumeric(9, 9, true, "Member ID").ToString();
-            string memberActive = "ACTIVE";
-            string memberName = InputController.ReadText(1, 25, "Member Name");
-            string memberAddress = InputController.ReadText(1, 25, "Member Address");
-            string memberCity = InputController.ReadText(1, 14, "Member City");
-            string memberState = InputController.ReadText(1, 2, "Member State");
-            string memberZip = InputController.ReadNumeric(5, 5, true, "Member Zipcode").ToString();
-            string memberEmail = InputController.ReadText(2, 254, "Member Email");
 
-            tui.WriteLine("\tGot member.");
-            tui.Render(true);
-
-            Console.ReadLine();
-
-            MemberPacket memberPacket = new MemberPacket("ADD_MEMBER", sessionID, memberID, memberActive, memberName,
-                memberAddress, memberCity, memberState, memberZip, memberEmail);
-
+            // We need to get all the inputs from the user. This should probably be 
+            // Refactored to another class that handles building packets.
             
-            ResponsePacket responsePacket = server.ProcessAction(memberPacket);
 
+            // Fill out the new member packet from the user input and send it off to the server.
+            // We get back a response packet to see how things went.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.GetPacket(tui, "MemberPacket", "ADD_MEMBER", sessionID) as MemberPacket);
+
+            // Write the response packet to the screen buffer.
+            tui.WriteLine("\n \n \t[Response]");
             tui.WriteLine(responsePacket.ToString());
+            tui.WriteLine("\n \nType some key(s) to continue.", TextUI.TextUIJustify.CENTER);
 
-            tui.Render(true);
+            // Refresh the screen to see what our response was.
+            tui.Refresh();
 
+            // Pause for the user to look at the response.
             Console.ReadLine();
 
+            // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
             return true;
         }

@@ -64,19 +64,19 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         public static int ReadNumeric(int digitsMin, int digitsMax, bool isPositive, string context = "ID")
         { 
-            string id = "";
+            string num = "";
 
-            while (id == "")
+            while (num == "")
             {
                 Console.Write("Enter " + context + ": ");
-                id = InputController.ReadLine(true, isPositive, digitsMin, digitsMax);
-                if (id == "")
+                num = InputController.ReadLine(true, isPositive, digitsMin, digitsMax);
+                if (num == "")
                 { 
-                    Console.WriteLine("\n\tBad ID! Please try again.\n");
+                    Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
                 }
             }
             
-            return Convert.ToInt32(id);
+            return Convert.ToInt32(num);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace HealthcareClientSystem
                 text = InputController.ReadLine(false, false, lengthMin, lengthMax);
                 if (text == "")
                 {
-                    Console.WriteLine("\n\tBad Text! Please try again.\n");
+                    Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
                 }
             }
             

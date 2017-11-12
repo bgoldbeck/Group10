@@ -283,5 +283,16 @@ namespace HealthcareClientSystem
             }
             return;
         }
+
+        /// <summary>
+        /// Wipes the window clean to blank slate. (Does NOT clear buffer).
+        /// Then writes the buffered output to the console once again.
+        /// </summary>
+        public void Refresh()
+        {
+            Console.Clear();
+            Render();
+            return;
+        }
     }
 }

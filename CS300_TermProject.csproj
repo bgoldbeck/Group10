@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Client\InputController.cs" />
+    <Compile Include="src\Client\PacketFactory.cs" />
     <Compile Include="src\Server\ChocAnServer.cs" />
     <Compile Include="src\Client\ManagerTerminal.cs" />
     <Compile Include="src\Client\OperatorTerminal.cs" />

@@ -143,7 +143,7 @@ namespace ChocAnServer
             }
             
             object[][] sessionTable = database.ExecuteQuery(String.Format("SELECT * FROM sessions " +
-                "WHERE sessionKey = '{0}' LIMIT 1;", sessionKey), out int affectedRows);
+                "WHERE sessionKey = '{0}' LIMIT 1;", sessionKey), out int affectedRecords);
             
             if(sessionTable.Length != 0 && sessionTable[0].Length != 0)
             {
@@ -173,7 +173,7 @@ namespace ChocAnServer
             string response = "";
 
             object[][] userdata = database.ExecuteQuery(String.Format("SELECT * FROM users " +
-                "WHERE userID = {0} LIMIT 1;", packet.ID()), out int affectedRows);
+                "WHERE userID = {0} LIMIT 1;", packet.ID()), out int affectedRecords);
 
             /*string resp = "";
 
@@ -200,18 +200,18 @@ namespace ChocAnServer
 
 
                 object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions " +
-                    "WHERE userID = '{0}' LIMIT 1;", userdata[0][0]), out affectedRows);
+                    "WHERE userID = '{0}' LIMIT 1;", userdata[0][0]), out affectedRecords);
 
                 if (session.Length != 0)
                 {
                     database.ExecuteQuery(String.Format("UPDATE sessions " +
                         "SET sessionKey = '{0}', expirationTime = '{1}' " +
-                        "WHERE userID = '{2}';", sessionID, date.ToString(), userdata[0][0]), out affectedRows);
+                        "WHERE userID = '{2}';", sessionID, date.ToString(), userdata[0][0]), out affectedRecords);
                 }
                 else
                 {
                     database.ExecuteQuery(String.Format("INSERT INTO sessions(userID, expirationTime, sessionKey) " +
-                        "VALUES( '{0}', '{1}', '{2}' );", userdata[0][0], date.ToString(), sessionID), out affectedRows);
+                        "VALUES( '{0}', '{1}', '{2}' );", userdata[0][0], date.ToString(), sessionID), out affectedRecords);
                 }
 
                 response = "Login Successful";
@@ -253,6 +253,14 @@ namespace ChocAnServer
             return responsePacket;
         }
 
+        /// <summary>
+        /// Build an sql statement from the packet for adding a
+        /// new member to the database and execute that statement. 
+        /// The function will return a ResponsePacket with information
+        /// regarding whether the member was added or not.
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
         private ResponsePacket RequestAddMember(MemberPacket packet)
         {
             if (packet == null)
@@ -265,6 +273,7 @@ namespace ChocAnServer
             // adding a new member, so of course they are valid.
             int memberValid = 1;
 
+            // Build the query up, the sqlite database will execute this statement.
             string builtQuery = String.Format("INSERT INTO members(" +
                 "memberID, memberName, memberAddress, memberCity, memberState, " +
                 "memberZip, memberValid, memberEmail, memberStatus) VALUES(" +
@@ -272,19 +281,15 @@ namespace ChocAnServer
                 packet.ID(), packet.Name(), packet.Address(), packet.City(), packet.State(),
                 packet.Zip(), memberValid, packet.Email(), packet.Status()).ToString();
 
+            // Execute the statement on the database. If any rows were added, meaning
+            // the member was added, we can check the affectedRecords variable for a 1 (added) or
+            // a 0 (not added).
             database.ExecuteQuery(builtQuery, out int affectedRecords);
+            
 
-            string response = "";
-
-            if (affectedRecords > 0)
-            {
-                response = "Member saved on record.";
-            }
-            else
-            {
-                response = "Failed to save member on record.";
-            }
-
+            // Build the response string depending if we added a member.
+            string response = affectedRecords > 0 ? "Member saved on record." : "Failed to save member on record.";
+            
             return new ResponsePacket("ADD_MEMBER", packet.SessionID(), affectedRecords.ToString(), response);
         }
 
