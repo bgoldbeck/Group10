@@ -60,7 +60,7 @@ namespace HealthcareClientSystem
             tui.Refresh();
 
             // Get the member's name.
-            string memberName = InputController.ReadText(1, 25, "Member Name");
+            string memberName = InputController.ReadText(0, 25, "Member Name");
 
             tui.WriteLine("\tMemberName: " + memberName);
             tui.Refresh();

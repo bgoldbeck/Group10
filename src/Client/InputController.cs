@@ -19,7 +19,7 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         private static string ReadLine(bool isDigit, bool isPositive, int lengthMin, int lengthMax)
         {
-            if (lengthMin <= 0 || lengthMax <= 0 || lengthMin > lengthMax)
+            if (lengthMax <= 0 || lengthMin > lengthMax)
             {
                 return "";
             }
@@ -70,9 +70,13 @@ namespace HealthcareClientSystem
             {
                 Console.Write("Enter " + context + ": ");
                 num = InputController.ReadLine(true, isPositive, digitsMin, digitsMax);
-                if (num == "")
+                if (num == "" && digitsMin > 0)
                 { 
                     Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
+                }
+                else
+                {
+                    break;
                 }
             }
             
@@ -92,9 +96,13 @@ namespace HealthcareClientSystem
             {
                 Console.Write("Enter " + context + ": ");
                 text = InputController.ReadLine(false, false, lengthMin, lengthMax);
-                if (text == "")
+                if (text == "" && lengthMin > 0)
                 {
                     Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
+                }
+                else
+                {
+                    break;
                 }
             }
             

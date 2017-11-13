@@ -32,7 +32,10 @@ namespace HealthcareClientSystem
         }
 
         /// <summary>
-        /// 
+        /// The manager entered the add member state and now must fill out a
+        /// member packet to submit to the server. The packet will process on the server
+        /// and return a response that can be viewed and inspected to see what took place
+        /// on the server-side.
         /// </summary>
         /// <returns></returns>
         private bool AddMemberUpdate()
