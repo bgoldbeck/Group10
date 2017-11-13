@@ -14,7 +14,6 @@ namespace HealthcareClientSystem
         {
             updateDelegates[(int)TerminalState.VIEW_PROVIDER_DIRECTORY] = ViewProviderDirectoryUpdate;
             updateDelegates[(int)TerminalState.CHECK_MEMBER_STATUS] = CheckMemberStatus;
-            updateDelegates[(int)TerminalState.CREATE_SERVICE_RECORD] = CreateServiceRecordUpdate;
         }
 
         /// <summary>
@@ -26,16 +25,7 @@ namespace HealthcareClientSystem
             currentState = TerminalState.MENU;
             return true;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected bool CreateServiceRecordUpdate()
-        {
-            currentState = TerminalState.MENU;
-            return true;
-        }
+        
 
         /// <summary>
         /// 
@@ -93,7 +83,7 @@ namespace HealthcareClientSystem
                     currentState = TerminalState.CHECK_MEMBER_STATUS;
                     break;
                 case "3":
-                    currentState = TerminalState.CREATE_SERVICE_RECORD;
+                    currentState = TerminalState.ADD_SERVICE_RECORD;
                     break;
                 case "9":
                     currentState = TerminalState.LOGIN;

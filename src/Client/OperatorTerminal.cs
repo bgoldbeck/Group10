@@ -15,7 +15,7 @@ namespace HealthcareClientSystem
 
         protected enum TerminalState {
             LOGIN, MENU, VIEW_PROVIDER_DIRECTORY,
-            ADD_MEMBER, CHECK_MEMBER_STATUS, CREATE_SERVICE_RECORD,
+            ADD_MEMBER, CHECK_MEMBER_STATUS,
             UPDATE_MEMBER, REMOVE_MEMBER, ADD_PROVIDER, 
             ADD_SERVICE_CODE, REMOVE_SERVICE_CODE, ADD_SERVICE_RECORD,
             REMOVE_SERVICE_RECORD, MAIN_ACCOUNTING_PROCEDURE, REMOVE_PROVIDER,
@@ -59,6 +59,7 @@ namespace HealthcareClientSystem
             // Set each updateDelegate.
             updateDelegates[(int)TerminalState.LOGIN] = LoginUpdate;
             updateDelegates[(int)TerminalState.MENU] = MenuUpdate;
+            updateDelegates[(int)TerminalState.ADD_SERVICE_RECORD] = AddServiceRecordUpdate;
 
             sessionID = "";
 
@@ -67,6 +68,29 @@ namespace HealthcareClientSystem
             packetFactory = new PacketFactory();
 
             userID = "";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected bool AddServiceRecordUpdate()
+        {
+            tui.WriteLine("ADD INVOICE", TextUI.TextUIJustify.CENTER);
+
+            // Fill out the new invoice packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.ReadPacket(tui, "InvoicePacket", "ADD_INVOICE", sessionID, userID) as InvoicePacket);
+
+            // Write the response packet to the terminal
+            WriteResponse(responsePacket);
+
+            // Pause for the user to look at the response.
+            Console.ReadLine();
+
+            // Just go straight back to menu. We are done.
+            currentState = TerminalState.MENU;
+            return true;
         }
 
         /// <summary>

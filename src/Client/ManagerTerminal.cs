@@ -18,7 +18,6 @@ namespace HealthcareClientSystem
             updateDelegates[(int)TerminalState.ADD_MEMBER] = AddMemberUpdate;
             updateDelegates[(int)TerminalState.ADD_PROVIDER] = AddProviderUpdate;
             updateDelegates[(int)TerminalState.ADD_SERVICE_CODE] = AddServiceCodeUpdate;
-            updateDelegates[(int)TerminalState.ADD_SERVICE_RECORD] = AddServiceRecordUpdate;
             updateDelegates[(int)TerminalState.REMOVE_MEMBER] = RemoveMemberUpdate;
             updateDelegates[(int)TerminalState.REMOVE_PROVIDER] = RemoveProviderUpdate;
             updateDelegates[(int)TerminalState.REMOVE_SERVICE_RECORD] = RemoveServiceRecordUpdate;
@@ -27,6 +26,7 @@ namespace HealthcareClientSystem
             updateDelegates[(int)TerminalState.UPDATE_MEMBER] = UpdateMemberUpdate;
             updateDelegates[(int)TerminalState.UPDATE_PROVIDER] = UpdateProviderUpdate;
             updateDelegates[(int)TerminalState.UPDATE_SERVICE_CODE] = UpdateServiceCodeUpdate;
+            updateDelegates[(int)TerminalState.ADD_SERVICE_RECORD] = AddServiceRecordUpdate;
             updateDelegates[(int)TerminalState.MAIN_ACCOUNTING_PROCEDURE] = MainAccountingProcedureUpdate;
 
         }
@@ -92,28 +92,7 @@ namespace HealthcareClientSystem
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private bool AddServiceRecordUpdate()
-        {
-            tui.WriteLine("ADD INVOICE", TextUI.TextUIJustify.CENTER);
-
-            // Fill out the new invoice packet from the user input and send it off to the server.
-            ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.ReadPacket(tui, "InvoicePacket", "ADD_INVOICE", sessionID, userID) as InvoicePacket);
-
-            // Write the response packet to the terminal
-            WriteResponse(responsePacket);
-
-            // Pause for the user to look at the response.
-            Console.ReadLine();
-
-            // Just go straight back to menu. We are done.
-            currentState = TerminalState.MENU;
-            return true;
-        }
+  
 
         /// <summary>
         /// 
@@ -294,12 +273,15 @@ namespace HealthcareClientSystem
                 case "x":
                     currentState = TerminalState.CUSTOM_PROVIDER_REPORT;
                     break;
+                case "f":
+                    currentState = TerminalState.ADD_SERVICE_RECORD;
+                    break;
                 case "m":
                     currentState = TerminalState.MAIN_ACCOUNTING_PROCEDURE;
                     break;
                 case "9":
                     currentState = TerminalState.LOGIN;
-                    sessionID = "";
+                    sessionID = userID = "";
                     break;
                 default:
                     break;
