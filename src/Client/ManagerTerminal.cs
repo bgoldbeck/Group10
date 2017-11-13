@@ -41,7 +41,7 @@ namespace HealthcareClientSystem
 
             // Fill out the new member packet from the user input and send it off to the server.
             ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.GetPacket(tui, "MemberPacket", "ADD_MEMBER", sessionID) as MemberPacket);
+                packetFactory.ReadPacket(tui, "MemberPacket", "ADD_MEMBER", sessionID) as MemberPacket);
 
             // Write the response packet to the screen buffer.
             tui.WriteLine("\n \n \t[Response]");
@@ -69,7 +69,7 @@ namespace HealthcareClientSystem
 
             // Fill out the new member packet from the user input and send it off to the server.
             ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.GetPacket(tui, "ProviderPacket", "ADD_PROVIDER", sessionID) as ProviderPacket);
+                packetFactory.ReadPacket(tui, "ProviderPacket", "ADD_PROVIDER", sessionID) as ProviderPacket);
 
             // Write the response packet to the screen buffer.
             tui.WriteLine("\n \n \t[Response]");

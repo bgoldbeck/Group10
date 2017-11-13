@@ -18,7 +18,7 @@ namespace HealthcareClientSystem
         /// <param name="action"></param>
         /// <param name="sessionID"></param>
         /// <returns></returns>
-        public BasePacket GetPacket(TextUI tui, String packetType, string action, string sessionID = "")
+        public BasePacket ReadPacket(TextUI tui, String packetType, string action, string sessionID = "")
         {
             BasePacket packet = null;
             

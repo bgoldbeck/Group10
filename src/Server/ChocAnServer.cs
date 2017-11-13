@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 
 using ChocAnServer.Packets;
 using SQLLiteDatabaseCenter;
+using System.IO;
 
 namespace ChocAnServer
 {
@@ -218,7 +219,10 @@ namespace ChocAnServer
 
                 response = "Login Successful";
             }
-            
+
+            WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
+                sessionID + ",", packet.Action() + ",", response));
+
             return new ResponsePacket("LOGIN", "", sessionID, response); 
         }
 
@@ -293,7 +297,10 @@ namespace ChocAnServer
 
             // Build the response string depending if we added a member.
             string response = affectedRecords > 0 ? "Member saved on record." : "Failed to save member on record.";
-            
+
+            WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
+                packet.SessionID() + ",", packet.Action() + ",", response));
+
             return new ResponsePacket("ADD_MEMBER", packet.SessionID(), affectedRecords.ToString(), response);
         }
 
@@ -336,7 +343,9 @@ namespace ChocAnServer
             if (entry != null)
             {
                 // Write entry as long as it's not null.
-                System.IO.File.AppendText(DateTime.Now.ToString() + " : " + entry);
+
+                System.IO.File.AppendAllText(this.logFilepath,
+                    DateTime.Now.ToString() + " : " + entry);
             }
             
             return;
