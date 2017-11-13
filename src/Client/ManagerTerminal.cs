@@ -46,13 +46,8 @@ namespace HealthcareClientSystem
             ResponsePacket responsePacket = server.ProcessAction(
                 packetFactory.ReadPacket(tui, "MemberPacket", "ADD_MEMBER", sessionID) as MemberPacket);
 
-            // Write the response packet to the screen buffer.
-            tui.WriteLine("\n \n \t[Response]");
-            tui.WriteLine(responsePacket.ToString());
-            tui.WriteLine("\n \nType some key(s) to continue.", TextUI.TextUIJustify.CENTER);
-
-            // Refresh the screen to see what our response was.
-            tui.Refresh();
+            // Write the response packet to the terminal
+            WriteResponse(responsePacket);
 
             // Pause for the user to look at the response.
             Console.ReadLine();
@@ -74,13 +69,8 @@ namespace HealthcareClientSystem
             ResponsePacket responsePacket = server.ProcessAction(
                 packetFactory.ReadPacket(tui, "ProviderPacket", "ADD_PROVIDER", sessionID) as ProviderPacket);
 
-            // Write the response packet to the screen buffer.
-            tui.WriteLine("\n \n \t[Response]");
-            tui.WriteLine(responsePacket.ToString());
-            tui.WriteLine("\n \nType some key(s) to continue.", TextUI.TextUIJustify.CENTER);
-
-            // Refresh the screen to see what our response was.
-            tui.Refresh();
+            // Write the response packet to the terminal
+            WriteResponse(responsePacket);
 
             // Pause for the user to look at the response.
             Console.ReadLine();
@@ -96,6 +86,8 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         private bool AddServiceCodeUpdate()
         {
+       
+
             currentState = TerminalState.MENU;
             return true;
         }
@@ -106,6 +98,19 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         private bool AddServiceRecordUpdate()
         {
+            tui.WriteLine("ADD INVOICE", TextUI.TextUIJustify.CENTER);
+
+            // Fill out the new invoice packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.ReadPacket(tui, "InvoicePacket", "ADD_INVOICE", sessionID, userID) as InvoicePacket);
+
+            // Write the response packet to the terminal
+            WriteResponse(responsePacket);
+
+            // Pause for the user to look at the response.
+            Console.ReadLine();
+
+            // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
             return true;
         }

@@ -66,20 +66,19 @@ namespace HealthcareClientSystem
         { 
             string num = "";
 
+            // We can't allow for less than 1 digit.
+            if (digitsMin < 1)
+                digitsMin = 1;
+
             while (num == "")
             {
                 Console.Write("Enter " + context + ": ");
                 num = InputController.ReadLine(true, isPositive, digitsMin, digitsMax);
-                if (num == "" && digitsMin > 0)
+                if (num == "")
                 { 
                     Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
                 }
-                else
-                {
-                    break;
-                }
             }
-            
             return Convert.ToInt32(num);
         }
 

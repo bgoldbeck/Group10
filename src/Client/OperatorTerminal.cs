@@ -37,6 +37,8 @@ namespace HealthcareClientSystem
 
         protected PacketFactory packetFactory;
 
+        protected string userID;
+
         /// <summary>
         /// 
         /// </summary>
@@ -64,6 +66,7 @@ namespace HealthcareClientSystem
 
             packetFactory = new PacketFactory();
 
+            userID = "";
         }
 
         /// <summary>
@@ -131,7 +134,10 @@ namespace HealthcareClientSystem
 
             // If we got a valid session from the server (md5 is length 32)
             if (this.sessionID.Length == 32)
+            { 
+                userID = username;
                 currentState = TerminalState.MENU;
+            }
             else
             {
                 tui.WriteLine(String.Format("The server gave the response:\n Status: {0} SessionID: {1}\nPress any key to continue...", rp.Response(), rp.Data()), TextUI.TextUIJustify.CENTER);
@@ -161,6 +167,28 @@ namespace HealthcareClientSystem
         public bool IsLoggedIn()
         {
             return sessionID != "";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        protected void WriteResponse(ResponsePacket packet)
+        {
+            if (packet == null)
+            {
+                throw new ArgumentNullException("packet", "Response packet was null for reading.");
+            }
+
+            // Write the response packet to the screen buffer.
+            tui.WriteLine("\n \n \t[Response]");
+            tui.WriteLine(packet.ToString());
+            tui.WriteLine("\n \nType some key(s) to continue.", TextUI.TextUIJustify.CENTER);
+
+            // Refresh the screen to see what our response was.
+            tui.Refresh();
+
+            return;
         }
     }
 }

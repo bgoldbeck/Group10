@@ -57,7 +57,7 @@ namespace ChocAnServer.Packets
         /// <param name="inputString"></param>
         /// <param name="lower"></param>
         /// <param name="upper"></param>
-        protected void CheckInt(string inputString,int lower, int upper)
+        protected void CheckInt(string inputString, int lower, int upper)
         {
             int temp;
             if (!int.TryParse(inputString, out temp))

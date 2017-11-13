@@ -18,7 +18,7 @@ namespace HealthcareClientSystem
         /// <param name="action"></param>
         /// <param name="sessionID"></param>
         /// <returns></returns>
-        public BasePacket ReadPacket(TextUI tui, String packetType, string action, string sessionID = "")
+        public BasePacket ReadPacket(TextUI tui, String packetType, string action, string sessionID = "", string userID = "")
         {
             BasePacket packet = null;
             
@@ -29,6 +29,9 @@ namespace HealthcareClientSystem
                     break;
                 case "ProviderPacket":
                     packet = ReadProviderPacket(tui, action, sessionID);
+                    break;
+                case "InvoicePacket":
+                    packet = ReadInvoicePacket(tui, action, sessionID, userID);
                     break;
                 default:
                     break;
@@ -66,31 +69,31 @@ namespace HealthcareClientSystem
             tui.Refresh();
 
             // Get the member's address.
-            string memberAddress = InputController.ReadText(1, 25, "Member Address");
+            string memberAddress = InputController.ReadText(0, 25, "Member Address");
 
             tui.WriteLine("\tMemberAddress: " + memberAddress);
             tui.Refresh();
 
             // Get the member's city.
-            string memberCity = InputController.ReadText(1, 14, "Member City");
+            string memberCity = InputController.ReadText(0, 14, "Member City");
 
             tui.WriteLine("\tMemberCity: " + memberCity);
             tui.Refresh();
 
             // Get the member's state.
-            string memberState = InputController.ReadText(2, 2, "Member State");
+            string memberState = InputController.ReadText(0, 2, "Member State");
 
             tui.WriteLine("\tMemberState: " + memberState);
             tui.Refresh();
 
             // Get the member's zip code.
-            string memberZip = InputController.ReadNumeric(5, 5, true, "Member Zip").ToString();
+            string memberZip = InputController.ReadNumeric(0, 5, true, "Member Zip").ToString();
 
             tui.WriteLine("\tMemberZip: " + memberZip);
             tui.Refresh();
 
             // Get the member's zip email address.
-            string memberEmail = InputController.ReadText(2, 254, "Member Email");
+            string memberEmail = InputController.ReadText(0, 254, "Member Email");
 
             tui.WriteLine("\tMemberEmail: " + memberEmail);
 
@@ -160,6 +163,42 @@ namespace HealthcareClientSystem
                 action, sessionID, providerID,
                 providerStatus, providerName, providerAddress,
                 providerCity, providerState, providerZip, providerEmail, providerPassword);
+        }
+
+        private InvoicePacket ReadInvoicePacket(TextUI tui, string action, string sessionID, string userID)
+        {
+            tui.WriteLine("\tPlease enter the Invoices's details.");
+
+            tui.Render();
+
+            string invoiceID = InputController.ReadNumeric(9, 9, true, "Invoice ID").ToString();
+            string currentDateTime = DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss");
+
+            tui.WriteLine("\tInvoiceID: " + invoiceID);
+            tui.WriteLine("\tCurrentDateTime: " + currentDateTime);
+            tui.Refresh();
+
+
+            string serviceDate = "";
+
+            while (!DateTime.TryParse(serviceDate, out DateTime result))
+            { 
+                serviceDate = InputController.ReadText(10, 10, "Service Date of form MM-DD-YYYY");
+            }
+
+            string memberID = InputController.ReadNumeric(9, 9, true, "MemberID ID").ToString();
+            tui.WriteLine("\tMemberID: " + memberID);
+            tui.Refresh();
+            string serviceCode = InputController.ReadNumeric(6, 6, true, "Service Code").ToString();
+            tui.WriteLine("\tServiceCode: " + serviceCode);
+            tui.Refresh();
+
+            string comments = InputController.ReadText(0, 100, "Comments").ToString();
+            tui.WriteLine("\tComments: " + comments);
+            tui.Refresh();
+
+            return new InvoicePacket(
+                action, sessionID, currentDateTime, serviceDate, userID, memberID, serviceCode, comments);
         }
     }
 }
