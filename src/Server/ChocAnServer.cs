@@ -75,7 +75,7 @@ namespace ChocAnServer
                             "Expected InvoicePacket", basePacket.Action()), "basePacket");
                     }
                     break;
-                case "ADD_SERVICECODE":
+                case "ADD_SERVICE_CODE":
                     if (basePacket is ServiceCodePacket)
                     {
                         responsePacket = RequestAddServiceCode((ServiceCodePacket)basePacket);
@@ -331,6 +331,16 @@ namespace ChocAnServer
             return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, response);
         }
 
+        public void WriteLogEntry(string entry)
+        {
+            if (entry != null)
+            {
+                // Write entry as long as it's not null.
+                System.IO.File.AppendText(DateTime.Now.ToString() + " : " + entry);
+            }
+            
+            return;
+        }
     }
 }
 
