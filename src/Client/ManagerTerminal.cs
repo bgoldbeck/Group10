@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using ChocAnServer;
 using ChocAnServer.Packets;
+using HealthcareClientSystem.IO;
 
 namespace HealthcareClientSystem
 {

@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 
+using ChocAnServer;
+using ChocAnServer.Packets;
+using HealthcareClientSystem.IO;
+
 namespace HealthcareClientSystem
 {
     public class ProviderTerminal : OperatorTerminal
@@ -33,9 +37,22 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         protected bool ViewProviderDirectoryUpdate()
         {
-            string[] s = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m" };
-            int groupSize = 5;
-            tui.WriteList(s, groupSize);
+            tui.WriteLine("ADD INVOICE", TextUI.TextUIJustify.CENTER);
+
+            ResponsePacket responsePacket = server.ProcessAction(new BasePacket("VIEW_PROVIDER_DIRECTORY", sessionID));
+
+            // View the response from the server.
+            WriteResponse(responsePacket);
+            
+            // Pause for the user to look at the response.
+            Console.ReadLine();
+
+            // Now view the provider directory file.
+            string [] contents = System.IO.File.ReadAllLines("ProviderDirectory.txt");
+            
+            
+            // View the contents of the provider directory with the given group size paramter.
+            tui.WriteList(contents, 15);
 
             currentState = TerminalState.MENU;
             return true;

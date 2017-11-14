@@ -98,6 +98,17 @@ namespace ChocAnServer
                             "Expected ProviderPacket", basePacket.Action()), "basePacket");
                     }
                     break;
+                case "VIEW_PROVIDER_DIRECTORY":
+                    if (basePacket is BasePacket)
+                    {
+                        responsePacket = RequestProviderDirectory(basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected BasePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
                 case "LOGIN":
                     if (basePacket is LoginPacket)
                     {
@@ -336,6 +347,40 @@ namespace ChocAnServer
             }
 
             return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, response);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestProviderDirectory(BasePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            // Execute the query on the database and get the entire provider directory contents.
+            object [][] data = database.ExecuteQuery("SELECT * FROM provider_directory;", out int affectedRecords);
+
+            List<string> contents = new List<string>();
+
+            for (int i = 0; i < data.Length; ++i)
+            {
+                string line = "\t" + data[i][0].ToString();
+                for (int j = 1; j < data[0].Length; ++j)
+                {
+                    line += ", " + data[i][j];
+                }
+                contents.Add(line);
+
+            }
+
+            System.IO.File.WriteAllLines("ProviderDirectory.txt", contents.ToArray());
+
+            return new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "Provider directory request acknowledged");
         }
 
         public void WriteLogEntry(string entry)

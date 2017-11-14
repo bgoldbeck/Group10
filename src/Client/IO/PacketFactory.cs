@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ChocAnServer.Packets;
+using HealthcareClientSystem;
 
-namespace HealthcareClientSystem
+namespace HealthcareClientSystem.IO
 {
     public class PacketFactory
     {

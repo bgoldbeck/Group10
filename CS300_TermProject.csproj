@@ -52,8 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Client\InputController.cs" />
-    <Compile Include="src\Client\PacketFactory.cs" />
+    <Compile Include="src\Client\IO\InputController.cs" />
+    <Compile Include="src\Client\IO\PacketFactory.cs" />
     <Compile Include="src\Server\ChocAnServer.cs" />
     <Compile Include="src\Client\ManagerTerminal.cs" />
     <Compile Include="src\Client\OperatorTerminal.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="src\Server\Packets\ServiceCodePacket.cs" />
     <Compile Include="src\Server\Packets\DateRangePacket.cs" />
     <Compile Include="src\Server\Packets\BasePacket.cs" />
-    <Compile Include="src\Client\TextUI.cs" />
+    <Compile Include="src\Client\IO\TextUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

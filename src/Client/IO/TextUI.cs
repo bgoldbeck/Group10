@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace HealthcareClientSystem
+namespace HealthcareClientSystem.IO
 {
     public class TextUI
     {
@@ -211,7 +211,7 @@ namespace HealthcareClientSystem
             {
                 for (int j = 0; j < d; ++j)
                 {
-                    this.WriteLine(s[i * d + j], TextUIJustify.CENTER);
+                    this.WriteLine(s[i * d + j]);
                 }
                 this.WriteLine("Please type 'n' for next grouping.", TextUIJustify.CENTER);
                 this.Render();
@@ -221,7 +221,7 @@ namespace HealthcareClientSystem
             this.WriteLine("Remainder.", TextUIJustify.CENTER);
             for (int i = 0; i < r; ++i)
             {
-                this.WriteLine(s[d * q + i], TextUIJustify.CENTER);
+                this.WriteLine(s[d * q + i]);
             }
             this.Render();
             this.ClearBuffer();
