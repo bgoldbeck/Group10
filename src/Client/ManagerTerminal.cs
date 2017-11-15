@@ -50,9 +50,6 @@ namespace HealthcareClientSystem
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
 
-            // Pause for the user to look at the response.
-            Console.ReadLine();
-
             // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
             return true;
@@ -72,9 +69,6 @@ namespace HealthcareClientSystem
 
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
-
-            // Pause for the user to look at the response.
-            Console.ReadLine();
 
             // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;

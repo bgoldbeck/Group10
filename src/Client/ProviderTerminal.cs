@@ -55,9 +55,6 @@ namespace HealthcareClientSystem
 
             // View the response from the server.
             WriteResponse(responsePacket);
-            
-            // Pause for the user to look at the response.
-            Console.ReadLine();
 
             // Now view the provider directory file.
             string [] contents = System.IO.File.ReadAllLines("ProviderDirectory.txt");
