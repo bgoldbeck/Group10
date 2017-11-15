@@ -87,9 +87,6 @@ namespace HealthcareClientSystem
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
 
-            // Pause for the user to look at the response.
-            Console.ReadLine();
-
             // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
             return true;
@@ -127,49 +124,22 @@ namespace HealthcareClientSystem
             {
                 // Exception.
             }
-            tui.WriteLine("Terminal [Login]", TextUI.TextUIJustify.CENTER);
-            //tui.WriteLine("        " + (frame++).ToString());
-            tui.WriteLine("");
-            tui.WriteLine("");
-            tui.WriteLine("");
-            tui.WriteLine("    Login ");
 
-            tui.WriteLine("");
-            tui.WriteLine("");
-            tui.WriteLine("Enter your userID:\n", TextUI.TextUIJustify.CENTER);
+            LoginPacket loginPacket = packetFactory.ReadPacket(tui, "LoginPacket", "", "", "", AccessLevel()) as LoginPacket;
 
-            tui.Render(true);
+            ResponsePacket responsePacket = server.ProcessAction(loginPacket);
 
-            string username = Console.ReadLine();
-            //string formattedoutput = String.Format("{0} {1}", username, username.Length);
-            tui.WriteLine(String.Format("UserID: {0}\nEnter your password:\n", username), TextUI.TextUIJustify.CENTER);
-            tui.Render(true);
-
-            string password = Console.ReadLine();
-
-            tui.WriteLine(String.Format("UserID: {0}\nPassword: {1}\n", username, password), TextUI.TextUIJustify.CENTER);
-            tui.Render(true);
-
-            // Do login packet here.
-            LoginPacket lp = new LoginPacket("LOGIN", "", username, password, AccessLevel());
-
-            ResponsePacket rp = server.ProcessAction(lp);
-
-            this.sessionID = rp.Data();
+            this.sessionID = responsePacket.Data();
 
 
             // If we got a valid session from the server (md5 is length 32)
             if (this.sessionID.Length == 32)
             { 
-                userID = username;
+                userID = loginPacket.ID();
                 currentState = TerminalState.MENU;
             }
             else
-            {
-                tui.WriteLine(String.Format("The server gave the response:\n Status: {0} SessionID: {1}\nPress any key to continue...", rp.Response(), rp.Data()), TextUI.TextUIJustify.CENTER);
-                tui.Render(true);
-                Console.ReadKey();
-            }
+                WriteResponse(responsePacket);
 
             return true;
         }
@@ -213,6 +183,9 @@ namespace HealthcareClientSystem
 
             // Refresh the screen to see what our response was.
             tui.Refresh();
+
+            //Wait for any single key to be pressed by the user.
+            Console.ReadKey();
 
             return;
         }

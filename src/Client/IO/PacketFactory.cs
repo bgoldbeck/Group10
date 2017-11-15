@@ -19,7 +19,7 @@ namespace HealthcareClientSystem.IO
         /// <param name="action"></param>
         /// <param name="sessionID"></param>
         /// <returns></returns>
-        public BasePacket ReadPacket(TextUI tui, String packetType, string action, string sessionID = "", string userID = "")
+        public BasePacket ReadPacket(TextUI tui, String packetType, string action, string sessionID = "", string userID = "", int accessLevel = -1)
         {
             BasePacket packet = null;
             
@@ -33,6 +33,9 @@ namespace HealthcareClientSystem.IO
                     break;
                 case "InvoicePacket":
                     packet = ReadInvoicePacket(tui, action, sessionID, userID);
+                    break;
+                case "LoginPacket":
+                    packet = ReadLoginPacket(tui, accessLevel);
                     break;
                 default:
                     break;
@@ -200,6 +203,35 @@ namespace HealthcareClientSystem.IO
 
             return new InvoicePacket(
                 action, sessionID, currentDateTime, serviceDate, userID, memberID, serviceCode, comments);
+        }
+
+        private LoginPacket ReadLoginPacket(TextUI tui, int accessLevel)
+        {
+            tui.WriteLine("Terminal [Login]", TextUI.TextUIJustify.CENTER);
+            //tui.WriteLine("        " + (frame++).ToString());
+            tui.WriteLine("");
+            tui.WriteLine("");
+            tui.WriteLine("");
+            tui.WriteLine("    Login ");
+
+            tui.WriteLine("");
+            tui.WriteLine("");
+            tui.WriteLine("Enter your userID:\n", TextUI.TextUIJustify.CENTER);
+
+            tui.Render(true);
+
+            string username = Console.ReadLine();
+            //string formattedoutput = String.Format("{0} {1}", username, username.Length);
+            tui.WriteLine(String.Format("UserID: {0}\nEnter your password:\n", username), TextUI.TextUIJustify.CENTER);
+            tui.Render(true);
+
+            string password = Console.ReadLine();
+
+            tui.WriteLine(String.Format("UserID: {0}\nPassword: {1}\n", username, password), TextUI.TextUIJustify.CENTER);
+            tui.Render(true);
+
+            // Do login packet here.
+            return new LoginPacket("LOGIN", "", username, password, accessLevel);
         }
     }
 }
