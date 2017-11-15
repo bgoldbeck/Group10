@@ -26,6 +26,18 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         protected bool CheckMemberStatus()
         {
+            tui.WriteLine("CHECK MEMBER STATUS", TextUI.TextUIJustify.CENTER);
+            
+            ResponsePacket responsePacket = server.ProcessAction(new MemberPacket("MEMBER_STATUS", sessionID,
+                InputController.ReadNumeric(9, 9, true, "MemberID").ToString(), "", "", "", "", "", "", ""));
+
+            // Write the response packet to the terminal
+            WriteResponse(responsePacket);
+
+            // Pause for the user to look at the response.
+            Console.ReadLine();
+
+            // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
             return true;
         }
