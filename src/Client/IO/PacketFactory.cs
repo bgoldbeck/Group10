@@ -19,7 +19,7 @@ namespace HealthcareClientSystem.IO
         /// <param name="action"></param>
         /// <param name="sessionID"></param>
         /// <returns></returns>
-        public BasePacket ReadPacket(TextUI tui, String packetType, string action, string sessionID = "", string userID = "", int accessLevel = -1)
+        public BasePacket BuildPacket(TextUI tui, String packetType, string action, string sessionID = "", string userID = "", int accessLevel = -1)
         {
             BasePacket packet = null;
             
@@ -36,6 +36,12 @@ namespace HealthcareClientSystem.IO
                     break;
                 case "LoginPacket":
                     packet = ReadLoginPacket(tui, accessLevel);
+                    break;
+                case "ServiceCodePacket":
+                    packet = ReadServiceCodePacket(tui, action, sessionID);
+                    break;
+                case "DateRangePacket":
+                    packet = ReadDateRangePacket(tui, action, sessionID);
                     break;
                 default:
                     break;
@@ -56,7 +62,7 @@ namespace HealthcareClientSystem.IO
 
             tui.Render();
 
-            string memberID = InputController.ReadNumeric(9, 9, true, "Member ID").ToString();
+            string memberID = InputController.ReadInteger(9, 9, true, "Member ID").ToString();
 
             // The member is active because we are adding a NEW member.
             string memberStatus = "ACTIVE";
@@ -91,7 +97,7 @@ namespace HealthcareClientSystem.IO
             tui.Refresh();
 
             // Get the member's zip code.
-            string memberZip = InputController.ReadNumeric(0, 5, true, "Member Zip").ToString();
+            string memberZip = InputController.ReadInteger(0, 5, true, "Member Zip").ToString();
 
             tui.WriteLine("\tMemberZip: " + memberZip);
             tui.Refresh();
@@ -113,7 +119,7 @@ namespace HealthcareClientSystem.IO
 
             tui.Render();
 
-            string providerID = InputController.ReadNumeric(9, 9, true, "Provider ID").ToString();
+            string providerID = InputController.ReadInteger(9, 9, true, "Provider ID").ToString();
 
             // The member is active because we are adding a NEW member.
             string providerStatus = "ACTIVE";
@@ -148,7 +154,7 @@ namespace HealthcareClientSystem.IO
             tui.Refresh();
 
             // Get the member's zip code.
-            string providerZip = InputController.ReadNumeric(5, 5, true, "Provider Zip").ToString();
+            string providerZip = InputController.ReadInteger(5, 5, true, "Provider Zip").ToString();
 
             tui.WriteLine("\tProviderZip: " + providerZip);
             tui.Refresh();
@@ -175,7 +181,7 @@ namespace HealthcareClientSystem.IO
 
             tui.Render();
 
-            string invoiceID = InputController.ReadNumeric(9, 9, true, "Invoice ID").ToString();
+            string invoiceID = InputController.ReadInteger(9, 9, true, "Invoice ID").ToString();
             string currentDateTime = DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss");
 
             tui.WriteLine("\tInvoiceID: " + invoiceID);
@@ -190,10 +196,12 @@ namespace HealthcareClientSystem.IO
                 serviceDate = InputController.ReadText(10, 10, "Service Date of form MM-DD-YYYY");
             }
 
-            string memberID = InputController.ReadNumeric(9, 9, true, "MemberID ID").ToString();
+            string memberID = InputController.ReadInteger(9, 9, true, "MemberID ID").ToString();
+
             tui.WriteLine("\tMemberID: " + memberID);
             tui.Refresh();
-            string serviceCode = InputController.ReadNumeric(6, 6, true, "Service Code").ToString();
+
+            string serviceCode = InputController.ReadInteger(6, 6, true, "Service Code").ToString();
             tui.WriteLine("\tServiceCode: " + serviceCode);
             tui.Refresh();
 
@@ -208,7 +216,6 @@ namespace HealthcareClientSystem.IO
         private LoginPacket ReadLoginPacket(TextUI tui, int accessLevel)
         {
             tui.WriteLine("Terminal [Login]", TextUI.TextUIJustify.CENTER);
-            //tui.WriteLine("        " + (frame++).ToString());
             tui.WriteLine("");
             tui.WriteLine("");
             tui.WriteLine("");
@@ -232,6 +239,69 @@ namespace HealthcareClientSystem.IO
 
             // Do login packet here.
             return new LoginPacket("LOGIN", "", username, password, accessLevel);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tui"></param>
+        /// <param name="action"></param>
+        /// <param name="sessionID"></param>
+        /// <returns></returns>
+        private ServiceCodePacket ReadServiceCodePacket(TextUI tui, string action, string sessionID)
+        {
+            tui.WriteLine(" \n \nPlease enter the service code details", TextUI.TextUIJustify.CENTER);
+            tui.Render();
+
+            string serviceCodeID = InputController.ReadInteger(6, 6, true, "Service Code ID").ToString();
+
+            tui.WriteLine("\tServiceCodeID: " + serviceCodeID);
+            tui.Refresh();
+
+            string serviceName = InputController.ReadText(0, 20, "Service Name").ToString();
+
+            tui.WriteLine("\tServiceName: " + serviceName);
+            tui.Refresh();
+            string fee = "";
+            float outFee = 999999.9f;
+
+            while (!float.TryParse(fee, out outFee) || outFee > 999.99f)
+            { 
+                fee = InputController.ReadText(1, 6, "Service Fee (0.0)").ToString();
+            }
+
+            tui.WriteLine("\tServiceFee: " + fee);
+            tui.Refresh();
+
+            return new ServiceCodePacket(action, sessionID, outFee, serviceCodeID, serviceName);
+        }
+
+        private DateRangePacket ReadDateRangePacket(TextUI tui, string action, string sessionID)
+        {
+            tui.WriteLine("Please enter custom report details", TextUI.TextUIJustify.CENTER);
+
+            tui.Render();
+
+            string id = InputController.ReadInteger(9, 9, true, "ID").ToString();
+
+            tui.WriteLine("\tID: " + id);
+
+            string startDate = "";
+            while (!DateTime.TryParse(startDate, out DateTime result))
+            {
+                startDate = InputController.ReadText(10, 10, "Start Date of form MM-DD-YYYY");
+            }
+
+            tui.WriteLine("\tStartDate: " + startDate);
+            tui.Refresh();
+
+            string endDate = "";
+            while (!DateTime.TryParse(endDate, out DateTime result))
+            {
+                endDate = InputController.ReadText(10, 10, "EndDate Date of form MM-DD-YYYY");
+            }
+
+            return new DateRangePacket(action, sessionID, startDate, endDate, id);
         }
     }
 }

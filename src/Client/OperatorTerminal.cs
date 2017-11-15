@@ -20,7 +20,7 @@ namespace HealthcareClientSystem
             ADD_MEMBER, CHECK_MEMBER_STATUS,
             UPDATE_MEMBER, REMOVE_MEMBER, ADD_PROVIDER, 
             ADD_SERVICE_CODE, REMOVE_SERVICE_CODE, ADD_SERVICE_RECORD,
-            REMOVE_SERVICE_RECORD, MAIN_ACCOUNTING_PROCEDURE, REMOVE_PROVIDER,
+            MAIN_ACCOUNTING_PROCEDURE, REMOVE_PROVIDER,
             UPDATE_PROVIDER, UPDATE_SERVICE_CODE,
             CUSTOM_MEMBER_REPORT, CUSTOM_PROVIDER_REPORT, COUNT };
 
@@ -82,7 +82,7 @@ namespace HealthcareClientSystem
 
             // Fill out the new invoice packet from the user input and send it off to the server.
             ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.ReadPacket(tui, "InvoicePacket", "ADD_INVOICE", sessionID, userID) as InvoicePacket);
+                packetFactory.BuildPacket(tui, "InvoicePacket", "ADD_INVOICE", sessionID, userID) as InvoicePacket);
 
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
@@ -107,6 +107,8 @@ namespace HealthcareClientSystem
                     if (updateDelegates[(int)currentState] != null)
                     {
                         running = updateDelegates[(int)currentState]();
+                        tui.Header = " | " + currentState.ToString() + " | ";
+                        tui.Footer = "";
                     }
                 }
 
@@ -125,7 +127,7 @@ namespace HealthcareClientSystem
                 // Exception.
             }
 
-            LoginPacket loginPacket = packetFactory.ReadPacket(tui, "LoginPacket", "", "", "", AccessLevel()) as LoginPacket;
+            LoginPacket loginPacket = packetFactory.BuildPacket(tui, "LoginPacket", "", "", "", AccessLevel()) as LoginPacket;
 
             ResponsePacket responsePacket = server.ProcessAction(loginPacket);
 
@@ -180,6 +182,8 @@ namespace HealthcareClientSystem
             tui.WriteLine("\n \n \t[Response]");
             tui.WriteLine(packet.ToString());
             tui.WriteLine("\n \nType some key(s) to continue.", TextUI.TextUIJustify.CENTER);
+
+            tui.Footer = " " + packet.Response() + " ";
 
             // Refresh the screen to see what our response was.
             tui.Refresh();

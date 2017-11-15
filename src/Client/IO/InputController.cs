@@ -62,7 +62,7 @@ namespace HealthcareClientSystem.IO
         /// </summary>
         /// <param name="digits"></param>
         /// <returns></returns>
-        public static int ReadNumeric(int digitsMin, int digitsMax, bool isPositive, string context = "ID")
+        public static int ReadInteger(int digitsMin, int digitsMax, bool isPositive, string context = "ID")
         { 
             string num = "";
 

@@ -21,7 +21,6 @@ namespace HealthcareClientSystem
             updateDelegates[(int)TerminalState.ADD_SERVICE_CODE] = AddServiceCodeUpdate;
             updateDelegates[(int)TerminalState.REMOVE_MEMBER] = RemoveMemberUpdate;
             updateDelegates[(int)TerminalState.REMOVE_PROVIDER] = RemoveProviderUpdate;
-            updateDelegates[(int)TerminalState.REMOVE_SERVICE_RECORD] = RemoveServiceRecordUpdate;
             updateDelegates[(int)TerminalState.CUSTOM_MEMBER_REPORT] = CustomMemberReportUpdate;
             updateDelegates[(int)TerminalState.CUSTOM_PROVIDER_REPORT] = CustomProviderReportUpdate;
             updateDelegates[(int)TerminalState.UPDATE_MEMBER] = UpdateMemberUpdate;
@@ -41,11 +40,9 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         private bool AddMemberUpdate()
         {
-            tui.WriteLine("ADD MEMBER", TextUI.TextUIJustify.CENTER);
-
             // Fill out the new member packet from the user input and send it off to the server.
             ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.ReadPacket(tui, "MemberPacket", "ADD_MEMBER", sessionID) as MemberPacket);
+                packetFactory.BuildPacket(tui, "MemberPacket", "ADD_MEMBER", sessionID) as MemberPacket);
 
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
@@ -56,7 +53,10 @@ namespace HealthcareClientSystem
         }
 
         /// <summary>
-        /// 
+        /// The manager wants to make a request to add a new provider to the database.
+        /// The manager must fill out a provider packet with all the provider's information
+        /// to be sent to the server to handle the processing. We will get a response that
+        /// informs us of success/failure.
         /// </summary>
         /// <returns></returns>
         private bool AddProviderUpdate()
@@ -65,7 +65,7 @@ namespace HealthcareClientSystem
 
             // Fill out the new member packet from the user input and send it off to the server.
             ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.ReadPacket(tui, "ProviderPacket", "ADD_PROVIDER", sessionID) as ProviderPacket);
+                packetFactory.BuildPacket(tui, "ProviderPacket", "ADD_PROVIDER", sessionID) as ProviderPacket);
 
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
@@ -76,111 +76,191 @@ namespace HealthcareClientSystem
         }
 
         /// <summary>
-        /// 
+        /// The manager entered the add service code state and now must fill out a
+        /// service code packet to submit to the server. The service code represents
+        /// services that providers offer their customers. The packet will process on the server
+        /// and return a response that can be viewed and inspected to see what took place
+        /// on the server-side.
         /// </summary>
         /// <returns></returns>
         private bool AddServiceCodeUpdate()
         {
-       
+            // Fill out the new service code packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.BuildPacket(tui, "ServiceCodePacket", "ADD_SERVICE_CODE", sessionID) as ServiceCodePacket);
+
+            // View the response packet and pause until user enters a key.
+            WriteResponse(responsePacket);
+
 
             currentState = TerminalState.MENU;
             return true;
         }
 
-  
-
         /// <summary>
-        /// 
+        /// The manager wants to make a request to remove a member from the database.
+        /// The manager must fill out a member id they wish to deactivate.
+        /// This will be sent to the server to handle the processing. We will get a response that
+        /// informs us of success/failure.
         /// </summary>
         /// <returns></returns>
         private bool RemoveMemberUpdate()
         {
+            // Fill out the new member packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(new MemberPacket("REMOVE_MEMBER", sessionID, 
+                InputController.ReadInteger(9, 9, true, "Member ID").ToString(), "", "", "", "", "", "", ""));
+
+            // View the response packet and pause until user enters a key.
+            WriteResponse(responsePacket);
+
             currentState = TerminalState.MENU;
             return true;
         }
 
         /// <summary>
-        /// 
+        /// The manager wants to make a request to remove a provider from the database.
+        /// The manager must fill out a provider id they wish to deactivate.
+        /// This will be sent to the server to handle the processing. We will get a response that
+        /// informs us of success/failure.
         /// </summary>
         /// <returns></returns>
         private bool RemoveProviderUpdate()
         {
-            currentState = TerminalState.MENU;
-            return true;
-        }
+            // Fill out the new provider packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(new ProviderPacket("REMOVE_PROVIDER", sessionID,
+                InputController.ReadInteger(9, 9, true, "Provider ID").ToString(), "", "", "", "", "", "", "", ""));
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private bool RemoveServiceRecordUpdate()
-        {
+            // View the response packet and pause until user enters a key.
+            WriteResponse(responsePacket);
+
             currentState = TerminalState.MENU;
             return true;
         }
         
         /// <summary>
-        /// 
+        /// The manager wants to view a specific member's report. It will contain
+        /// a list of invoices the member has been serviced by within a certain range.
+        /// The user must fill in this information to be sent to the server. The server will process
+        /// the information and return a response with success/failure.
         /// </summary>
         /// <returns></returns>
         private bool CustomMemberReportUpdate()
         {
+            // Fill out a custom member report packet and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.BuildPacket(tui, "DateRangePacket", "CUSTOM_MEMBER_REPORT", sessionID) as DateRangePacket);
+
+            // View the response packet and pause until user enters a key.
+            WriteResponse(responsePacket);
+
             currentState = TerminalState.MENU;
             return true;
         }
 
         /// <summary>
-        /// 
+        /// The manager wants to view a specific providers's report. It will contain
+        /// a list of invoices the provider has serviced by within a certain range.
+        /// The user must fill in this information to be sent to the server. The server will process
+        /// the information and return a response with success/failure.
         /// </summary>
         /// <returns></returns>
         private bool CustomProviderReportUpdate()
         {
+            // Fill out a custom member report packet and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.BuildPacket(tui, "DateRangePacket", "CUSTOM_PROVIDER_REPORT", sessionID) as DateRangePacket);
+
+            // View the response packet and pause until user enters a key.
+            WriteResponse(responsePacket);
+            
             currentState = TerminalState.MENU;
             return true;
         }
 
         /// <summary>
-        /// 
+        /// The manager entered the update member state and now must fill out a
+        /// member packet to submit to the server for updating a member's information. 
+        /// The packet will process on the server and return a response that can be viewed 
+        /// and inspected to see what took place on the server-side.
         /// </summary>
         /// <returns></returns>
         private bool UpdateMemberUpdate()
         {
+            // Fill out the new member packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.BuildPacket(tui, "MemberPacket", "UPDATE_MEMBER", sessionID) as MemberPacket);
+
+            // Write the response packet to the terminal
+            WriteResponse(responsePacket);
+
+            // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
             return true;
         }
 
         /// <summary>
-        /// 
+        /// The manager entered the update provider state and now must fill out a
+        /// provider packet to submit to the server for updating a provider's information. 
+        /// The packet will process on the server and return a response that can be viewed 
+        /// and inspected to see what took place on the server-side.
         /// </summary>
         /// <returns></returns>
         private bool UpdateProviderUpdate()
         {
+            // Fill out the new provider packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.BuildPacket(tui, "ProviderPacket", "UPDATE_MEMBER", sessionID) as ProviderPacket);
+
+            // Write the response packet to the terminal
+            WriteResponse(responsePacket);
+
+            // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
             return true;
         }
 
         /// <summary>
-        /// 
+        /// The manager entered the update service code state and now must fill out a
+        /// service code packet to submit to the server for updating a service codes's information. 
+        /// The packet will process on the server and return a response that can be viewed 
+        /// and inspected to see what took place on the server-side.
         /// </summary>
         /// <returns></returns>
         private bool UpdateServiceCodeUpdate()
         {
+            // Fill out the new service code packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.BuildPacket(tui, "ServiceCodePacket", "UPDATE_SERVICE_CODE", sessionID) as ServiceCodePacket);
+
+            // View the response packet and pause until user enters a key.
+            WriteResponse(responsePacket);
+            
             currentState = TerminalState.MENU;
             return true;
         }
 
         /// <summary>
-        /// 
+        /// The manager requests the Main Accounting Procedure. All the reports requested
+        /// will be generated by the server when the request reaches to the server. The server
+        /// will send a response when all the reports have been generated. The response will inform
+        /// the user how many reports were generated or of failure status.
         /// </summary>
         /// <returns></returns>
         private bool MainAccountingProcedureUpdate()
         {
+            ResponsePacket responsePacket = server.ProcessAction(
+                new BasePacket("MAIN_ACCOUNTING_PROCEDURE", sessionID));
+
+            // View the response packet and pause until user enters a key.
+            WriteResponse(responsePacket);
+
+            // Return to the main menu.
             currentState = TerminalState.MENU;
             return true;
         }
 
         /// <summary>
-        /// 
+        /// The main menu. Display all the choices to the user on the terminal screen.
         /// </summary>
         /// <returns></returns>
         protected override bool MenuUpdate()

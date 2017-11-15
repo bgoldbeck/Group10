@@ -14,9 +14,13 @@ namespace HealthcareClientSystem.IO
         private int nRows;
         private int cursorLinePosition;
         private string[] outputBuffer;
+        private string header;
+        private string footer;
 
         public TextUI()
         {
+            header = " TextUI ";
+            footer = "";
             Resize(80, 25);
             ClearBuffer();
         }
@@ -28,6 +32,8 @@ namespace HealthcareClientSystem.IO
         /// <param name="nCols"></param>
         public TextUI(int nRows, int nCols)
         {
+            header = " TextUI ";
+            footer = "";
             Resize(nRows, nCols);
             ClearBuffer();
         }
@@ -82,8 +88,24 @@ namespace HealthcareClientSystem.IO
             // Fill the entire top row with #'s
             FillRow(0, '#');
 
+            // Replace the header text.
+            StringBuilder topRow = new StringBuilder(outputBuffer[0]);
+            topRow.Remove(0, header.Length);
+            topRow.Insert((int)(outputBuffer[0].Length * 0.5f) - (int)(header.Length * 0.5f), header);
+
+            outputBuffer[0] = topRow.ToString();
+
+            //(outputBuffer[0].Length * 0.5f) - (header.Length * 0.5f)
             // Fill the entire bottom row with #'s
             FillRow(nRows - 1, '#');
+
+            // Replace the header text.
+            StringBuilder bottomRow = new StringBuilder(outputBuffer[nRows - 1]);
+            bottomRow.Remove(0, footer.Length);
+            bottomRow.Insert((int)(outputBuffer[nRows-1].Length * 0.5f) - (int)(footer.Length * 0.5f), footer);
+
+            outputBuffer[nRows - 1] = bottomRow.ToString();
+
 
             // Fill the left side of the UI with #'s
             FillColumn(0, '#');
@@ -293,6 +315,18 @@ namespace HealthcareClientSystem.IO
             Console.Clear();
             Render();
             return;
+        }
+
+        public string Footer
+        {
+            get { return footer; }
+            set { footer = value; }
+        }
+
+        public string Header
+        {
+            get { return header; }
+            set { header = value; }
         }
     }
 }

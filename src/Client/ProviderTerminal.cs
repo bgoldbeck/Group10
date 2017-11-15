@@ -29,7 +29,7 @@ namespace HealthcareClientSystem
             tui.WriteLine("CHECK MEMBER STATUS", TextUI.TextUIJustify.CENTER);
             
             ResponsePacket responsePacket = server.ProcessAction(new MemberPacket("MEMBER_STATUS", sessionID,
-                InputController.ReadNumeric(9, 9, true, "MemberID").ToString(), "", "", "", "", "", "", ""));
+                InputController.ReadInteger(9, 9, true, "MemberID").ToString(), "", "", "", "", "", "", ""));
 
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
