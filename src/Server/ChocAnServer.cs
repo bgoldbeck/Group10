@@ -43,6 +43,7 @@ namespace ChocAnServer
 
             switch (basePacket.Action())
             {
+                /* MANAGER TERMINAL REQUESTS */
                 case "ADD_MEMBER":
                     if (basePacket is MemberPacket)
                     { 
@@ -52,39 +53,6 @@ namespace ChocAnServer
                     {
                         throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
                             "Expected MemberPacket", basePacket.Action()), "basePacket");
-                    }
-                    break;
-                case "MEMBER_STATUS":
-                    if (basePacket is MemberPacket)
-                    {
-                        responsePacket = RequestMemberStatus((MemberPacket)basePacket);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
-                            "Expected MemberPacket", basePacket.Action()), "basePacket");
-                    }
-                    break;
-                case "ADD_INVOICE":
-                    if(basePacket is InvoicePacket)
-                    {
-                        responsePacket = RequestAddInvoice((InvoicePacket)basePacket);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
-                            "Expected InvoicePacket", basePacket.Action()), "basePacket");
-                    }
-                    break;
-                case "ADD_SERVICE_CODE":
-                    if (basePacket is ServiceCodePacket)
-                    {
-                        responsePacket = RequestAddServiceCode((ServiceCodePacket)basePacket);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
-                            "Expected ServiceCodePacket", basePacket.Action()), "basePacket");
                     }
                     break;
                 case "ADD_PROVIDER":
@@ -98,6 +66,118 @@ namespace ChocAnServer
                             "Expected ProviderPacket", basePacket.Action()), "basePacket");
                     }
                     break;
+                case "ADD_SERVICE_CODE":
+                    if (basePacket is ServiceCodePacket)
+                    {
+                        responsePacket = RequestAddServiceCode((ServiceCodePacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected ServiceCodePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "REMOVE_MEMBER":
+                    if (basePacket is MemberPacket)
+                    {
+                        responsePacket = RequestRemoveMember((MemberPacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected MemberPacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "REMOVE_PROVIDER":
+                    if (basePacket is ProviderPacket)
+                    {
+                        responsePacket = RequestRemoveProvider((ProviderPacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected ProviderPacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "CUSTOM_MEMBER_REPORT":
+                    if (basePacket is DateRangePacket)
+                    {
+                        responsePacket = RequestCustomMemberReport((DateRangePacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected DateRangePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "CUSTOM_PROVIDER_REPORT":
+                    if (basePacket is DateRangePacket)
+                    {
+                        responsePacket = RequestCustomProviderReport((DateRangePacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected DateRangePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "UPDATE_MEMBER_UPDATE":
+                    if (basePacket is MemberPacket)
+                    {
+                        responsePacket = RequestUpdateMember((MemberPacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected MemberPacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "UPDATE_PROVIDER_UPDATE":
+                    if (basePacket is ProviderPacket)
+                    {
+                        responsePacket = RequestUpdateProvider((ProviderPacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected ProviderPacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "UPDATE_SERVICE_CODE":
+                    if (basePacket is ServiceCodePacket)
+                    {
+                        responsePacket = RequestUpdateServiceCode((ServiceCodePacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected ServiceCodePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                case "MAIN_ACCOUNTING_PROCEDURE":
+                    if (basePacket is BasePacket)
+                    {
+                        responsePacket = RequestMainAccountingProcedure((BasePacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected BasePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                
+                /* PROVIDER TERMINAL REQUESTS */
+                case "MEMBER_STATUS":
+                    if (basePacket is MemberPacket)
+                    {
+                        responsePacket = RequestMemberStatus((MemberPacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected MemberPacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
                 case "VIEW_PROVIDER_DIRECTORY":
                     if (basePacket is BasePacket)
                     {
@@ -107,6 +187,20 @@ namespace ChocAnServer
                     {
                         throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
                             "Expected BasePacket", basePacket.Action()), "basePacket");
+                    }
+                    break;
+                
+                
+                /* OPERATOR TERMINAL REQUESTS */
+                case "ADD_INVOICE":
+                    if (basePacket is InvoicePacket)
+                    {
+                        responsePacket = RequestAddInvoice((InvoicePacket)basePacket);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
+                            "Expected InvoicePacket", basePacket.Action()), "basePacket");
                     }
                     break;
                 case "LOGIN":
@@ -176,9 +270,318 @@ namespace ChocAnServer
             return "";
         }
 
+       
+        /// <summary>
+        /// Build an sql statement from the packet for adding a
+        /// new member to the database and execute that statement. 
+        /// The function will return a ResponsePacket with information
+        /// regarding whether the member was added or not.
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestAddMember(MemberPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected MemberPacket type.");
+            }
+
+            // The member we are adding will have a valid state of 1, because we are 
+            // adding a new member, so of course they are valid.
+            int memberValid = 1;
+
+            // Build the query up, the sqlite database will execute this statement.
+            string builtQuery = String.Format("INSERT INTO members(" +
+                "memberID, memberName, memberAddress, memberCity, memberState, " +
+                "memberZip, memberValid, memberEmail, memberStatus) VALUES(" +
+                "'{0}', '{1}', '{2}', '{3}', '{4}', '{5}', {6}, '{7}', '{8}');",
+                packet.ID(), packet.Name(), packet.Address(), packet.City(), packet.State(),
+                packet.Zip(), memberValid, packet.Email(), packet.Status()).ToString();
+
+            // Execute the statement on the database. If any rows were added, meaning
+            // the member was added, we can check the affectedRecords variable for a 1 (added) or
+            // a 0 (not added).
+            database.ExecuteQuery(builtQuery, out int affectedRecords);
+
+
+            // Build the response string depending if we added a member.
+            string response = affectedRecords > 0 ? "Member saved on record." : "Failed to save member on record.";
+
+            WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
+                packet.SessionID() + ",", packet.Action() + ",", response));
+
+            return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestAddProvider(ProviderPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestAddServiceCode(ServiceCodePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+            ResponsePacket responsePacket = null;
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestRemoveMember(MemberPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestRemoveProvider(ProviderPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestCustomMemberReport(DateRangePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestCustomProviderReport(DateRangePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestUpdateMember(MemberPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
+
+            return responsePacket;
+        } 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestUpdateProvider(ProviderPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestUpdateServiceCode(ServiceCodePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            ResponsePacket responsePacket = new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "");
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestMainAccountingProcedure(BasePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+            ResponsePacket responsePacket = null;
+
+            return responsePacket;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestMemberStatus(MemberPacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            //Get the user id if the session is valid.
+            string userID = GetUserIDBySession(packet.SessionID());
+
+            //Some sort of accesslevel authentication is needed now...
+
+            // Build the query string from the packet.
+            string query = String.Format("SELECT memberStatus FROM members WHERE " +
+             "memberID='{0}';", packet.ID().ToString());
+
+            object[][] table = database.ExecuteQuery(query, out int affectedRecords);
+
+            string response = "";
+            string data = "";
+
+            if (data == null)
+            {
+                response = "Could not find member in database.";
+            }
+            else
+            {
+                response = "Found member in database.";
+                data = table[0][0].ToString();
+            }
+
+            return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, response);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestProviderDirectory(BasePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+
+            // Execute the query on the database and get the entire provider directory contents.
+            object[][] data = database.ExecuteQuery("SELECT * FROM provider_directory;", out int affectedRecords);
+
+            List<string> contents = new List<string>();
+
+            for (int i = 0; i < data.Length; ++i)
+            {
+                string line = "\t" + data[i][0].ToString();
+                for (int j = 1; j < data[0].Length; ++j)
+                {
+                    line += ", " + data[i][j];
+                }
+                contents.Add(line);
+
+            }
+
+            System.IO.File.WriteAllLines("ProviderDirectory.txt", contents.ToArray());
+
+            return new ResponsePacket(
+                packet.Action(), packet.SessionID(), "", "Provider directory request acknowledged");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private ResponsePacket RequestAddInvoice(InvoicePacket packet)
+        {
+            if (packet == null)
+            {
+                // Exception.
+            }
+            ResponsePacket responsePacket = null;
+
+            return responsePacket;
+        }
+
+
         private ResponsePacket RequestLogin(LoginPacket packet)
         {
-            if(packet == null)
+            if (packet == null)
             {
                 // Exception.
             }
@@ -234,154 +637,10 @@ namespace ChocAnServer
             WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
                 sessionID + ",", packet.Action() + ",", response));
 
-            return new ResponsePacket("LOGIN", "", sessionID, response); 
+            return new ResponsePacket("LOGIN", "", sessionID, response);
         }
 
-        private ResponsePacket RequestAddServiceCode(ServiceCodePacket packet)
-        {
-            if (packet == null)
-            {
-                // Exception.
-            }
-            ResponsePacket responsePacket = null;
 
-            return responsePacket;
-        }
-
-        private ResponsePacket RequestAddProvider(ProviderPacket packet)
-        {
-            if (packet == null)
-            {
-                // Exception.
-            }
-
-            ResponsePacket responsePacket = new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", "");
-
-            return responsePacket;
-        }
-
-        private ResponsePacket RequestAddInvoice(InvoicePacket packet)
-        {
-            if (packet == null)
-            {
-                // Exception.
-            }
-            ResponsePacket responsePacket = null;
-
-            return responsePacket;
-        }
-
-        /// <summary>
-        /// Build an sql statement from the packet for adding a
-        /// new member to the database and execute that statement. 
-        /// The function will return a ResponsePacket with information
-        /// regarding whether the member was added or not.
-        /// </summary>
-        /// <param name="packet"></param>
-        /// <returns></returns>
-        private ResponsePacket RequestAddMember(MemberPacket packet)
-        {
-            if (packet == null)
-            {
-                // Exception.
-                throw new ArgumentNullException("packet", "Argument passed in was null, expected MemberPacket type.");
-            }
-            
-            // The member we are adding will have a valid state of 1, because we are 
-            // adding a new member, so of course they are valid.
-            int memberValid = 1;
-
-            // Build the query up, the sqlite database will execute this statement.
-            string builtQuery = String.Format("INSERT INTO members(" +
-                "memberID, memberName, memberAddress, memberCity, memberState, " +
-                "memberZip, memberValid, memberEmail, memberStatus) VALUES(" +
-                "'{0}', '{1}', '{2}', '{3}', '{4}', '{5}', {6}, '{7}', '{8}');", 
-                packet.ID(), packet.Name(), packet.Address(), packet.City(), packet.State(),
-                packet.Zip(), memberValid, packet.Email(), packet.Status()).ToString();
-
-            // Execute the statement on the database. If any rows were added, meaning
-            // the member was added, we can check the affectedRecords variable for a 1 (added) or
-            // a 0 (not added).
-            database.ExecuteQuery(builtQuery, out int affectedRecords);
-            
-
-            // Build the response string depending if we added a member.
-            string response = affectedRecords > 0 ? "Member saved on record." : "Failed to save member on record.";
-
-            WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
-                packet.SessionID() + ",", packet.Action() + ",", response));
-
-            return new ResponsePacket("ADD_MEMBER", packet.SessionID(), affectedRecords.ToString(), response);
-        }
-
-        private ResponsePacket RequestMemberStatus(MemberPacket packet)
-        {
-            if (packet == null)
-            {
-                // Exception.
-            }
-
-            //Get the user id if the session is valid.
-            string userID = GetUserIDBySession(packet.SessionID());
-
-            //Some sort of accesslevel authentication is needed now...
-            
-            // Build the query string from the packet.
-            string query = String.Format("SELECT memberStatus FROM members WHERE " +
-             "memberID='{0}';", packet.ID().ToString());
-
-            object[][] table = database.ExecuteQuery(query, out int affectedRecords);
-            
-            string response = "";
-            string data = "";
-
-            if (data == null)
-            {
-                response = "Could not find member in database.";
-            }
-            else
-            {
-                response = "Found member in database.";
-                data = table[0][0].ToString();
-            }
-
-            return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, response);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="packet"></param>
-        /// <returns></returns>
-        private ResponsePacket RequestProviderDirectory(BasePacket packet)
-        {
-            if (packet == null)
-            {
-                // Exception.
-            }
-
-            // Execute the query on the database and get the entire provider directory contents.
-            object [][] data = database.ExecuteQuery("SELECT * FROM provider_directory;", out int affectedRecords);
-
-            List<string> contents = new List<string>();
-
-            for (int i = 0; i < data.Length; ++i)
-            {
-                string line = "\t" + data[i][0].ToString();
-                for (int j = 1; j < data[0].Length; ++j)
-                {
-                    line += ", " + data[i][j];
-                }
-                contents.Add(line);
-
-            }
-
-            System.IO.File.WriteAllLines("ProviderDirectory.txt", contents.ToArray());
-
-            return new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", "Provider directory request acknowledged");
-        }
 
         public void WriteLogEntry(string entry)
         {

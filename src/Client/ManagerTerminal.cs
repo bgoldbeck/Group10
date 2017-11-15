@@ -26,7 +26,6 @@ namespace HealthcareClientSystem
             updateDelegates[(int)TerminalState.UPDATE_MEMBER] = UpdateMemberUpdate;
             updateDelegates[(int)TerminalState.UPDATE_PROVIDER] = UpdateProviderUpdate;
             updateDelegates[(int)TerminalState.UPDATE_SERVICE_CODE] = UpdateServiceCodeUpdate;
-            updateDelegates[(int)TerminalState.ADD_SERVICE_RECORD] = AddServiceRecordUpdate;
             updateDelegates[(int)TerminalState.MAIN_ACCOUNTING_PROCEDURE] = MainAccountingProcedureUpdate;
 
         }
