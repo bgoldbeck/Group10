@@ -606,10 +606,27 @@ namespace ChocAnServer
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected InvoicePacket type.");
             }
-            ResponsePacket responsePacket = null;
+            // Build the query up, the sqlite database will execute this statement.
+            string builtQuery = String.Format("INSERT INTO invoices(" +
+                "memberID, providerID, timestamp, serviceCode, serviceDate, comments) VALUES(" +
+                "'{0}', '{1}', '{2}', '{3}', '{4}', '{5}')",
+                packet.MemberID(), packet.ProviderID(), packet.CurrentDateTime(), packet.ServiceCode(),
+                packet.DateServiceProvided(), packet.Comments()).ToString();
 
-            return responsePacket;
+            // Execute the statement on the database. If any rows were added, meaning
+            // the invoice was added, we can check the affectedRecords variable for a 1 (added) or
+            // a 0 (not added).
+            database.ExecuteQuery(builtQuery, out int affectedRecords);
+
+            // Build the response string depending if we added an invoice.
+            string response = affectedRecords > 0 ? "Invoice saved on record." : "Failed to save invoice on record.";
+
+            WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
+                packet.SessionID() + ",", packet.Action() + ",", response));
+
+            return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
         }
 
 
