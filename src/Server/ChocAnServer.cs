@@ -121,7 +121,7 @@ namespace ChocAnServer
                             "Expected DateRangePacket", basePacket.Action()), "basePacket");
                     }
                     break;
-                case "UPDATE_MEMBER_UPDATE":
+                case "UPDATE_MEMBER":
                     if (basePacket is MemberPacket)
                     {
                         responsePacket = RequestUpdateMember((MemberPacket)basePacket);
@@ -132,7 +132,7 @@ namespace ChocAnServer
                             "Expected MemberPacket", basePacket.Action()), "basePacket");
                     }
                     break;
-                case "UPDATE_PROVIDER_UPDATE":
+                case "UPDATE_PROVIDER":
                     if (basePacket is ProviderPacket)
                     {
                         responsePacket = RequestUpdateProvider((ProviderPacket)basePacket);
@@ -218,6 +218,11 @@ namespace ChocAnServer
                     break;
             }
 
+            if (responsePacket != null && basePacket != null)
+            { 
+                WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
+                    basePacket.SessionID() + ",", basePacket.Action() + ",", responsePacket.Response()));
+            }
             return responsePacket;
         }
 
@@ -430,12 +435,30 @@ namespace ChocAnServer
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected MemberPacket type.");
             }
 
-            ResponsePacket responsePacket = new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", "");
+       
+            // Build the query up, the sqlite database will execute this statement.
+            string builtQuery = String.Format("UPDATE members SET " +
+                "memberName = '{0}', memberAddress = '{1}', memberCity = '{2}', " +
+                "memberState = '{3}', memberZip = '{4}', memberEmail = '{5}', memberStatus = '{6}' WHERE " +
+                "memberID = {7}",
+                packet.Name(), packet.Address(), packet.City(), 
+                packet.State(), packet.Zip(), packet.Email(), packet.Status(), packet.ID());
 
-            return responsePacket;
+
+            // Execute the statement on the database. If any rows were changed, meaning
+            // the member was updated, we can check the affectedRecords variable for a 1 (updated) or
+            // a 0 (not updated).
+            database.ExecuteQuery(builtQuery, out int affectedRecords);
+
+
+            // Build the response string depending if we added a member.
+            string response = affectedRecords > 0 ? "Member updated on record." : "Failed to update member on record.";
+
+
+            return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
         } 
         
         /// <summary>

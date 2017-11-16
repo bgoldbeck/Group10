@@ -62,14 +62,30 @@ namespace HealthcareClientSystem.IO
 
             tui.Render();
 
-            //string memberID = InputController.ReadInteger(9, 9, true, "Member ID").ToString();
+            string memberID = "000000001";
 
-            // The member is active because we are adding a NEW member.
-            string memberStatus = "ACTIVE";
+            if (action == "UPDATE_MEMBER")
+            {
+                memberID = InputController.ReadInteger(9, 9, true, "Member ID").ToString();
+            }
+                
 
-            //tui.WriteLine("\tMemberID: " + memberID);
+            tui.WriteLine("\tMemberID: " + memberID);
+            tui.Refresh();
+
+            string memberStatus = "SUSPENDED";
+
+            if (action == "UPDATE_MEMBER")
+            { 
+                string memberStatusResponse = InputController.ReadText(1, 1, "Member Active? [Y/y] YES [N/n] NO");
+
+                if (memberStatusResponse == "Y" || memberStatusResponse == "y")
+                {
+                    memberStatus = "ACTIVE";
+                }
+            }
+            
             tui.WriteLine("\tMemberActive: " + memberStatus);
-
             tui.Refresh();
 
             // Get the member's name.
@@ -108,7 +124,7 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine("\tMemberEmail: " + memberEmail);
 
             return new MemberPacket(
-                action, sessionID, "123456789", 
+                action, sessionID, memberID, 
                 memberStatus, memberName, memberAddress,
                 memberCity, memberState, memberZip, memberEmail);
         }
