@@ -547,10 +547,21 @@ namespace ChocAnServer
 
             for (int i = 0; i < data.Length; ++i)
             {
-                string line = "\t" + data[i][0].ToString();
-                for (int j = 1; j < data[0].Length; ++j)
+                string query = String.Format("SELECT providerName from providers where providerID={0};", data[i][1].ToString());
+
+                string line = "\t" + database.ExecuteQuery(query, out affectedRecords)[0][0].ToString();
+                    
+                for (int j = 0; j < data[0].Length; ++j)
                 {
-                    line += ", " + data[i][j];
+                    if (j == data[0].Length - 1)
+                    {
+                        line += ", " + Convert.ToDouble(data[i][j]);
+                    }
+                    else
+                    {
+                        line += ", " + data[i][j];
+                    }
+                    
                 }
                 contents.Add(line);
 
@@ -640,8 +651,10 @@ namespace ChocAnServer
             return new ResponsePacket("LOGIN", "", sessionID, response);
         }
 
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entry"></param>
         public void WriteLogEntry(string entry)
         {
             if (entry != null)

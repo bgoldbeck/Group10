@@ -86,7 +86,7 @@ namespace SQLLiteDatabaseCenter
                 command.CommandText = query;
 
                 this.reader = command.ExecuteReader();
-                ret = SQLRetrieveFromReader(this.reader);
+                ret = SQLRetrieveTableFromReader(this.reader);
                 affectedRecords = reader.RecordsAffected;
             }
             catch (SQLiteException e)
@@ -97,7 +97,7 @@ namespace SQLLiteDatabaseCenter
             return ret;
         }
 
-        private object[][] SQLRetrieveFromReader(SQLiteDataReader dataReader)
+        private object[][] SQLRetrieveTableFromReader(SQLiteDataReader dataReader)
         {
             List<List<object>> retrieval = new List<List<object>>();
 
@@ -133,6 +133,9 @@ namespace SQLLiteDatabaseCenter
                     break;
                 case "System.Single":
                     obj = dataReader.GetFloat(col);
+                    break;
+                case "System.Double":
+                    obj = dataReader.GetDouble(col);
                     break;
                 default:
                     break;
