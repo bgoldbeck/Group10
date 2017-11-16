@@ -293,10 +293,10 @@ namespace ChocAnServer
 
             // Build the query up, the sqlite database will execute this statement.
             string builtQuery = String.Format("INSERT INTO members(" +
-                "memberID, memberName, memberAddress, memberCity, memberState, " +
+                "memberName, memberAddress, memberCity, memberState, " +
                 "memberZip, memberValid, memberEmail, memberStatus) VALUES(" +
-                "'{0}', '{1}', '{2}', '{3}', '{4}', '{5}', {6}, '{7}', '{8}');",
-                packet.ID(), packet.Name(), packet.Address(), packet.City(), packet.State(),
+                "'{0}', '{1}', '{2}', '{3}', '{4}', {5}, '{6}', '{7}');",
+                packet.Name(), packet.Address(), packet.City(), packet.State(),
                 packet.Zip(), memberValid, packet.Email(), packet.Status()).ToString();
 
             // Execute the statement on the database. If any rows were added, meaning

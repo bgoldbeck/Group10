@@ -62,12 +62,12 @@ namespace HealthcareClientSystem.IO
 
             tui.Render();
 
-            string memberID = InputController.ReadInteger(9, 9, true, "Member ID").ToString();
+            //string memberID = InputController.ReadInteger(9, 9, true, "Member ID").ToString();
 
             // The member is active because we are adding a NEW member.
             string memberStatus = "ACTIVE";
 
-            tui.WriteLine("\tMemberID: " + memberID);
+            //tui.WriteLine("\tMemberID: " + memberID);
             tui.WriteLine("\tMemberActive: " + memberStatus);
 
             tui.Refresh();
@@ -108,7 +108,7 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine("\tMemberEmail: " + memberEmail);
 
             return new MemberPacket(
-                action, sessionID, memberID, 
+                action, sessionID, "123456789", 
                 memberStatus, memberName, memberAddress,
                 memberCity, memberState, memberZip, memberEmail);
         }
@@ -119,12 +119,12 @@ namespace HealthcareClientSystem.IO
 
             tui.Render();
 
-            string providerID = InputController.ReadInteger(9, 9, true, "Provider ID").ToString();
+            //string providerID = InputController.ReadInteger(9, 9, true, "Provider ID").ToString();
 
             // The member is active because we are adding a NEW member.
             string providerStatus = "ACTIVE";
 
-            tui.WriteLine("\tProviderID: " + providerID);
+            //tui.WriteLine("\tProviderID: " + providerID);
             tui.WriteLine("\tProviderStatus: " + providerStatus);
 
             tui.Refresh();
@@ -170,7 +170,7 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine("\tProviderPassword: " + providerPassword);
 
             return new ProviderPacket(
-                action, sessionID, providerID,
+                action, sessionID, "123456789",
                 providerStatus, providerName, providerAddress,
                 providerCity, providerState, providerZip, providerEmail, providerPassword);
         }
