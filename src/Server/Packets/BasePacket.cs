@@ -1,10 +1,10 @@
-﻿/// TODO: Please add a description ;_;
+﻿/*The BasePacket class is the base class of all the other packets and uses polymorphism
+to pass in the base packet into the ChocAnServer class. This class contains two 
+data members: a string for the name of the action this packet and a string for the
+sessionID of the user. This class also contains the check functions to check that the
+inputs in the strings is legal.
+*/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace ChocAnServer.Packets
 {
@@ -69,6 +69,10 @@ namespace ChocAnServer.Packets
                 throw new ArgumentOutOfRangeException("ID");
             }
         }
+        /// <summary>
+        /// Checks whether an inputted string is a legal date.
+        /// </summary>
+        /// <param name="inputString"></param>
         public void CheckDate(string inputString)
         {
             System.DateTime temp;

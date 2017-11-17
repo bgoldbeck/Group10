@@ -1,10 +1,9 @@
-﻿//This comment should talk about this class.
+﻿/*The DateRangePacket class is the packet that is passed in to pass the information
+ * in to allow for custom member reports and custom provider reports. This class is
+ * derived from the BasePacket. The data members in this class are: the string for
+ * the start date, the string for the end date, and the string for the member/provider id.
+ */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace ChocAnServer.Packets
 {

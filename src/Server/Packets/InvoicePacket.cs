@@ -1,10 +1,11 @@
-﻿//TODO:Insert comment about this class.
+﻿/*The InvoicePacket class is the packet that is passed in to pass the information
+ * in to allow for a new service invoice to be added to the database. This class is
+ * derived from the BasePacket. The data members in this class are: the string for
+ * the current date and time, the string for the service was provided, the string for
+ * the provider ID, the string for the member ID, the string for the service code,
+ * and the string for the comments attachted to the service invoice.
+ */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace ChocAnServer.Packets
 {
