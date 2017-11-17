@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*The MemberPacket class is the packet that is passed in to pass the information
+ * in to allow the member's account to be added and updated. This class is
+ * derived from the BasePacket. The data members in this class are: the string for
+ * the member id, string for the member status, the string for the name, the string
+ * for the address, the string for the city, the string for the state, the string for
+ * the zip, and a string for the email.
+ */
+using System;
 
 
 namespace ChocAnServer.Packets

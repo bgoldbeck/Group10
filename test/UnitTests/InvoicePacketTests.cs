@@ -17,9 +17,9 @@ namespace UnitTests
         [TestMethod]
         public void TestInvoicePacketConstructor()
         {
-            //The happy path takes in a legal action string, session ID, dateStart,
-            //dateEnd, and id and it checks to make sure the values are correctly 
-            //set in the packet.
+            //The happy path takes in a legal action string, session ID, currentDateTime,
+            //ServiceProvided, providerID, memberID, serviceCode, comments and checks
+            //to make sure that they are initialized correctly.
             string action = "Add Member";
             string sessionID = "1209384209385";
             string currentDateTime = "11-07-2017 17:58:17";

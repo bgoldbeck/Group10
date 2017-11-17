@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*The LoginPacket class is the packet that is passed in to pass the information
+ * in to allow the member and provider to login and get a new session. This class is
+ * derived from the BasePacket. The data members in this class are: the string for
+ * the id, the string for the password, and the integer for the access level.
+ */
+using System;
 
 
 namespace ChocAnServer.Packets
