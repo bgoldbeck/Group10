@@ -536,12 +536,27 @@ namespace ChocAnServer
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected MemberPacket type.");
             }
 
-            ResponsePacket responsePacket = new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", "");
+            // Initialize the response string.
+            string response = "";
 
-            return responsePacket;
+            // Build the query up, the sqlite database will execute this statement.
+            string query = String.Format("UPDATE provider_directory SET " +
+               "providerID = '{0}', serviceName = '{1}', serviceFee = '{2}' WHERE serviceCode = '{3}';",
+               packet.ProviderID(), packet.Name(), packet.Fee(), packet.ID());
+
+
+            // Execute the statement on the database. If any rows were added, meaning
+            // the service was updated, we can check the affectedRecords variable for a 1 (added) or
+            // a 0 (not added).
+            database.ExecuteQuery(query, out int affectedRecords);
+
+            // Build the response string depending if we added a service.
+            response = affectedRecords > 0 ? "Service saved on record." : "Failed to save service on record.";
+
+            return new ResponsePacket(packet.Action(), packet.SessionID(), "", response);
         }
 
         /// <summary>

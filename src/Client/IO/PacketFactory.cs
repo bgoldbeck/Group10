@@ -269,6 +269,15 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine(" \n \nPlease enter the service code details", TextUI.TextUIJustify.CENTER);
             tui.Render();
 
+            string serviceCode = "000001";
+
+            if (action == "UPDATE_SERVICE_CODE")
+            {
+                serviceCode = InputController.ReadInteger(6, 6, true, "Service Code").ToString();
+                tui.WriteLine("\tServiceID: " + serviceCode);
+                tui.Refresh();
+            }
+
             string providerID = InputController.ReadInteger(9, 9, true, "Provider ID").ToString();
 
             tui.WriteLine("\tProviderID: " + providerID);
@@ -278,6 +287,7 @@ namespace HealthcareClientSystem.IO
 
             tui.WriteLine("\tServiceName: " + serviceName);
             tui.Refresh();
+
             string fee = "";
             float outFee = 999999.9f;
 
@@ -289,7 +299,7 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine("\tServiceFee: " + fee);
             tui.Refresh();
 
-            return new ServiceCodePacket(action, sessionID, providerID, outFee, "111111", serviceName);
+            return new ServiceCodePacket(action, sessionID, providerID, outFee, serviceCode, serviceName);
         }
 
         private DateRangePacket ReadDateRangePacket(TextUI tui, string action, string sessionID)
