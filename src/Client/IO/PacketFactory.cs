@@ -269,9 +269,9 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine(" \n \nPlease enter the service code details", TextUI.TextUIJustify.CENTER);
             tui.Render();
 
-            string serviceCodeID = InputController.ReadInteger(6, 6, true, "Service Code ID").ToString();
+            string providerID = InputController.ReadInteger(9, 9, true, "Provider ID").ToString();
 
-            tui.WriteLine("\tServiceCodeID: " + serviceCodeID);
+            tui.WriteLine("\tProviderID: " + providerID);
             tui.Refresh();
 
             string serviceName = InputController.ReadText(0, 20, "Service Name").ToString();
@@ -289,7 +289,7 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine("\tServiceFee: " + fee);
             tui.Refresh();
 
-            return new ServiceCodePacket(action, sessionID, outFee, serviceCodeID, serviceName);
+            return new ServiceCodePacket(action, sessionID, providerID, outFee, "111111", serviceName);
         }
 
         private DateRangePacket ReadDateRangePacket(TextUI tui, string action, string sessionID)

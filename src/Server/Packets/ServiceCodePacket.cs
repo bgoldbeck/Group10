@@ -12,6 +12,7 @@ namespace ChocAnServer.Packets
         private float fee;
         private string id;
         private string name;
+        private string providerID;
 
         /// <summary>
         /// This is the default constructor for the base packet class to set the
@@ -23,6 +24,7 @@ namespace ChocAnServer.Packets
             this.fee = 0;
             this.id = null;
             this.name = null;
+            this.providerID = null;
         }
         /// <summary>
         /// This is the constructor takes in inputs for each data member and sets
@@ -33,7 +35,7 @@ namespace ChocAnServer.Packets
         /// <param name="newFee"></param>
         /// <param name="newID"></param>
         /// <param name="newName"></param>
-        public ServiceCodePacket(string newAction, string newSessionID, float newFee,
+        public ServiceCodePacket(string newAction, string newSessionID, string newProviderID, float newFee,
             string newID, string newName) :base(newAction,newSessionID)
         {
             if(newFee < 0)
@@ -46,7 +48,9 @@ namespace ChocAnServer.Packets
                 throw new NullReferenceException("ID");
             this.name = newName ??
                 throw new NullReferenceException("Name");
+            this.providerID = newProviderID;
         }
+
         /// <summary>
         /// This method returns the string stored in the fee data member.
         /// </summary>
@@ -70,6 +74,12 @@ namespace ChocAnServer.Packets
         public string Name()
         {
             return this.name;
+        }
+
+        //
+        public string ProviderID()
+        {
+            return this.providerID;
         }
     }
 }
