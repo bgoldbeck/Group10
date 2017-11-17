@@ -312,10 +312,7 @@ namespace ChocAnServer
 
             // Build the response string depending if we added a member.
             string response = affectedRecords > 0 ? "Member saved on record." : "Failed to save member on record.";
-
-            WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
-                packet.SessionID() + ",", packet.Action() + ",", response));
-
+           
             return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
         }
 
@@ -331,8 +328,41 @@ namespace ChocAnServer
                 // Exception.
             }
 
+            string response = "";
+
+            string query = String.Format("INSERT INTO providers(" +
+                "providerName, providerAddress, providerCity, providerState, providerZip, providerEmail) VALUES(" +
+                "'{0}', '{1}', '{2}', '{3}', '{4}', '{5}');",
+                packet.Name(), packet.Address(), packet.City(), packet.State(), packet.Zip(), packet.Email());
+
+            database.ExecuteQuery(query, out int affectedRecords);
+
+            if (affectedRecords == 0)
+            {
+                response = "Could not add provider.";
+            }
+            else
+            {
+                query = String.Format("SELECT providerID FROM providers WHERE " +
+                    "providerName='{0}' AND providerAddress='{1}' AND providerCity='{2}' AND " +
+                    "providerState='{3}' AND providerZip='{4}' AND providerEmail='{5}';",
+                    packet.Name(), packet.Address(), packet.City(), packet.State(), packet.Zip(), packet.Email());
+
+                object [][] table = database.ExecuteQuery(query, out affectedRecords);
+
+                int providerID = Convert.ToInt32(table[0][0]);
+
+                query = String.Format("INSERT INTO users (userID, passwordKey, isActive, status, accessLevel)" + " VALUES(" +
+                    "'{0}', '{1}', {2}, '{3}', {4});", providerID, packet.Password(), 1, "Active", 0);
+
+                database.ExecuteQuery(query, out affectedRecords);
+
+                response = affectedRecords == 0 ? "Could not add provider." : "Provider added to records.";
+            }
+
+
             ResponsePacket responsePacket = new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", "");
+                packet.Action(), packet.SessionID(), "", response);
 
             return responsePacket;
         }
@@ -622,10 +652,7 @@ namespace ChocAnServer
 
             // Build the response string depending if we added an invoice.
             string response = affectedRecords > 0 ? "Invoice saved on record." : "Failed to save invoice on record.";
-
-            WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
-                packet.SessionID() + ",", packet.Action() + ",", response));
-
+            
             return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
         }
 
