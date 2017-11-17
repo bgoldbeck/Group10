@@ -63,28 +63,24 @@ namespace HealthcareClientSystem.IO
             tui.Render();
 
             string memberID = "000000001";
+            
+            string memberStatus = "ACTIVE";
 
             if (action == "UPDATE_MEMBER")
             {
-                memberID = InputController.ReadInteger(9, 9, true, "Member ID").ToString();
-            }
-                
+                memberID = InputController.ReadInteger(9, 9, true, "Provider ID").ToString();
 
-            tui.WriteLine("\tMemberID: " + memberID);
-            tui.Refresh();
+                tui.WriteLine("\tProviderID: " + memberID);
+                tui.Refresh();
 
-            string memberStatus = "SUSPENDED";
-
-            if (action == "UPDATE_MEMBER")
-            { 
                 string memberStatusResponse = InputController.ReadText(1, 1, "Member Active? [Y/y] YES [N/n] NO");
 
-                if (memberStatusResponse == "Y" || memberStatusResponse == "y")
+                if (memberStatusResponse != "Y" && memberStatusResponse != "y")
                 {
-                    memberStatus = "ACTIVE";
+                    memberStatus = "SUSPENDED";
                 }
             }
-            
+
             tui.WriteLine("\tMemberActive: " + memberStatus);
             tui.Refresh();
 
@@ -135,14 +131,25 @@ namespace HealthcareClientSystem.IO
 
             tui.Render();
 
-            //string providerID = InputController.ReadInteger(9, 9, true, "Provider ID").ToString();
-
-            // The member is active because we are adding a NEW member.
+            string providerID = "000000001";
             string providerStatus = "ACTIVE";
 
-            //tui.WriteLine("\tProviderID: " + providerID);
-            tui.WriteLine("\tProviderStatus: " + providerStatus);
+            if (action == "UPDATE_PROVIDER")
+            {
+                providerID = InputController.ReadInteger(9, 9, true, "Provider ID").ToString();
 
+                tui.WriteLine("\tProviderID: " + providerID);
+                tui.Refresh();
+
+                string providerStatusResponse = InputController.ReadText(1, 1, "Provider Active? [Y/y] YES [N/n] NO");
+
+                if (providerStatusResponse != "Y" && providerStatusResponse != "y")
+                {
+                    providerStatus = "SUSPENDED";
+                }
+            }
+      
+            tui.WriteLine("\tProviderStatus: " + providerStatus);
             tui.Refresh();
 
             // Get the member's name.
@@ -186,7 +193,7 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine("\tProviderPassword: " + providerPassword);
 
             return new ProviderPacket(
-                action, sessionID, "123456789",
+                action, sessionID, providerID,
                 providerStatus, providerName, providerAddress,
                 providerCity, providerState, providerZip, providerEmail, providerPassword);
         }

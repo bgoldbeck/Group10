@@ -41,7 +41,7 @@ namespace HealthcareClientSystem
         {
             // Fill out the new member packet from the user input and send it off to the server.
             ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.BuildPacket(tui, "MemberPacket", "ADD_MEMBER", sessionID) as MemberPacket);
+                packetFactory.BuildPacket(tui, "MemberPacket", currentState.ToString(), sessionID) as MemberPacket);
 
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
@@ -60,11 +60,9 @@ namespace HealthcareClientSystem
         /// <returns></returns>
         private bool AddProviderUpdate()
         {
-            tui.WriteLine("ADD PROVIDER", TextUI.TextUIJustify.CENTER);
-
             // Fill out the new member packet from the user input and send it off to the server.
             ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.BuildPacket(tui, "ProviderPacket", "ADD_PROVIDER", sessionID) as ProviderPacket);
+                packetFactory.BuildPacket(tui, "ProviderPacket", currentState.ToString(), sessionID) as ProviderPacket);
 
             // Write the response packet to the terminal
             WriteResponse(responsePacket);
@@ -208,7 +206,7 @@ namespace HealthcareClientSystem
         {
             // Fill out the new provider packet from the user input and send it off to the server.
             ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.BuildPacket(tui, "ProviderPacket", "UPDATE_MEMBER", sessionID) as ProviderPacket);
+                packetFactory.BuildPacket(tui, "ProviderPacket", currentState.ToString(), sessionID) as ProviderPacket);
 
             // Write the response packet to the terminal
             WriteResponse(responsePacket);

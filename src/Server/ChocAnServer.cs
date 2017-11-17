@@ -487,7 +487,7 @@ namespace ChocAnServer
 
        
             // Build the query up, the sqlite database will execute this statement.
-            string builtQuery = String.Format("UPDATE members SET " +
+            string query = String.Format("UPDATE members SET " +
                 "memberName = '{0}', memberAddress = '{1}', memberCity = '{2}', " +
                 "memberState = '{3}', memberZip = '{4}', memberEmail = '{5}', memberStatus = '{6}' WHERE " +
                 "memberID = {7}",
@@ -498,11 +498,11 @@ namespace ChocAnServer
             // Execute the statement on the database. If any rows were changed, meaning
             // the member was updated, we can check the affectedRecords variable for a 1 (updated) or
             // a 0 (not updated).
-            database.ExecuteQuery(builtQuery, out int affectedRecords);
+            database.ExecuteQuery(query, out int affectedRecords);
 
 
             // Build the response string depending if we added a member.
-            string response = affectedRecords > 0 ? "Member updated on record." : "Failed to update member on record.";
+            string response = affectedRecords > 0 ? "Member update on record." : "Failed to update member record.";
 
 
             return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
@@ -519,9 +519,30 @@ namespace ChocAnServer
             {
                 // Exception.
             }
+            string providerValid = packet.Status() == "ACTIVE" ? "1" : "0";
+            string response = "";
+
+            // Build the query up, the sqlite database will execute this statement.
+            string query = String.Format("UPDATE providers SET " +
+                "providerName='{0}', providerAddress='{1}', providerCity='{2}', providerState='{3}'," +
+                "providerZip='{4}', providerEmail='{5}', providerValid='{6}' WHERE providerID='{7}';",
+                packet.Name(), packet.Address(), packet.City(), packet.State(), 
+                packet.Zip(), packet.Email(), providerValid, packet.ID());
+
+            database.ExecuteQuery(query, out int affectedRecords);
+            if (affectedRecords > 0)
+            {
+                query = String.Format("UPDATE users SET passwordKey='{0}', isActive='{1}', status='{2}' WHERE userID='{3}';",
+                    packet.Password(), providerValid, packet.Status(), packet.ID());
+
+                database.ExecuteQuery(query, out affectedRecords);
+
+                // Build the response string depending if we added a member.
+                response = affectedRecords > 0 ? "Provider update on record." : "Failed to update Provider record.";
+            }
 
             ResponsePacket responsePacket = new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", "");
+                packet.Action(), packet.SessionID(), "", response);
 
             return responsePacket;
         }
