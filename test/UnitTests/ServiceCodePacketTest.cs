@@ -15,8 +15,9 @@ namespace UnitTests
             float fee = 250;
             string id = "123456";
             string name = "John Smith";
+            string providerID = "123456";
 
-            ServiceCodePacket testPacket = new ServiceCodePacket(action, sessionID,
+            ServiceCodePacket testPacket = new ServiceCodePacket(action, sessionID, providerID,
         fee,id,name);
             Assert.AreEqual(fee, testPacket.Fee());
             Assert.AreEqual(id, testPacket.ID());
@@ -30,10 +31,11 @@ namespace UnitTests
             float fee = 250;
             string id = null;
             string name = "John Smith";
+            string providerID = "123456";
 
             ServiceCodePacket testPacket;
             Assert.ThrowsException<ArgumentException>(
-                () => testPacket = new ServiceCodePacket(action, sessionID,
+                () => testPacket = new ServiceCodePacket(action, sessionID, providerID,
             fee, id, name));
         }
         [TestMethod]
@@ -44,10 +46,11 @@ namespace UnitTests
             float fee = 250;
             string id = "123456";
             string name = null;
+            string providerID = "123456";
 
             ServiceCodePacket testPacket;
             Assert.ThrowsException<NullReferenceException>(
-                () => testPacket = new ServiceCodePacket(action, sessionID,
+                () => testPacket = new ServiceCodePacket(action, sessionID, providerID,
             fee, id, name));
         }
         [TestMethod]
@@ -58,10 +61,11 @@ namespace UnitTests
             float fee = -250;
             string id = "123456";
             string name = "John Smith";
+            string providerID = "123456";
 
             ServiceCodePacket testPacket;
             Assert.ThrowsException<ArgumentOutOfRangeException>(
-                () => testPacket = new ServiceCodePacket(action, sessionID,
+                () => testPacket = new ServiceCodePacket(action, sessionID, providerID,
             fee, id, name));
         }
         [TestMethod]
@@ -72,10 +76,11 @@ namespace UnitTests
             float fee = 250;
             string id = "Choc Therapy";
             string name = "John Smith";
+            string providerID = "123456";
 
             ServiceCodePacket testPacket;
             Assert.ThrowsException<ArgumentException>(
-                () => testPacket = new ServiceCodePacket(action, sessionID,
+                () => testPacket = new ServiceCodePacket(action, sessionID, providerID,
             fee, id, name));
         }
         [TestMethod]
@@ -86,10 +91,11 @@ namespace UnitTests
             float fee = -250;
             string id = "12345";
             string name = "John Smith";
+            string providerID = "123456";
 
             ServiceCodePacket testPacket;
             Assert.ThrowsException<ArgumentOutOfRangeException>(
-                () => testPacket = new ServiceCodePacket(action, sessionID,
+                () => testPacket = new ServiceCodePacket(action, sessionID, providerID,
             fee, id, name));
         }
         [TestMethod]
@@ -100,10 +106,11 @@ namespace UnitTests
             float fee = -250;
             string id = "1234567";
             string name = "John Smith";
+            string providerID = "123456";
 
             ServiceCodePacket testPacket;
             Assert.ThrowsException<ArgumentOutOfRangeException>(
-                () => testPacket = new ServiceCodePacket(action, sessionID,
+                () => testPacket = new ServiceCodePacket(action, sessionID, providerID,
             fee, id, name));
         }
     }
