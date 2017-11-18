@@ -97,7 +97,6 @@ namespace HealthcareClientSystem
         /// </summary>
         public bool Loop()
         {
-            //string userInput = Console.ReadLine();
             bool running = true;
             while (running)
             {
