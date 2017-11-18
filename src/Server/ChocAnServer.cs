@@ -603,19 +603,208 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Runs the main accounting procedure weekly to produce 
+        /// member reports, provider reports, and the ChocAn report
+        /// for managers.
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>Response Packet Object</returns>
         private ResponsePacket RequestMainAccountingProcedure(BasePacket packet)
         {
+            // If packet passed in is null, throw exception
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected BasePacket type.");
             }
-            ResponsePacket responsePacket = null;
 
-            return responsePacket;
+            // Time range for Invoice database
+            // Parse string to get only date
+            DateTime currentDate = DateTime.Now;
+            DateTime oneWeekEarlier = currentDate.AddDays(-7);
+            currentDate.ToString().Substring(0, 9);
+            oneWeekEarlier.ToString().Substring(0, 9);
+
+            // Build database query to recieve all Members, Invoices from date range,
+            // Provider information, and Provider Directory information.
+            string memberQuery = "SELECT * FROM members";
+            string invoiceQuery = "SELECT * FROM invoices";
+            //The below code will work once we have additional dates for invoices in the database. Commented out for now.
+            //"WHERE serviceDate BETWEEN" + currentDate + "AND" + oneWeekEarlier;
+            string providerQuery = "SELECT * FROM providers";
+            string providerDirectoryQuery = "SELECT * FROM provider_directory";
+
+            // Object to hold returned database table for members and invoices
+            object[][] memberList = database.ExecuteQuery(memberQuery, out int affectedRecords1);
+            object[][] invoiceList = database.ExecuteQuery(invoiceQuery, out int affectedRecords2);
+            object[][] providerList = database.ExecuteQuery(providerQuery, out int affectedRecords3);
+            object[][] providerDirectory = database.ExecuteQuery(providerDirectoryQuery, out int affectedRecords4);
+
+            // Get lengths of returned tables
+            if (memberList == null)
+            {
+                throw new NullReferenceException("No members in database");
+            }
+            int memberLength = memberList.Length;
+
+            // IF no invoices during the period, report back to UI
+            if (invoiceList == null)
+            {
+                return new ResponsePacket("REQUEST_MAIN_ACCOUNTING", packet.SessionID(), "", "No invoices for this period. No reports to generate");
+            }
+            int invoiceLength = invoiceList.Length;
+            if (providerList[0][0] == null || providerDirectory[0][0] == null)
+            {
+                throw new Exception("No providers in database");
+            }
+            int providerLength = providerList.Length;
+            int directoryLength = providerDirectory.Length;
+
+            // Restructure invoice list
+
+
+            // Go through member list and invoice list, generate .txt files for members 
+            for (int i = 0; i < memberLength; ++i)
+            {
+                List<string> serviceList = new List<string>();
+                int numOfServices = 0;
+                List<string> memberToWrite = new List<string>();
+                memberToWrite.Add("ChocAn Weekly Member Report");
+                memberToWrite.Add("");
+                memberToWrite.Add("Member Name: " + memberList[i][1].ToString());
+                memberToWrite.Add("Member Number: " + memberList[i][0].ToString());
+                memberToWrite.Add("Member Address: " + memberList[i][2].ToString());
+                memberToWrite.Add(memberList[i][3].ToString() + " " + memberList[i][4].ToString());
+                memberToWrite.Add(memberList[i][5].ToString());
+                string memberId = memberList[i][0].ToString();
+                for (int j = 0; j < invoiceLength; ++j)
+                {
+                    if (memberId.Equals(invoiceList[j][1]))
+                    {
+                        string providerName = "";
+                        string serviceName = "";
+                        string dateOfService = invoiceList[j][5].ToString();
+                        string serviceCode = invoiceList[j][4].ToString();
+                        for (int k = 0; k < providerLength; ++k)
+                        {
+                            if (serviceCode.Equals(providerDirectory[k][0].ToString()))
+                            {
+                                providerName = providerDirectory[k][2].ToString();
+                                serviceName = providerDirectory[k][3].ToString();
+                            }
+                        }
+                        ++numOfServices;
+                        serviceList.Add(dateOfService);
+                        serviceList.Add(providerName);
+                        serviceList.Add(serviceName);
+                        serviceList.Add("");
+                    }
+                }
+                memberToWrite.Add("Services This Period: " + numOfServices.ToString());
+                if (numOfServices != 0)
+                {
+                    memberToWrite.Add("");
+                    memberToWrite.Add(serviceList.ToString());
+                }
+                memberToWrite.ToArray();
+                string name = memberList[i][1].ToString();
+                name = name.Replace(' ', '_');
+                string path = name + currentDate + ".txt";
+                System.IO.File.WriteAllLines(path, memberToWrite);
+            }
+
+            // Variables needed for Manager Report and Provider Report 
+            int totalNumOfServices = 0;
+            double totalChocAnFees = 0.0;
+            int totalProviders = 0;
+            List<string> completeProviderList = new List<string>();
+
+            // Create Provider Reports
+            for (int i = 0; i < providerLength; ++i)
+            {
+                List<string> providerServiceList = new List<string>();
+                int numOfServices = 0;
+                double totalFees = 0.0;
+                string providerName = providerList[i][1].ToString();
+                List<string> providerToWrite = new List<string>();
+                providerToWrite.Add("ChocAn Weekly Provider Report");
+                providerToWrite.Add("");
+                providerToWrite.Add("Provider Name: " + providerName);
+                providerToWrite.Add("Provider Number: " + providerList[i][0].ToString());
+                providerToWrite.Add("Provider Address: " + providerList[i][2].ToString());
+                providerToWrite.Add(providerList[i][3] + " " + providerList[i][4].ToString());
+                providerToWrite.Add(providerList[i][5].ToString());
+                string providerId = providerList[i][0].ToString();
+                for (int j = 0; j < invoiceLength; ++j)
+                {
+                    if (providerId.Equals(invoiceList[j][1]))
+                    {
+                        string memberName = "";
+                        string memberId = invoiceList[j][1].ToString();
+                        string dateOfService = invoiceList[j][5].ToString();
+                        string timeEntered = invoiceList[j][3].ToString();
+                        string serviceCode = invoiceList[j][4].ToString();
+                        double serviceFee = 0.0;
+                        for (int k = 0; k < providerLength; ++k)
+                        {
+                            if (serviceCode.Equals(providerDirectory[k][0].ToString()))
+                            {
+                                serviceFee = (double)providerDirectory[k][4];
+                                totalFees += serviceFee;
+                            }
+                        }
+                        for (int k = 0; k < memberLength; ++k)
+                        {
+                            if (memberId.Equals(memberList[k][0]))
+                                memberName = memberList[k][1].ToString();
+                        }
+                        ++numOfServices;
+                        totalNumOfServices += numOfServices;
+                        totalChocAnFees += totalFees;
+                        providerServiceList.Add(dateOfService);
+                        providerServiceList.Add(timeEntered);
+                        providerServiceList.Add(memberName);
+                        providerServiceList.Add(memberId);
+                        providerServiceList.Add(serviceCode);
+                        providerServiceList.Add(serviceFee.ToString());
+                        providerServiceList.Add("");
+                    }
+                }
+                if (numOfServices > 0)
+                {
+                    completeProviderList.Add(providerName);
+                    completeProviderList.Add(numOfServices.ToString());
+                    completeProviderList.Add(totalFees.ToString());
+                    completeProviderList.Add("");
+                    ++totalProviders;
+                    providerToWrite.Add(providerServiceList.ToString());
+                }
+                providerToWrite.Add("Services This Period: " + numOfServices.ToString());
+                providerToWrite.Add("Total Fees for Services Rendered: " + totalFees.ToString());
+                providerToWrite.ToArray();
+                providerName = providerName.Replace(' ', '_');
+                string path = providerName + currentDate + ".txt";
+                System.IO.File.WriteAllLines(path, providerToWrite);
+            }
+
+            // Create Summary Report for ChocAn Manager
+            List<string> toWrite = new List<string>();
+            toWrite.Add("ChocAn Weekly Account Summary");
+            toWrite.Add("For Managers Only");
+            toWrite.Add("");
+            toWrite.Add("Total Number of Providers: " + totalProviders.ToString());
+            toWrite.Add("Total Number of Services Provided: " + totalNumOfServices.ToString());
+            toWrite.Add("Total Fee for period: " + totalChocAnFees.ToString());
+            if (totalProviders > 0)
+            {
+                toWrite.Add("Providers to be paid this period: ");
+                toWrite.Add(completeProviderList.ToString());
+            }
+            toWrite.ToArray();
+            System.IO.File.WriteAllLines("WeeklyAccountSummary" + currentDate + ".txt", toWrite);
+
+            // Return response packet
+            return new ResponsePacket("REQUEST_MAIN_ACCOUNTING", packet.SessionID(), "", "Reports Generated");
         }
 
         /// <summary>
