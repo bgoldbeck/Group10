@@ -416,7 +416,7 @@ namespace ChocAnServer
             // Build the query up, the sqlite database will execute this statement.
             string builtQuery = String.Format("UPDATE members SET " +
                 "memberValid = '0' WHERE " +
-                "memberID = {0}", packet.ID());
+                "memberID = {0};", packet.ID());
 
             // Execute the statement on the database. If any rows were changed, meaning
             // the member was updated, we can check the affectedRecords variable for a 1 (updated) or
@@ -445,7 +445,7 @@ namespace ChocAnServer
             // Build the query up, the sqlite database will execute this statement.
             string builtQuery = String.Format("UPDATE providers SET " +
                 "providerValid = '0' WHERE " +
-                "providerID = {0}", packet.ID());
+                "providerID = {0};", packet.ID());
 
             // Execute the statement on the database. If any rows were changed, meaning
             // the member was updated, we can check the affectedRecords variable for a 1 (updated) or
