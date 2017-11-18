@@ -13,9 +13,13 @@ namespace ChocAnServer
 {
     public class ChocAnServer
     {
+        // Private Class Variables
         private DatabaseCenter database;
         private string logFilepath = "log.txt";
 
+        /// <summary>
+        /// Constructor for ChocAnServer Class
+        /// </summary>
         public ChocAnServer()
         {
             this.database = DatabaseCenter.Singelton;
@@ -26,10 +30,19 @@ namespace ChocAnServer
                 new string[] { "Initialize: " + DateTime.Now.ToString() });
         }
 
+        /// <summary>
+        /// Destructor for ChocAnServer Class
+        /// </summary>
         ~ChocAnServer()
         {
         }
 
+        /// <summary>
+        /// Processes all actions incoming from Client system
+        /// Calls correct function and returns proper response packet
+        /// </summary>
+        /// <param name="basePacket"></param>
+        /// <returns>ResponsePacket</returns>
         public ResponsePacket ProcessAction(BasePacket basePacket)
         {
             if (basePacket == null)
@@ -190,7 +203,6 @@ namespace ChocAnServer
                     }
                     break;
                 
-                
                 /* OPERATOR TERMINAL REQUESTS */
                 case "ADD_INVOICE":
                     if (basePacket is InvoicePacket)
@@ -218,6 +230,7 @@ namespace ChocAnServer
                     break;
             }
 
+            // Log any successful activity from manager or provider in database
             if (responsePacket != null && basePacket != null)
             { 
                 WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
@@ -226,6 +239,11 @@ namespace ChocAnServer
             return responsePacket;
         }
 
+        /// <summary>
+        /// Get MD5 hash for sessionID
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>string</returns>
         private string GetMD5Hash(string input)
         {
             MD5 md5Hash = MD5.Create();
@@ -274,7 +292,6 @@ namespace ChocAnServer
 
             return "";
         }
-
        
         /// <summary>
         /// Build an sql statement from the packet for adding a
@@ -317,10 +334,10 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Adds new provider to database
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestAddProvider(ProviderPacket packet)
         {
             if (packet == null)
@@ -368,10 +385,10 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Adds new service to database
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestAddServiceCode(ServiceCodePacket packet)
         {
             if (packet == null)
@@ -401,10 +418,10 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Deactivates member in database
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestRemoveMember(MemberPacket packet)
         {
             if (packet == null)
@@ -430,10 +447,10 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Deactivates Provider in database
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestRemoveProvider(ProviderPacket packet)
         {
             if (packet == null)
@@ -485,7 +502,8 @@ namespace ChocAnServer
             object[][] providerDirectory = database.ExecuteQuery(providerDirectoryQuery, out int affectedRecords4);
 
             // Get lengths of returned tables
-            if (memberList == null)
+            // If no member was found OR if member is deactivated, return.
+            if (memberList == null || Convert.ToInt32(memberList[0][6]) == 0)
             {
                 return new ResponsePacket("REQUEST_CUSTOM_MEMBER_REPORT", packet.SessionID(), "", "No member with that ID found. No reports to generate");
             }
@@ -504,9 +522,11 @@ namespace ChocAnServer
             int providerLength = providerList.Length;
             int directoryLength = providerDirectory.Length;
 
-            
+            // Use list to format services member has had during this period
             List<string> serviceList = new List<string>();
             int numOfServices = 0;
+
+            // Use lsit to format needed info for .txt file
             List<string> memberToWrite = new List<string>();
             memberToWrite.Add("ChocAn Custom Member Report");
             memberToWrite.Add("For Period: " + packet.DateStart() + " to " + packet.DateEnd());
@@ -515,8 +535,10 @@ namespace ChocAnServer
             memberToWrite.Add("Member Address: " + memberList[0][2].ToString());
             memberToWrite.Add(memberList[0][3].ToString() + " " + memberList[0][4].ToString());
             memberToWrite.Add(memberList[0][5].ToString());
+
             string memberId = memberList[0][0].ToString();
 
+            // Check for services member has had during this period
             for (int j = 0; j < invoiceLength; ++j)
             {
                 if (memberId.Equals(invoiceList[j][1]))
@@ -541,6 +563,9 @@ namespace ChocAnServer
                 }
             }
             memberToWrite.Add("Services This Period: " + numOfServices.ToString());
+            
+            // If member had services for this period, add them to text file.
+            // Else, do nothing.
             if (numOfServices != 0)
             {
                 memberToWrite.Add("");
@@ -584,19 +609,16 @@ namespace ChocAnServer
             object[][] providerDirectory = database.ExecuteQuery(providerDirectoryQuery, out int affectedRecords4);
 
             // Get lengths of returned tables
-            if (memberList == null)
-            {
-                throw new NullReferenceException("No member matching that ID in database");
-            }
             int memberLength = memberList.Length;
 
-            // IF no invoices during the period, report back to UI
+            // IF no invoices during the period, return.
             if (invoiceList == null)
             {
                 return new ResponsePacket("REQUEST_CUSTOM_PROVIDER_REPORT", packet.SessionID(), "", "No invoices for this provider during this period. No reports to generate");
             }
             int invoiceLength = invoiceList.Length;
-            if (providerList[0][0] == null)
+            //IF provider cannot be found OR provider is deactivated, return.
+            if (providerList[0][0] == null || providerList[0][7] == null)
             {
                 return new ResponsePacket("REQUEST_CUSTOM_PROVIDER_REPORT", packet.SessionID(), "", "No provider's with that ID found. No reports to generate");
             }
@@ -607,6 +629,7 @@ namespace ChocAnServer
             int directoryLength = providerDirectory.Length;
 
             // Create Provider Reports
+            //Use list to generate needed text data
             List<string> providerServiceList = new List<string>();
             int numOfServices = 0;
             double totalFees = 0.0;
@@ -620,6 +643,8 @@ namespace ChocAnServer
             providerToWrite.Add(providerList[0][3] + " " + providerList[0][4].ToString());
             providerToWrite.Add(providerList[0][5].ToString());
             string providerId = providerList[0][0].ToString();
+
+            //Get Invoices for that provider
             for (int j = 0; j < invoiceLength; ++j)
             {
                 if (providerId.Equals(invoiceList[j][1]))
@@ -653,6 +678,7 @@ namespace ChocAnServer
                     providerServiceList.Add("");
                 }
             }
+            // If there are services provided during this period, add them to report
             if (numOfServices > 0)
             {
                 providerToWrite.Add(providerServiceList.ToString());
@@ -661,7 +687,10 @@ namespace ChocAnServer
             providerToWrite.Add("Total Fees for Services Rendered: " + totalFees.ToString());
             providerName = providerName.Replace(' ', '_');
             string path = providerName + packet.DateEnd() + ".txt";
+            
+            //Create and fill text file
             System.IO.File.WriteAllLines(path, providerToWrite);
+            
             //Return response packet
             ResponsePacket responsePacket = new ResponsePacket(
             packet.Action(), packet.SessionID(), "", "Custom Provider Report Generated");
@@ -670,10 +699,10 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Updates an existing member in the database
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>Response Packet</returns>
         private ResponsePacket RequestUpdateMember(MemberPacket packet)
         {
             if (packet == null)
@@ -706,10 +735,10 @@ namespace ChocAnServer
         } 
         
         /// <summary>
-        /// 
+        /// Updates an existing provider in the database
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestUpdateProvider(ProviderPacket packet)
         {
             if (packet == null)
@@ -745,10 +774,10 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Updates a service code in the database
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestUpdateServiceCode(ServiceCodePacket packet)
         {
             if (packet == null)
@@ -816,18 +845,21 @@ namespace ChocAnServer
             object[][] providerDirectory = database.ExecuteQuery(providerDirectoryQuery, out int affectedRecords4);
 
             // Get lengths of returned tables
+            //If no members, throw exception
             if (memberList == null)
             {
                 throw new NullReferenceException("No members in database");
             }
             int memberLength = memberList.Length;
 
-            // IF no invoices during the period, report back to UI
+            // IF no invoices during the period, return.
             if (invoiceList == null)
             {
                 return new ResponsePacket("REQUEST_MAIN_ACCOUNTING", packet.SessionID(), "", "No invoices for this period. No reports to generate");
             }
             int invoiceLength = invoiceList.Length;
+
+            //If no providers, throw exception
             if (providerList[0][0] == null || providerDirectory[0][0] == null)
             {
                 throw new Exception("No providers in database");
@@ -835,53 +867,57 @@ namespace ChocAnServer
             int providerLength = providerList.Length;
             int directoryLength = providerDirectory.Length;
         
-            // Go through member list and invoice list, generate .txt files for members 
+            // Go through member list and generate .txt files for members 
             for (int i = 0; i < memberLength; ++i)
             {
-                List<string> serviceList = new List<string>();
-                int numOfServices = 0;
-                List<string> memberToWrite = new List<string>();
-                memberToWrite.Add("ChocAn Weekly Member Report");
-                memberToWrite.Add("");
-                memberToWrite.Add("Member Name: " + memberList[i][1].ToString());
-                memberToWrite.Add("Member Number: " + memberList[i][0].ToString());
-                memberToWrite.Add("Member Address: " + memberList[i][2].ToString());
-                memberToWrite.Add(memberList[i][3].ToString() + " " + memberList[i][4].ToString());
-                memberToWrite.Add(memberList[i][5].ToString());
-                string memberId = memberList[i][0].ToString();
-                for (int j = 0; j < invoiceLength; ++j)
+                //Check to see that member is valid.
+                if (Convert.ToInt32(memberList[i][6]) == 0)
                 {
-                    if (memberId.Equals(invoiceList[j][1]))
-                    {
-                        string providerName = "";
-                        string serviceName = "";
-                        string dateOfService = invoiceList[j][5].ToString();
-                        string serviceCode = invoiceList[j][4].ToString();
-                        for (int k = 0; k < providerLength; ++k)
-                        {
-                            if (serviceCode.Equals(providerDirectory[k][0].ToString()))
-                            {
-                                providerName = providerDirectory[k][2].ToString();
-                                serviceName = providerDirectory[k][3].ToString();
-                            }
-                        }
-                        ++numOfServices;
-                        serviceList.Add(dateOfService);
-                        serviceList.Add(providerName);
-                        serviceList.Add(serviceName);
-                        serviceList.Add("");
-                    }
-                }
-                memberToWrite.Add("Services This Period: " + numOfServices.ToString());
-                if (numOfServices != 0)
-                {
+                    List<string> serviceList = new List<string>();
+                    int numOfServices = 0;
+                    List<string> memberToWrite = new List<string>();
+                    memberToWrite.Add("ChocAn Weekly Member Report");
                     memberToWrite.Add("");
-                    memberToWrite.Add(serviceList.ToString());
+                    memberToWrite.Add("Member Name: " + memberList[i][1].ToString());
+                    memberToWrite.Add("Member Number: " + memberList[i][0].ToString());
+                    memberToWrite.Add("Member Address: " + memberList[i][2].ToString());
+                    memberToWrite.Add(memberList[i][3].ToString() + " " + memberList[i][4].ToString());
+                    memberToWrite.Add(memberList[i][5].ToString());
+                    string memberId = memberList[i][0].ToString();
+                    for (int j = 0; j < invoiceLength; ++j)
+                    {
+                        if (memberId.Equals(invoiceList[j][1]))
+                        {
+                            string providerName = "";
+                            string serviceName = "";
+                            string dateOfService = invoiceList[j][5].ToString();
+                            string serviceCode = invoiceList[j][4].ToString();
+                            for (int k = 0; k < providerLength; ++k)
+                            {
+                                if (serviceCode.Equals(providerDirectory[k][0].ToString()))
+                                {
+                                    providerName = providerDirectory[k][2].ToString();
+                                    serviceName = providerDirectory[k][3].ToString();
+                                }
+                            }
+                            ++numOfServices;
+                            serviceList.Add(dateOfService);
+                            serviceList.Add(providerName);
+                            serviceList.Add(serviceName);
+                            serviceList.Add("");
+                        }
+                    }
+                    memberToWrite.Add("Services This Period: " + numOfServices.ToString());
+                    if (numOfServices != 0)
+                    {
+                        memberToWrite.Add("");
+                        memberToWrite.Add(serviceList.ToString());
+                    }
+                    string name = memberList[i][1].ToString();
+                    name = name.Replace(' ', '_');
+                    string path = name + currentDate + ".txt";
+                    System.IO.File.WriteAllLines(path, memberToWrite.ToArray());
                 }
-                string name = memberList[i][1].ToString();
-                name = name.Replace(' ', '_');
-                string path = name + currentDate + ".txt";
-                System.IO.File.WriteAllLines(path, memberToWrite.ToArray());
             }
 
             // Variables needed for Manager Report and Provider Report 
@@ -893,68 +929,81 @@ namespace ChocAnServer
             // Create Provider Reports
             for (int i = 0; i < providerLength; ++i)
             {
-                List<string> providerServiceList = new List<string>();
-                int numOfServices = 0;
-                double totalFees = 0.0;
-                string providerName = providerList[i][1].ToString();
-                List<string> providerToWrite = new List<string>();
-                providerToWrite.Add("ChocAn Weekly Provider Report");
-                providerToWrite.Add("");
-                providerToWrite.Add("Provider Name: " + providerName);
-                providerToWrite.Add("Provider Number: " + providerList[i][0].ToString());
-                providerToWrite.Add("Provider Address: " + providerList[i][2].ToString());
-                providerToWrite.Add(providerList[i][3] + " " + providerList[i][4].ToString());
-                providerToWrite.Add(providerList[i][5].ToString());
-                string providerId = providerList[i][0].ToString();
-                for (int j = 0; j < invoiceLength; ++j)
+                //Check to see that provider is active
+                if (providerList[i][7] != null)
                 {
-                    if (providerId.Equals(invoiceList[j][1]))
+                    // Use list to format services provider has given this period
+                    List<string> providerServiceList = new List<string>();
+                    int numOfServices = 0;
+                    double totalFees = 0.0;
+                    string providerName = providerList[i][1].ToString();
+
+                    //Use list to format .txt file with needed information
+                    List<string> providerToWrite = new List<string>();
+                    providerToWrite.Add("ChocAn Weekly Provider Report");
+                    providerToWrite.Add("");
+                    providerToWrite.Add("Provider Name: " + providerName);
+                    providerToWrite.Add("Provider Number: " + providerList[i][0].ToString());
+                    providerToWrite.Add("Provider Address: " + providerList[i][2].ToString());
+                    providerToWrite.Add(providerList[i][3] + " " + providerList[i][4].ToString());
+                    providerToWrite.Add(providerList[i][5].ToString());
+
+                    // Check services for provider ID
+                    string providerId = providerList[i][0].ToString();
+                    for (int j = 0; j < invoiceLength; ++j)
                     {
-                        string memberName = "";
-                        string memberId = invoiceList[j][1].ToString();
-                        string dateOfService = invoiceList[j][5].ToString();
-                        string timeEntered = invoiceList[j][3].ToString();
-                        string serviceCode = invoiceList[j][4].ToString();
-                        double serviceFee = 0.0;
-                        for (int k = 0; k < directoryLength; ++k)
+                        if (providerId.Equals(invoiceList[j][1]))
                         {
-                            if (serviceCode.Equals(providerDirectory[k][0].ToString()))
+                            string memberName = "";
+                            string memberId = invoiceList[j][1].ToString();
+                            string dateOfService = invoiceList[j][5].ToString();
+                            string timeEntered = invoiceList[j][3].ToString();
+                            string serviceCode = invoiceList[j][4].ToString();
+                            double serviceFee = 0.0;
+                            for (int k = 0; k < directoryLength; ++k)
                             {
-                                serviceFee = Convert.ToDouble(providerDirectory[k][4]);
-                                totalFees += serviceFee;
+                                if (serviceCode.Equals(providerDirectory[k][0].ToString()))
+                                {
+                                    serviceFee = Convert.ToDouble(providerDirectory[k][4]);
+                                    totalFees += serviceFee;
+                                }
                             }
+                            for (int k = 0; k < memberLength; ++k)
+                            {
+                                if (memberId.Equals(memberList[k][0]))
+                                    memberName = memberList[k][1].ToString();
+                            }
+                            ++numOfServices;
+                            totalNumOfServices += numOfServices;
+                            totalChocAnFees += totalFees;
+                            providerServiceList.Add(dateOfService);
+                            providerServiceList.Add(timeEntered);
+                            providerServiceList.Add(memberName);
+                            providerServiceList.Add(memberId);
+                            providerServiceList.Add(serviceCode);
+                            providerServiceList.Add(serviceFee.ToString());
+                            providerServiceList.Add("");
                         }
-                        for (int k = 0; k < memberLength; ++k)
-                        {
-                            if (memberId.Equals(memberList[k][0]))
-                                memberName = memberList[k][1].ToString();
-                        }
-                        ++numOfServices;
-                        totalNumOfServices += numOfServices;
-                        totalChocAnFees += totalFees;
-                        providerServiceList.Add(dateOfService);
-                        providerServiceList.Add(timeEntered);
-                        providerServiceList.Add(memberName);
-                        providerServiceList.Add(memberId);
-                        providerServiceList.Add(serviceCode);
-                        providerServiceList.Add(serviceFee.ToString());
-                        providerServiceList.Add("");
                     }
+                    // If there were services for the provider this period, then add them to manager
+                    // report and the provider report
+                    if (numOfServices > 0)
+                    {
+                        completeProviderList.Add(providerName);
+                        completeProviderList.Add(numOfServices.ToString());
+                        completeProviderList.Add(totalFees.ToString());
+                        completeProviderList.Add("");
+                        ++totalProviders;
+                        providerToWrite.Add(providerServiceList.ToString());
+                    }
+                    providerToWrite.Add("Services This Period: " + numOfServices.ToString());
+                    providerToWrite.Add("Total Fees for Services Rendered: " + totalFees.ToString());
+                    providerName = providerName.Replace(' ', '_');
+                    string path = providerName + currentDate + ".txt";
+
+                    //Generate and fill .txt file
+                    System.IO.File.WriteAllLines(path, providerToWrite);
                 }
-                if (numOfServices > 0)
-                {
-                    completeProviderList.Add(providerName);
-                    completeProviderList.Add(numOfServices.ToString());
-                    completeProviderList.Add(totalFees.ToString());
-                    completeProviderList.Add("");
-                    ++totalProviders;
-                    providerToWrite.Add(providerServiceList.ToString());
-                }
-                providerToWrite.Add("Services This Period: " + numOfServices.ToString());
-                providerToWrite.Add("Total Fees for Services Rendered: " + totalFees.ToString());
-                providerName = providerName.Replace(' ', '_');
-                string path = providerName + currentDate + ".txt";
-                System.IO.File.WriteAllLines(path, providerToWrite);
             }
 
             // Create Summary Report for ChocAn Manager
@@ -977,10 +1026,10 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// On provider/manager request and scan of memberID, returns member status
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestMemberStatus(MemberPacket packet)
         {
             if (packet == null)
@@ -1015,10 +1064,10 @@ namespace ChocAnServer
             return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, response);
         }
         /// <summary>
-        /// 
+        /// On manager request, allows provider directory to be viewed in textUI
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestProviderDirectory(BasePacket packet)
         {
             if (packet == null)
@@ -1060,10 +1109,10 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Adds an invoice to the directory
         /// </summary>
         /// <param name="packet"></param>
-        /// <returns></returns>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestAddInvoice(InvoicePacket packet)
         {
             if (packet == null)
@@ -1089,7 +1138,11 @@ namespace ChocAnServer
             return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
         }
 
-
+        /// <summary>
+        /// Login procedure
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestLogin(LoginPacket packet)
         {
             if (packet == null)
@@ -1152,7 +1205,7 @@ namespace ChocAnServer
         }
 
         /// <summary>
-        /// 
+        /// Logs activity from server into database log
         /// </summary>
         /// <param name="entry"></param>
         public void WriteLogEntry(string entry)
