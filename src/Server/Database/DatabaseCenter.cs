@@ -57,12 +57,11 @@ namespace SQLLiteDatabaseCenter
                 this.connection = new SQLiteConnection("URI=file:" + filepath);
                 this.connection.Open();
             }
-            catch (SQLiteException exception)
+            catch (Exception exception)
             {
                 Console.WriteLine("SQL could not open : " + filepath + " because " + exception.Message);
                 success = false;
             }
-            
             return success;
         }
 

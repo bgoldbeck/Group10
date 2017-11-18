@@ -9,7 +9,7 @@ namespace UnitTests
     [TestClass]
     public class DatabaseCenterTests
     {
-        const string testSql = "SELECT 1";
+        const string testSql = "SELECT 1, 'a', 1.2";
         const string testSqlBad = "HAHAHAHHAHAHAHAAHAH HAHAHAH AAHAHAHAH";
 
         private DatabaseCenter GetInst()
@@ -20,7 +20,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void DatabaseCenterInitialize()
+        public void DatabaseCenter_Initialize_Valid()
         {
             DatabaseCenter database = DatabaseCenter.Singelton;
             Assert.IsNotNull(database);
@@ -28,36 +28,39 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void DatabaseCenterRunNonQuery()
+        public void DatabaseCenter_Initialize_Invalid()
         {
-            DatabaseCenter database = GetInst();
-            //bool result = database.ExecuteNonQuery(testSql, new List<SQLiteParameter>());
-            //Assert.IsTrue(result);
+            DatabaseCenter database = DatabaseCenter.Singelton;
+            Assert.IsNotNull(database);
+            Assert.IsFalse(database.Initialize(""));
         }
 
         [TestMethod]
-        public void DatabaseCenterRunReaderQuery()
+        public void DatabaseCenter_Initialize_CloseThenOpen()
         {
-            
-            DatabaseCenter database = GetInst();
-            //SQLiteDataReader dataReader = database.ExecuteReaderQuery(testSql, new List<SQLiteParameter>());
-            //Assert.IsNotNull(dataReader);
+            DatabaseCenter database = DatabaseCenter.Singelton;
+            Assert.IsNotNull(database);
+            Assert.IsTrue(database.Initialize());
+            database.Close();
+            Assert.IsTrue(database.Initialize());
         }
 
         [TestMethod]
-        public void DatabaseCenterRunBadReaderQuery()
+        public void DatabaseCenter_ExecuteQuery_Valid()
         {
             DatabaseCenter database = GetInst();
-            //SQLiteDataReader dataReader = database.ExecuteReaderQuery(testSqlBad, new List<SQLiteParameter>());
-            //Assert.IsNull(dataReader);
+            int affectedRecords = 0;
+            var result = database.ExecuteQuery(testSql, out affectedRecords);
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void DatabaseCenterRunBadNonQuery()
+        public void DatabaseCenter_ExecuteQuery_Invalid()
         {
             DatabaseCenter database = GetInst();
-            //bool result = database.ExecuteNonQuery(testSqlBad, new List<SQLiteParameter>());
-            //Assert.IsFalse(result);
+            int affectedRecords = 0;
+            var result = database.ExecuteQuery(testSqlBad, out affectedRecords);
+            Assert.IsNull(result);
         }
     }
 }
