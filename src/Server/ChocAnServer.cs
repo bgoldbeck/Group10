@@ -410,12 +410,23 @@ namespace ChocAnServer
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected MemberPacket type.");
             }
 
-            ResponsePacket responsePacket = new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", "");
+            // Build the query up, the sqlite database will execute this statement.
+            string builtQuery = String.Format("UPDATE members SET " +
+                "memberValid = '0' WHERE " +
+                "memberID = {0}", packet.ID());
 
-            return responsePacket;
+            // Execute the statement on the database. If any rows were changed, meaning
+            // the member was updated, we can check the affectedRecords variable for a 1 (updated) or
+            // a 0 (not updated).
+            database.ExecuteQuery(builtQuery, out int affectedRecords);
+
+            // Build the response string depending if we added a member.
+            string response = affectedRecords > 0 ? "Member updated on record." : "Failed to update member on record.";
+
+            return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
         }
 
         /// <summary>
@@ -428,12 +439,23 @@ namespace ChocAnServer
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected MemberPacket type.");
             }
 
-            ResponsePacket responsePacket = new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", "");
+            // Build the query up, the sqlite database will execute this statement.
+            string builtQuery = String.Format("UPDATE providers SET " +
+                "providerValid = '0' WHERE " +
+                "providerID = {0}", packet.ID());
 
-            return responsePacket;
+            // Execute the statement on the database. If any rows were changed, meaning
+            // the member was updated, we can check the affectedRecords variable for a 1 (updated) or
+            // a 0 (not updated).
+            database.ExecuteQuery(builtQuery, out int affectedRecords);
+
+            // Build the response string depending if we added a member.
+            string response = affectedRecords > 0 ? "Provider updated on record." : "Failed to update provider on record.";
+
+            return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
         }
 
         /// <summary>
