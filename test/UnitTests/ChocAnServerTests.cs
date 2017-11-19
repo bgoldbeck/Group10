@@ -64,6 +64,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             ResponsePacket packet = server.ProcessAction(GenerateTestInvoicePacket());
+            Assert.IsNotNull(packet);
         }
 
         // Write test to verify response is not null for RequestAddInvoice

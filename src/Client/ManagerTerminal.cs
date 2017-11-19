@@ -373,6 +373,15 @@ namespace HealthcareClientSystem
         {
             return 1;
         }
+
+        /// <summary>
+        /// Needed to unit test this. 
+        /// AccessLevel() may be unneeded. 
+        /// </summary>
+        public int GetAccessLevel()
+        {
+            return AccessLevel();
+        }
     }
 
 }

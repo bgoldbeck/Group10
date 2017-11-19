@@ -62,8 +62,12 @@
     <Compile Include="ChocAnServerTests.cs" />
     <Compile Include="LoginPacketTests.cs" />
     <Compile Include="PacketFactoryTests.cs" />
+    <Compile Include="ManagerTerminalTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="db.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

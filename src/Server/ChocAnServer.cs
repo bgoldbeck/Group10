@@ -45,10 +45,6 @@ namespace ChocAnServer
         /// <returns>ResponsePacket</returns>
         public ResponsePacket ProcessAction(BasePacket basePacket)
         {
-            if (basePacket == null)
-            {
-                // Throw argument exception.
-            }
 
             // Generic response if no action executes.
             ResponsePacket responsePacket = new ResponsePacket(

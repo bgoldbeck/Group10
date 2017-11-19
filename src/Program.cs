@@ -3,8 +3,9 @@
 using System;
 
 using HealthcareClientSystem;
+using System.Diagnostics.CodeAnalysis;
 
-
+[ExcludeFromCodeCoverage]
 public class Program
 {
 
