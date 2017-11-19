@@ -62,6 +62,7 @@
     <Compile Include="DatabaseCenterTests.cs" />
     <Compile Include="ChocAnServerTests.cs" />
     <Compile Include="LoginPacketTests.cs" />
+    <Compile Include="PacketFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

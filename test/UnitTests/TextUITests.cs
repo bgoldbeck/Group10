@@ -16,6 +16,13 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TextUI_DefaultConstructor()
+        {
+            TextUI textUI = new TextUI();
+            Assert.IsNotNull(textUI);
+        }
+
+        [TestMethod]
         public void TestWriteLine()
         {
             TextUI ui = BuildTextUIInstance(40, 40);
