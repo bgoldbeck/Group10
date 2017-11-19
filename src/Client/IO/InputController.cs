@@ -8,6 +8,26 @@ namespace HealthcareClientSystem.IO
 {
     public class InputController
     {
+        private static Boolean MockInput = false;
+        private static Queue<String> MockInputQueue = new Queue<string>();
+
+        public static void EnableMock()
+        {
+            MockInput = true;
+            MockInputQueue.Clear();
+        }
+
+        public static void DisableMock()
+        {
+            MockInput = false;
+            MockInputQueue.Clear();
+        }
+
+        public static void AddMockInput(string input)
+        {
+            MockInputQueue.Enqueue(input);
+        }
+
         /// <summary>
         /// This function reads a line input from the user and takes steps to ensure
         /// the string follows the parameters. If the string input does not follow the
@@ -25,7 +45,16 @@ namespace HealthcareClientSystem.IO
             }
 
             // Get the input from the user.
-            string line = Console.ReadLine();
+            string line = "";
+            if (MockInput)
+            {
+                if (MockInputQueue.Count > 0)
+                    return MockInputQueue.Dequeue();
+            }
+            else
+            {
+                line = Console.ReadLine();
+            }
 
             if (isDigit == true)
             {

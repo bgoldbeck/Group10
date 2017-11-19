@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,11 @@ namespace HealthcareClientSystem.IO
         private string[] outputBuffer;
         private string header;
         private string footer;
+        private Boolean isFake;
 
-        public TextUI()
+        public TextUI(Boolean isFake = false)
         {
+            this.isFake = isFake;
             header = " TextUI ";
             footer = "";
             Resize(80, 25);
@@ -77,6 +80,9 @@ namespace HealthcareClientSystem.IO
         /// </summary>
         public void ClearBuffer()
         {
+            if (isFake)
+                return;
+
             // Reset cursor position to the top.
             cursorLinePosition = 1;
 
@@ -121,6 +127,9 @@ namespace HealthcareClientSystem.IO
         /// </summary>
         public void Render(Boolean clearBuffer = false)
         {
+            if (isFake)
+                return;
+
             Console.Clear();
             for (int i = 0; i < nRows; ++i)
             {
@@ -142,6 +151,12 @@ namespace HealthcareClientSystem.IO
         /// <returns></returns>
         public int WriteLine(string output, TextUIJustify justify = TextUIJustify.LEFT)
         {
+            if (isFake)
+            {
+                Debug.WriteLine(output);
+                return 1;
+            }
+
             if (output.Length < 1) return CurrentCursorPosition();
 
             output = output.Replace("\t", "    ");
@@ -213,6 +228,12 @@ namespace HealthcareClientSystem.IO
         /// <param name="groupSize"></param>
         public void WriteList(string[] s, int groupSize = 10)
         {
+            if (isFake)
+            {
+                s.ToList().ForEach(x => Debug.WriteLine(x));
+                return;
+            }
+
             if (groupSize <= 0)
             {
                 // Throw exception.
@@ -312,6 +333,9 @@ namespace HealthcareClientSystem.IO
         /// </summary>
         public void Refresh()
         {
+            if (isFake)
+                return;
+
             Console.Clear();
             Render();
             return;
