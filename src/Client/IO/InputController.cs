@@ -56,7 +56,7 @@ namespace HealthcareClientSystem.IO
             if (MockInput)
             {
                 if (MockInputQueue.Count > 0)
-                    return MockInputQueue.Dequeue();
+                    line = MockInputQueue.Dequeue();
             }
             else
             {

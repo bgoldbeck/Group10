@@ -23,6 +23,25 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TextUI_HeaderFooterTests()
+        {
+            TextUI textUI = new TextUI();
+            textUI.Header = "header";
+            Assert.AreEqual("header", textUI.Header);
+            textUI.Footer = "footer";
+            Assert.AreEqual("footer", textUI.Footer);
+        }
+
+        [TestMethod]
+        public void TextUI_WriteList_Valid()
+        { 
+            TextUI textUI = new TextUI(true);
+            textUI.WriteList(
+                new string[] { "a", "b" });
+            Assert.IsNotNull(textUI);
+        }
+
+        [TestMethod]
         public void TestWriteLine()
         {
             TextUI ui = BuildTextUIInstance(40, 40);

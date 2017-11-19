@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="BasePacketTests.cs" />
     <Compile Include="DateRangePacketTests.cs" />
-    <Compile Include="InputControllerTests.cs" />
     <Compile Include="InvoicePacketTests.cs" />
     <Compile Include="MemberPacketTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

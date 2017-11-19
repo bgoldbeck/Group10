@@ -229,10 +229,7 @@ namespace HealthcareClientSystem.IO
         public void WriteList(string[] s, int groupSize = 10)
         {
             if (isFake)
-            {
                 s.ToList().ForEach(x => Debug.WriteLine(x));
-                return;
-            }
 
             if (groupSize <= 0)
             {
@@ -258,7 +255,9 @@ namespace HealthcareClientSystem.IO
                 }
                 this.WriteLine("Please type 'n' for next grouping.", TextUIJustify.CENTER);
                 this.Render();
-                string t = Console.ReadLine();
+                string t = "";
+                if (!isFake)
+                    t = Console.ReadLine();
                 this.ClearBuffer();
             }
             this.WriteLine("Remainder.", TextUIJustify.CENTER);
@@ -268,7 +267,8 @@ namespace HealthcareClientSystem.IO
             }
             this.Render();
             this.ClearBuffer();
-            Console.ReadLine();
+            if (!isFake)
+                Console.ReadLine();
         }
 
         /// <summary>
