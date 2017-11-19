@@ -28,6 +28,13 @@ namespace HealthcareClientSystem.IO
             MockInputQueue.Enqueue(input);
         }
 
+        public static void PressAnyKey()
+        {
+            if (MockInput)
+                return;
+            Console.ReadKey();
+        }
+
         /// <summary>
         /// This function reads a line input from the user and takes steps to ensure
         /// the string follows the parameters. If the string input does not follow the

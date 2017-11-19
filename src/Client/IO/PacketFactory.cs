@@ -523,7 +523,7 @@ namespace HealthcareClientSystem.IO
             tui.Refresh();
 
             // Press any key to continue.
-            Console.ReadKey();
+            InputController.PressAnyKey();
 
             // Create and return a new date range packet.
             return new DateRangePacket(action, sessionID, startDate.ToString(), endDate, id);
