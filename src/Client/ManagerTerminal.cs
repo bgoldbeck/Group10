@@ -13,7 +13,9 @@ namespace HealthcareClientSystem
     public class ManagerTerminal : OperatorTerminal
     {
         
-
+        /// <summary>
+        /// Constructor for derived ManagerTerminal Class -> calls base class constructor
+        /// </summary>
         public ManagerTerminal() : base()
         {
             updateDelegates[(int)TerminalState.ADD_MEMBER] = AddMemberUpdate;
@@ -36,7 +38,7 @@ namespace HealthcareClientSystem
         /// and return a response that can be viewed and inspected to see what took place
         /// on the server-side.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True unless exceptions are thrown</returns>
         private bool AddMemberUpdate()
         {
             // Fill out the new member packet from the user input and send it off to the server.
@@ -57,7 +59,7 @@ namespace HealthcareClientSystem
         /// to be sent to the server to handle the processing. We will get a response that
         /// informs us of success/failure.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True unless exceptions are thrown</returns>
         private bool AddProviderUpdate()
         {
             // Fill out the new member packet from the user input and send it off to the server.
@@ -79,7 +81,7 @@ namespace HealthcareClientSystem
         /// and return a response that can be viewed and inspected to see what took place
         /// on the server-side.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         private bool AddServiceCodeUpdate()
         {
             // Fill out the new service code packet from the user input and send it off to the server.
@@ -100,7 +102,7 @@ namespace HealthcareClientSystem
         /// This will be sent to the server to handle the processing. We will get a response that
         /// informs us of success/failure.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         private bool RemoveMemberUpdate()
         {
             // Fill out the new member packet from the user input and send it off to the server.
@@ -120,7 +122,7 @@ namespace HealthcareClientSystem
         /// This will be sent to the server to handle the processing. We will get a response that
         /// informs us of success/failure.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         private bool RemoveProviderUpdate()
         {
             // Fill out the new provider packet from the user input and send it off to the server.
@@ -140,7 +142,7 @@ namespace HealthcareClientSystem
         /// The user must fill in this information to be sent to the server. The server will process
         /// the information and return a response with success/failure.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         private bool CustomMemberReportUpdate()
         {
             // Fill out a custom member report packet and send it off to the server.
@@ -160,7 +162,7 @@ namespace HealthcareClientSystem
         /// The user must fill in this information to be sent to the server. The server will process
         /// the information and return a response with success/failure.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         private bool CustomProviderReportUpdate()
         {
             // Fill out a custom member report packet and send it off to the server.
@@ -180,7 +182,7 @@ namespace HealthcareClientSystem
         /// The packet will process on the server and return a response that can be viewed 
         /// and inspected to see what took place on the server-side.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         private bool UpdateMemberUpdate()
         {
             // Fill out the new member packet from the user input and send it off to the server.
@@ -201,7 +203,7 @@ namespace HealthcareClientSystem
         /// The packet will process on the server and return a response that can be viewed 
         /// and inspected to see what took place on the server-side.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         private bool UpdateProviderUpdate()
         {
             // Fill out the new provider packet from the user input and send it off to the server.
@@ -222,7 +224,7 @@ namespace HealthcareClientSystem
         /// The packet will process on the server and return a response that can be viewed 
         /// and inspected to see what took place on the server-side.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptiosn are thrown</returns>
         private bool UpdateServiceCodeUpdate()
         {
             // Fill out the new service code packet from the user input and send it off to the server.
@@ -242,7 +244,7 @@ namespace HealthcareClientSystem
         /// will send a response when all the reports have been generated. The response will inform
         /// the user how many reports were generated or of failure status.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         private bool MainAccountingProcedureUpdate()
         {
             ResponsePacket responsePacket = server.ProcessAction(
@@ -259,7 +261,7 @@ namespace HealthcareClientSystem
         /// <summary>
         /// The main menu. Display all the choices to the user on the terminal screen.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns user input. If false, program exits</returns>
         protected override bool MenuUpdate()
         {
             if (tui == null)
@@ -363,6 +365,10 @@ namespace HealthcareClientSystem
             return (userInput.Equals("0") == true) ? false : true;
         }
 
+        ///<summary>
+        /// ????????????
+        ///</summary>
+        ///<returns>1</returns>
         protected override int AccessLevel()
         {
             return 1;

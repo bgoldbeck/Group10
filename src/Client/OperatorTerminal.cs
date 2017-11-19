@@ -139,7 +139,7 @@ namespace HealthcareClientSystem
         /// and return a response that can be viewed and inspected to see what took place
         /// on the server-side.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>boolean</returns>
         protected bool AddServiceRecordUpdate()
         {
             // Fill out the new invoice packet from the user input and send it off to the server.
@@ -209,7 +209,7 @@ namespace HealthcareClientSystem
         /// the packet to the server for processing. The server will send back a 
         /// session id if login was successful.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True</returns>
         private bool LoginUpdate()
         {
             if (tui == null)
@@ -249,7 +249,7 @@ namespace HealthcareClientSystem
         /// Virtual function with no real logic, meant to be overridden in 
         /// derived classes.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True</returns>
         protected virtual bool MenuUpdate()
         {
             return true;

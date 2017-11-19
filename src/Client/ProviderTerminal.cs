@@ -13,7 +13,9 @@ namespace HealthcareClientSystem
 {
     public class ProviderTerminal : OperatorTerminal
     {
-
+        /// <summary>
+        /// Constructor for the ProviderTerminalClass -> calls base class constructor
+        /// </summary>
         public ProviderTerminal() : base()
         {
             updateDelegates[(int)TerminalState.VIEW_PROVIDER_DIRECTORY] = ViewProviderDirectoryUpdate;
@@ -21,9 +23,9 @@ namespace HealthcareClientSystem
         }
 
         /// <summary>
-        /// 
+        /// Executes a call to server for member status
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         protected bool CheckMemberStatus()
         {
             tui.WriteLine("CHECK MEMBER STATUS", TextUI.TextUIJustify.CENTER);
@@ -44,9 +46,9 @@ namespace HealthcareClientSystem
         
 
         /// <summary>
-        /// 
+        /// Calls to server to get provider directory to view in textUI
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True, unless exceptions are thrown</returns>
         protected bool ViewProviderDirectoryUpdate()
         {
             tui.WriteLine("ADD INVOICE", TextUI.TextUIJustify.CENTER);
@@ -68,9 +70,9 @@ namespace HealthcareClientSystem
         }
 
         /// <summary>
-        /// 
+        /// Updates menu
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true, unless exceptions are thrown</returns>
         protected override bool MenuUpdate()
         {
             if (tui == null)
