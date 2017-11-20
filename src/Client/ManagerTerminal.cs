@@ -369,18 +369,9 @@ namespace HealthcareClientSystem
         /// ????????????
         ///</summary>
         ///<returns>1</returns>
-        protected override int AccessLevel()
+        public override int AccessLevel()
         {
             return 1;
-        }
-
-        /// <summary>
-        /// Needed to unit test this. 
-        /// AccessLevel() may be unneeded. 
-        /// </summary>
-        public int GetAccessLevel()
-        {
-            return AccessLevel();
         }
     }
 

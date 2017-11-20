@@ -12,13 +12,15 @@ namespace UnitTests
         {
             ManagerTerminal managerTerminal = new ManagerTerminal();
             Assert.IsNotNull(managerTerminal);
+            return;
         }
 
         [TestMethod]
         public void ManagerTerminal_AccessLevel_Tests()
         {
             ManagerTerminal managerTerminal = new ManagerTerminal();
-            Assert.AreEqual(1, managerTerminal.GetAccessLevel());
+            Assert.AreEqual(1, managerTerminal.AccessLevel());
+            return;
         }
     }
 }

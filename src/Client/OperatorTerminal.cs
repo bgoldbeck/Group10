@@ -262,7 +262,7 @@ namespace HealthcareClientSystem
         /// <returns>
         /// -1
         /// </returns>
-        protected virtual int AccessLevel()
+        public virtual int AccessLevel()
         {
             return -1;
         }
