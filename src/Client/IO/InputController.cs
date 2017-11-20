@@ -125,6 +125,11 @@ namespace HealthcareClientSystem.IO
         /// <returns></returns>
         public static string ReadText(int lengthMin, int lengthMax, string context = "Text")
         {
+            if (lengthMin > lengthMax)
+            {
+                lengthMin = lengthMax;
+            }
+
             string text = "";
 
             while (text == "")

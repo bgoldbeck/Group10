@@ -10,13 +10,7 @@ namespace UnitTests
     public class TextUITests
     {
         // Convention: MethodName_StateUnderTest_ExpectedBehavior
-
-        [TestMethod]
-        public TextUI BuildTextUIInstance(int nRows, int nCols)
-        {
-            return new TextUI(nRows, nCols);
-        }
-
+        
         [TestMethod]
         public void TextUI_DefaultConstructor()
         {
@@ -60,7 +54,7 @@ namespace UnitTests
         public void WriteLine_ValidString_IncreaseCursorPosition()
         {
             // Arrange.
-            TextUI ui = BuildTextUIInstance(40, 40);
+            TextUI ui = new TextUI(40, 40);
 
             int startCursorPosition = ui.CurrentCursorPosition();
             
@@ -76,7 +70,7 @@ namespace UnitTests
         [TestMethod]
         public void WriteLine_OverflowScreenSpace_ResetCursorPosition()
         {
-            TextUI ui = BuildTextUIInstance(40, 40);
+            TextUI ui = new TextUI(40, 40);
 
             // Cursor line position initially is 1. (The top index is the ### header)
             for (int i = 1; i < ui.MaximumCursorPosition(); ++i)
@@ -100,7 +94,7 @@ namespace UnitTests
         public void WriteLine_ValidFooter_IncreaseCursorPosition()
         {
             // Arrange.
-            TextUI ui = BuildTextUIInstance(40, 40);
+            TextUI ui = new TextUI(40, 40);
             ui.Footer = "Test Footer";
 
             int startCursorPosition = ui.CurrentCursorPosition();
@@ -116,7 +110,7 @@ namespace UnitTests
         public void WriteLine_ValidHeader_IncreaseCursorPosition()
         {
             // Arrange.
-            TextUI ui = BuildTextUIInstance(40, 40);
+            TextUI ui = new TextUI(40, 40);
             ui.Header = "Test Header";
 
             int startCursorPosition = ui.CurrentCursorPosition();
