@@ -134,13 +134,20 @@ namespace HealthcareClientSystem.IO
                 tui.Refresh();
 
                 // Get the new status of the member from the user.
-                string memberStatusResponse = InputController.ReadText(
-                    1, 1, "Member Active? [Y/y] YES [N/n] NO");
-
-                if (memberStatusResponse != "Y" && memberStatusResponse != "y")
+                string memberStatusResponse = "";
+                while (memberStatusResponse != "N" &&
+                       memberStatusResponse != "n" &&
+                       memberStatusResponse != "Y" &&
+                       memberStatusResponse != "y")
                 {
-                    // User chose member to be suspended.
-                    memberStatus = "SUSPENDED";
+                    memberStatusResponse = InputController.ReadText(
+                                                1, 1, "Member Active? [Y/y] YES [N/n] NO");
+
+                    if (memberStatusResponse == "N" || memberStatusResponse == "n")
+                    {
+                        // User chose member to be suspended.
+                        memberStatus = "SUSPENDED";
+                    }
                 }
             }
 
