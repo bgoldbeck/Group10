@@ -240,7 +240,7 @@ namespace HealthcareClientSystem.IO
                 string providerStatusResponse = InputController.ReadText(
                     1, 1, "Provider Active? [Y/y] YES [N/n] NO");
 
-                if (providerStatusResponse != "Y" && providerStatusResponse != "y")
+                if (providerStatusResponse != "Y" || providerStatusResponse != "y")
                 {
                     // User chose provider to be suspended.
                     providerStatus = "SUSPENDED";

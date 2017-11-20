@@ -12,7 +12,7 @@ namespace SQLLiteDatabaseCenter
 {
     public class DatabaseCenter
     {
-        private static readonly DatabaseCenter instance = new DatabaseCenter();
+        private static readonly DatabaseCenter Instance = new DatabaseCenter();
         
         private SQLiteConnection connection;
         private SQLiteDataReader reader;
@@ -26,7 +26,7 @@ namespace SQLLiteDatabaseCenter
         {
             get
             {  
-                return instance;
+                return Instance;
             }
         }
 
