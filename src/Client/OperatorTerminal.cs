@@ -183,7 +183,7 @@ namespace HealthcareClientSystem
                         running = updateDelegates[(int)currentState]();
                         
                         // Our header is based on our current state.
-                        tui.Header = " | " + currentState.ToString() + " | ";
+                        tui.Header = " | " + currentState.ToString().Replace('_', ' ') + " | ";
 
                         // Clear the footer (most recent message).
                         tui.Footer = "";

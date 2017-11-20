@@ -9,6 +9,8 @@ namespace UnitTests
     [TestClass]
     public class TextUITests
     {
+        // Convention: MethodName_StateUnderTest_ExpectedBehavior
+
         [TestMethod]
         public TextUI BuildTextUIInstance(int nRows, int nCols)
         {
@@ -30,30 +32,49 @@ namespace UnitTests
             Assert.AreEqual("header", textUI.Header);
             textUI.Footer = "footer";
             Assert.AreEqual("footer", textUI.Footer);
+            return;
         }
 
         [TestMethod]
-        public void TextUI_WriteList_Valid()
+        public void WriteList_ValidList_NotNull()
         { 
             TextUI textUI = new TextUI(true);
-            textUI.WriteList(
-                new string[] { "a", "b" });
+            textUI.WriteList(new string[] { "a", "b" });
             Assert.IsNotNull(textUI);
+            return;
         }
 
         [TestMethod]
-        public void TestWriteLine()
+        public void WriteList_NullList_ExceptionThrown()
         {
+            // Arrange.
+            TextUI textUI = new TextUI(true);
+            string[] sArr = null;
+
+            // Act, Assert
+            Assert.ThrowsException<NullReferenceException>( () => textUI.WriteList(sArr) );
+            return;
+        }
+
+        [TestMethod]
+        public void WriteLine_ValidString_IncreaseCursorPosition()
+        {
+            // Arrange.
             TextUI ui = BuildTextUIInstance(40, 40);
 
-            // The first Writeline should return the cursor position : 2.
-            Assert.AreEqual(ui.WriteLine("first line added."), 2);
+            int startCursorPosition = ui.CurrentCursorPosition();
+            
+            // Act.
+            int currentCursorPosition = ui.WriteLine("valid string");
+
+            // Assert. The first Writeline should return the cursor position + 1.
+            Assert.AreEqual(startCursorPosition + 1, currentCursorPosition);
 
             return;
         }
 
         [TestMethod]
-        public void TestCurrentCursorPosition()
+        public void WriteLine_OverflowScreenSpace_ResetCursorPosition()
         {
             TextUI ui = BuildTextUIInstance(40, 40);
 
@@ -66,7 +87,7 @@ namespace UnitTests
                 Assert.AreEqual(ui.CurrentCursorPosition(), i + 1);
             }
 
-            ui.WriteLine("write another line added.");
+            ui.WriteLine("write one more line.");
 
             // By now we should have overflowed the TextUI cursor line index. We check to make
             // sure that happened.
@@ -75,5 +96,36 @@ namespace UnitTests
             return;
         }
 
+        [TestMethod]
+        public void WriteLine_ValidFooter_IncreaseCursorPosition()
+        {
+            // Arrange.
+            TextUI ui = BuildTextUIInstance(40, 40);
+            ui.Footer = "Test Footer";
+
+            int startCursorPosition = ui.CurrentCursorPosition();
+
+            // Act.
+            int currentCursorPosition = ui.WriteLine("valid string");
+
+            // Assert. The first Writeline should return the cursor position + 1.
+            Assert.AreEqual(startCursorPosition + 1, currentCursorPosition);
+        }
+
+        [TestMethod]
+        public void WriteLine_ValidHeader_IncreaseCursorPosition()
+        {
+            // Arrange.
+            TextUI ui = BuildTextUIInstance(40, 40);
+            ui.Header = "Test Header";
+
+            int startCursorPosition = ui.CurrentCursorPosition();
+
+            // Act.
+            int currentCursorPosition = ui.WriteLine("valid string");
+
+            // Assert. The first Writeline should return the cursor position + 1.
+            Assert.AreEqual(startCursorPosition + 1, currentCursorPosition);
+        }
     }
 }

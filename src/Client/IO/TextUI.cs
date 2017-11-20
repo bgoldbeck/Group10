@@ -94,24 +94,28 @@ namespace HealthcareClientSystem.IO
             // Fill the entire top row with #'s
             FillRow(0, '#');
 
-            // Replace the header text.
-            StringBuilder topRow = new StringBuilder(outputBuffer[0]);
-            topRow.Remove(0, header.Length);
-            topRow.Insert((int)(outputBuffer[0].Length * 0.5f) - (int)(header.Length * 0.5f), header);
+            if (header != null && header != "")
+            { 
+                // Replace the header text.
+                StringBuilder topRow = new StringBuilder(outputBuffer[0]);
+                topRow.Remove(0, header.Length);
+                topRow.Insert((int)(outputBuffer[0].Length * 0.5f) - (int)(header.Length * 0.5f), header);
 
-            outputBuffer[0] = topRow.ToString();
+                outputBuffer[0] = topRow.ToString();
+            }
 
-            //(outputBuffer[0].Length * 0.5f) - (header.Length * 0.5f)
-            // Fill the entire bottom row with #'s
-            FillRow(nRows - 1, '#');
+            if (footer != null && footer != "")
+                { 
+                // Fill the entire bottom row with #'s
+                FillRow(nRows - 1, '#');
 
-            // Replace the header text.
-            StringBuilder bottomRow = new StringBuilder(outputBuffer[nRows - 1]);
-            bottomRow.Remove(0, footer.Length);
-            bottomRow.Insert((int)(outputBuffer[nRows-1].Length * 0.5f) - (int)(footer.Length * 0.5f), footer);
+                // Replace the header text.
+                StringBuilder bottomRow = new StringBuilder(outputBuffer[nRows - 1]);
+                bottomRow.Remove(0, footer.Length);
+                bottomRow.Insert((int)(outputBuffer[nRows-1].Length * 0.5f) - (int)(footer.Length * 0.5f), footer);
 
-            outputBuffer[nRows - 1] = bottomRow.ToString();
-
+                outputBuffer[nRows - 1] = bottomRow.ToString();
+            }
 
             // Fill the left side of the UI with #'s
             FillColumn(0, '#');
@@ -125,7 +129,7 @@ namespace HealthcareClientSystem.IO
         /// <summary>
         /// Draw everything from the buffer to the console.
         /// </summary>
-        public void Render(Boolean clearBuffer = false)
+        public void Render()
         {
             if (isFake)
                 return;
@@ -136,9 +140,9 @@ namespace HealthcareClientSystem.IO
                 //Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(outputBuffer[i]);
             }
-
-            if (clearBuffer)
-                ClearBuffer();
+            
+            // Clear the contents in the buffer.
+            ClearBuffer();
 
             return;
         }
@@ -151,6 +155,12 @@ namespace HealthcareClientSystem.IO
         /// <returns></returns>
         public int WriteLine(string output, TextUIJustify justify = TextUIJustify.LEFT)
         {
+            // Just exit on null or empty string.
+            if (output == null || output == "")
+            {
+                return CurrentCursorPosition();
+            }
+
             if (isFake)
             {
                 Debug.WriteLine(output);
@@ -196,6 +206,7 @@ namespace HealthcareClientSystem.IO
                     j = q - r;
                     break;
                 case TextUIJustify.LEFT:
+                    j = 0;
                     break;
                 case TextUIJustify.RIGHT:
                     break;
@@ -228,18 +239,22 @@ namespace HealthcareClientSystem.IO
         /// <param name="groupSize"></param>
         public void WriteList(string[] s, int groupSize = 10)
         {
-            if (isFake)
-                s.ToList().ForEach(x => Debug.WriteLine(x));
-
-            if (groupSize <= 0)
-            {
-                // Throw exception.
-            }
             if (s == null)
             {
                 // Throw exception.
+                throw new NullReferenceException("String array 's' was null");
             }
 
+            // Do this after exception cases.
+            if (isFake)
+                s.ToList().ForEach(x => Debug.WriteLine(x));
+
+            // Correct any bad group sizes.
+            if (groupSize <= 0)
+            {
+                // Auto-correct the stupid user.
+                groupSize = 2;
+            }
             int n = s.Length;
 
             int d = groupSize; // n things at a time.
@@ -255,20 +270,26 @@ namespace HealthcareClientSystem.IO
                 }
                 this.WriteLine("Please type 'n' for next grouping.", TextUIJustify.CENTER);
                 this.Render();
-                string t = "";
                 if (!isFake)
-                    t = Console.ReadLine();
+                { 
+                    Console.ReadKey();
+                }
                 this.ClearBuffer();
             }
-            this.WriteLine("Remainder.", TextUIJustify.CENTER);
-            for (int i = 0; i < r; ++i)
-            {
-                this.WriteLine(s[d * q + i]);
+            if (r > 0)
+            { 
+                this.WriteLine("Remainder.", TextUIJustify.CENTER);
+                for (int i = 0; i < r; ++i)
+                {
+                    this.WriteLine(s[d * q + i]);
+                }
+                this.Render();
             }
-            this.Render();
-            this.ClearBuffer();
             if (!isFake)
-                Console.ReadLine();
+            { 
+                Console.ReadKey();
+            }
+            return;
         }
 
         /// <summary>
