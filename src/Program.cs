@@ -55,11 +55,12 @@ public class Program
                 Console.ReadKey();
             }
 
-            // Loop the program until the user wants to quit.
+            // Loop the program until the user wants to quit.E
             // Or maybe something goes wrong, like really, really wrong.
             if (terminal != null && running == true)
-            { 
-                running = terminal.Loop();
+            {
+                if (!terminal.Loop())
+                    terminal = null;
             }
         }
 
