@@ -45,6 +45,8 @@ namespace ChocAnServer
         /// <returns>ResponsePacket</returns>
         public ResponsePacket ProcessAction(BasePacket basePacket)
         {
+            if (basePacket == null)
+                throw new ArgumentNullException("BasePacket cannot be null!");
 
             // Generic response if no action executes.
             ResponsePacket responsePacket = new ResponsePacket(
