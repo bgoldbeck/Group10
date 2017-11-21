@@ -7,6 +7,9 @@ namespace UnitTests
     [TestClass]
     public class ResponsePacketTests
     {
+        /// <summary>
+        /// Tests the response packet constructor
+        /// </summary>
         [TestMethod]
         public void TestResponsePacketConstructor()
         {

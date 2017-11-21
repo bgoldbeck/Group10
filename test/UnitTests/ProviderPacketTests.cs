@@ -7,6 +7,10 @@ namespace UnitTests
     [TestClass]
     public class ProviderPacketTests
     {
+
+        /// <summary>
+        /// Tests the default constructor and properties of Provider Packet
+        /// </summary>
         [TestMethod]
         public void ProviderPacketConstructor()
         {
@@ -34,6 +38,10 @@ namespace UnitTests
             Assert.AreEqual(email, testPacket.Email());
             Assert.AreEqual(password, testPacket.Password());
         }
+
+        /// <summary>
+        /// Tests running a null password through the provider packet
+        /// </summary>
         [TestMethod]
         public void NullPasswordProviderPacketConstructor()
         {

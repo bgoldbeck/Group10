@@ -7,6 +7,9 @@ namespace UnitTests
     [TestClass]
     public class ServiceCodePacketTests
     {
+        /// <summary>
+        /// Tests the service code packet constructor
+        /// </summary>
         [TestMethod]
         public void ServiceCodePacketConstructor()
         {
@@ -23,6 +26,10 @@ namespace UnitTests
             Assert.AreEqual(id, testPacket.ID());
             Assert.AreEqual(name, testPacket.Name());
         }
+
+        /// <summary>
+        /// Tests running a null ID thru the service code packet constructor
+        /// </summary>
         [TestMethod]
         public void NullIDServiceCodePacketConstructor()
         {
@@ -38,6 +45,10 @@ namespace UnitTests
                 () => testPacket = new ServiceCodePacket(action, sessionID, providerID,
             fee, id, name));
         }
+
+        /// <summary>
+        /// Tests a null name in the service code packet constructor
+        /// </summary>
         [TestMethod]
         public void NullNameServiceCodePacketConstructor()
         {
@@ -53,6 +64,10 @@ namespace UnitTests
                 () => testPacket = new ServiceCodePacket(action, sessionID, providerID,
             fee, id, name));
         }
+        
+        /// <summary>
+        /// Tests a negative fee in the service code packet constructor
+        /// </summary>
         [TestMethod]
         public void NegativeFeeServiceCodePacketConstructor()
         {
