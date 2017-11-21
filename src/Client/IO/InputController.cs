@@ -8,26 +8,47 @@ namespace HealthcareClientSystem.IO
 {
     public class InputController
     {
+        /// <summary>
+        /// Mock variables
+        /// </summary>
         private static Boolean MockInput = false;
         private static Queue<String> MockInputQueue = new Queue<string>();
 
+        /// <summary>
+        /// Places the InputController in mock mode
+        /// This does not take any input from the user
+        /// </summary>
         public static void EnableMock()
         {
             MockInput = true;
             MockInputQueue.Clear();
         }
 
+        /// <summary>
+        /// Takes the InputController out of mock mode
+        /// This switches it back to accepting input from the user
+        /// </summary>
         public static void DisableMock()
         {
             MockInput = false;
             MockInputQueue.Clear();
         }
 
+        /// <summary>
+        /// Adds input to be mocked if the program needs input of any kind
+        /// Note that this is added in a queue
+        /// The queue is cleared whenever Mock is enabled/disabled
+        /// </summary>
+        /// <param name="input">user input to queue</param>
         public static void AddMockInput(string input)
         {
             MockInputQueue.Enqueue(input);
         }
 
+        /// <summary>
+        /// Simulates pressing any key. This helps prevent
+        /// tests from continuing forever in unit tests.
+        /// </summary>
         public static void PressAnyKey()
         {
             if (MockInput)

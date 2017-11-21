@@ -22,6 +22,9 @@ namespace SQLLiteDatabaseCenter
             connection = null;
         }
 
+        /// <summary>
+        /// Accessor for the singleton method
+        /// </summary>
         public static DatabaseCenter Singelton
         {
             get
@@ -30,6 +33,9 @@ namespace SQLLiteDatabaseCenter
             }
         }
 
+        /// <summary>
+        /// Closes the connection to the SQlite database
+        /// </summary>
         public void Close()
         { 
             if (reader != null)
@@ -43,6 +49,11 @@ namespace SQLLiteDatabaseCenter
             return;
         }
         
+        /// <summary>
+        /// Creates a connection to the SQLite database
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
         public bool Initialize(string filepath = "db.sqlite")
         {
             bool success = true;
@@ -65,6 +76,12 @@ namespace SQLLiteDatabaseCenter
             return success;
         }
 
+        /// <summary>
+        /// Main method for executing a query against the SQLite database
+        /// </summary>
+        /// <param name="query">The SQL to run on the server</param>
+        /// <param name="affectedRecords">int to say how many records are affected</param>
+        /// <returns></returns>
         public object[][] ExecuteQuery(string query, out int affectedRecords)
         {
             // Selects a single Item
@@ -96,6 +113,11 @@ namespace SQLLiteDatabaseCenter
             return ret;
         }
 
+        /// <summary>
+        /// Using a DataReader object, this iterates thru it and returns an object array
+        /// </summary>
+        /// <param name="dataReader"></param>
+        /// <returns></returns>
         private object[][] SQLRetrieveTableFromReader(SQLiteDataReader dataReader)
         {
             List<List<object>> retrieval = new List<List<object>>();
@@ -115,6 +137,13 @@ namespace SQLLiteDatabaseCenter
             return retrieval.Select(a => a.ToArray()).ToArray();
         }
 
+        /// <summary>
+        /// Reads a type from the database and converts it to a C# type
+        /// </summary>
+        /// <param name="type">The type of data we expect</param>
+        /// <param name="dataReader">The SQLiteDataReader</param>
+        /// <param name="col"></param>
+        /// <returns></returns>
         private object SQLReadFromType(string type, SQLiteDataReader dataReader, int col)
         {
             object obj = null;
