@@ -97,18 +97,23 @@ namespace HealthcareClientSystem
         /// </summary>
         protected string userID;
 
+        protected Boolean isFake;
+
         /// <summary>
         /// Initialize all data members.
         /// </summary>
-        public OperatorTerminal()
+        public OperatorTerminal(Boolean isFake = false)
         {
+            this.isFake = isFake;
+
             // Set up the window size.
             columnSize = 100;
             rowSize = 40;
-            Console.SetWindowSize(columnSize + 1, rowSize + 2);
+            if(!isFake)
+                Console.SetWindowSize(columnSize + 1, rowSize + 2);
 
             // Create the text ui instance.
-            tui = new TextUI(rowSize, columnSize);
+            tui = new TextUI(rowSize, columnSize, isFake);
             
             // Default state is login.
             currentState = TerminalState.LOGIN;
@@ -302,7 +307,8 @@ namespace HealthcareClientSystem
             tui.Refresh();
 
             //Wait for any single key to be pressed by the user.
-            Console.ReadKey();
+            if (!isFake)
+                Console.ReadKey();
 
             return;
         }

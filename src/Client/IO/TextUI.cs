@@ -33,8 +33,9 @@ namespace HealthcareClientSystem.IO
         /// </summary>
         /// <param name="nRows"></param>
         /// <param name="nCols"></param>
-        public TextUI(int nRows, int nCols)
+        public TextUI(int nRows, int nCols, Boolean isFake = false)
         {
+            this.isFake = isFake;
             header = " TextUI ";
             footer = "";
             Resize(nRows, nCols);

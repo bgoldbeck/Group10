@@ -16,7 +16,7 @@ namespace HealthcareClientSystem
         /// <summary>
         /// Constructor for derived ManagerTerminal Class -> calls base class constructor
         /// </summary>
-        public ManagerTerminal() : base()
+        public ManagerTerminal(Boolean isFake = false) : base(isFake)
         {
             updateDelegates[(int)TerminalState.ADD_MEMBER] = AddMemberUpdate;
             updateDelegates[(int)TerminalState.ADD_PROVIDER] = AddProviderUpdate;
