@@ -310,9 +310,10 @@ namespace ChocAnServer
             // The member we are adding will have a valid state of 1, because we are 
             // adding a new member, so of course they are valid.
             int memberValid = 1;
+            int memberID = -1;
 
             // Build the query up, the sqlite database will execute this statement.
-            string builtQuery = String.Format("INSERT INTO members(" +
+            string query = String.Format("INSERT INTO members(" +
                 "memberName, memberAddress, memberCity, memberState, " +
                 "memberZip, memberValid, memberEmail, memberStatus) VALUES(" +
                 "'{0}', '{1}', '{2}', '{3}', '{4}', {5}, '{6}', '{7}');",
@@ -322,12 +323,23 @@ namespace ChocAnServer
             // Execute the statement on the database. If any rows were added, meaning
             // the member was added, we can check the affectedRecords variable for a 1 (added) or
             // a 0 (not added).
-            database.ExecuteQuery(builtQuery, out int affectedRecords);
-            
+            database.ExecuteQuery(query, out int affectedRecords);
+
+            query = String.Format("SELECT memberID FROM members WHERE " +
+                    "memberName='{0}' AND memberAddress='{1}' AND memberCity='{2}' AND " +
+                    "memberState='{3}' AND memberZip='{4}' AND memberEmail='{5}';",
+                    packet.Name(), packet.Address(), packet.City(), packet.State(), 
+                    packet.Zip(), packet.Email());
+
+            object[][] table = database.ExecuteQuery(query, out affectedRecords);
+
+            memberID = Convert.ToInt32(table[0][0]);
+
             // Build the response string depending if we added a member.
             string response = affectedRecords > 0 ? "Member saved on record." : "Failed to save member on record.";
            
-            return new ResponsePacket(packet.Action(), packet.SessionID(), affectedRecords.ToString(), response);
+            return new ResponsePacket(
+                packet.Action(), packet.SessionID(), memberID.ToString(), response);
         }
 
         /// <summary>
@@ -343,6 +355,7 @@ namespace ChocAnServer
             }
 
             string response = "";
+            int providerID = -1;
 
             string query = String.Format("INSERT INTO providers(" +
                 "providerName, providerAddress, providerCity, providerState, providerZip, providerEmail) VALUES(" +
@@ -364,7 +377,7 @@ namespace ChocAnServer
 
                 object [][] table = database.ExecuteQuery(query, out affectedRecords);
 
-                int providerID = Convert.ToInt32(table[0][0]);
+                providerID = Convert.ToInt32(table[0][0]);
 
                 query = String.Format("INSERT INTO users (userID, passwordKey, isActive, status, accessLevel)" + " VALUES(" +
                     "'{0}', '{1}', {2}, '{3}', {4});", providerID, packet.Password(), 1, "Active", 0);
@@ -376,7 +389,7 @@ namespace ChocAnServer
 
 
             ResponsePacket responsePacket = new ResponsePacket(
-                packet.Action(), packet.SessionID(), "", response);
+                packet.Action(), packet.SessionID(), providerID.ToString(), response);
 
             return responsePacket;
         }
