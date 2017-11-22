@@ -49,7 +49,7 @@ namespace UnitTests
         {
             String action = "ADD_PROVIDER";
             if (wrongAction)
-                action = "ADD_SERVICE_CODE";
+                action = "CUSTOM_PROVIDER_REPORT";
 
             Random random = new Random();
             return new ProviderPacket(action, "5555", "444455555", "Active",
@@ -84,7 +84,7 @@ namespace UnitTests
             String action = "CUSTOM_MEMBER_REPORT";
             if (wrongAction)
             { 
-                action = "WRONG_ACTION";
+                action = "ADD_SERVICE_CODE";
             }
 
             return new DateRangePacket(action, "1234", "11-11-2017", "12-25-2017", "123456788");
@@ -100,7 +100,7 @@ namespace UnitTests
             String action = "CUSTOM_PROVIDER_REPORT";
             if (wrongAction)
             { 
-                action = "WRONG_ACTION";
+                action = "ADD_INVOICE";
             }
             return new DateRangePacket(action, "1234", "11-11-2017", "12-25-2017", "123456788");
         }
