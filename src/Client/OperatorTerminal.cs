@@ -242,6 +242,7 @@ namespace HealthcareClientSystem
             {
                 loginPacket = MockPacket as LoginPacket;
             }
+            else
             { 
                 loginPacket = packetFactory.BuildPacket(
                     tui, "LoginPacket", "", "", "", AccessLevel()) as LoginPacket;

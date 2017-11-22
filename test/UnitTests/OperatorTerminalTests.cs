@@ -35,9 +35,9 @@ namespace UnitTests
             // I set the MockPacket to a response pack when mock mode is enabled.
             ResponsePacket response = OperatorTerminal.MockPacket as ResponsePacket;
 
-            OperatorTerminal.DisableMock();
 
             Assert.AreEqual(response.Response(), "Login Successful");
+            OperatorTerminal.DisableMock();
             return;
         }
     }
