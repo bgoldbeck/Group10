@@ -566,107 +566,84 @@ namespace ChocAnServer
                 // Exception.
                 throw new ArgumentNullException("packet", "Argument passed in was null, expected DateRangePacket type.");
             }
-            // Build database query to recieve all Members, Invoices from date range,
-            // Provider information, and Provider Directory information.
-            string memberQuery = "SELECT * FROM members";
-            string invoiceQuery = "SELECT * FROM invoices WHERE serviceDate BETWEEN" + packet.DateStart() + " AND " + packet.DateEnd();
-            string providerQuery = "SELECT * FROM providers WHERE providerID IS " + packet.ID();
-            string providerDirectoryQuery = "SELECT * FROM provider_directory";
+            string response = "";
 
-            // Object to hold returned database table for members and invoices
-            object[][] memberList = database.ExecuteQuery(memberQuery, out int affectedRecords1);
-            object[][] invoiceList = database.ExecuteQuery(invoiceQuery, out int affectedRecords2);
-            object[][] providerList = database.ExecuteQuery(providerQuery, out int affectedRecords3);
-            object[][] providerDirectory = database.ExecuteQuery(providerDirectoryQuery, out int affectedRecords4);
+            // Attempt to get the member by the id from the packet.
+            object[][] provider = database.ExecuteQuery(String.Format(
+                "SELECT * FROM providers WHERE providerID='{0}'", packet.ID()), 
+                out int affectedRecords);
 
-            // Get lengths of returned tables
-            int memberLength = memberList.Length;
-
-            // IF no invoices during the period, return.
-            if (invoiceList == null)
+            if (provider == null || provider.Length == 0)
             {
-                return new ResponsePacket("REQUEST_CUSTOM_PROVIDER_REPORT", packet.SessionID(), "", "No invoices for this provider during this period. No reports to generate");
+                response = "Provider does not exist";
             }
-            int invoiceLength = invoiceList.Length;
-            //IF provider cannot be found OR provider is deactivated, return.
-            if (providerList[0][0] == null || providerList[0][7] == null)
+            else
             {
-                return new ResponsePacket("REQUEST_CUSTOM_PROVIDER_REPORT", packet.SessionID(), "", "No provider's with that ID found. No reports to generate");
-            }
-            if(providerDirectory[0][0] == null)
-            {
-                throw new Exception("No providers in database");
-            }
-            int directoryLength = providerDirectory.Length;
-
-            // Create Provider Reports
-            //Use list to generate needed text data
-            List<string> providerServiceList = new List<string>();
-            int numOfServices = 0;
-            double totalFees = 0.0;
-            string providerName = providerList[0][1].ToString();
-            List<string> providerToWrite = new List<string>();
-            providerToWrite.Add("ChocAn Custom Provider Report");
-            providerToWrite.Add("");
-            providerToWrite.Add("Provider Name: " + providerName);
-            providerToWrite.Add("Provider Number: " + providerList[0][0].ToString());
-            providerToWrite.Add("Provider Address: " + providerList[0][2].ToString());
-            providerToWrite.Add(providerList[0][3] + " " + providerList[0][4].ToString());
-            providerToWrite.Add(providerList[0][5].ToString());
-            string providerId = providerList[0][0].ToString();
-
-            //Get Invoices for that provider
-            for (int j = 0; j < invoiceLength; ++j)
-            {
-                if (providerId.Equals(invoiceList[j][1]))
+                // Execute the query to gather the invoices.
+                object[][] invoices = database.ExecuteQuery(String.Format(
+                    "SELECT * FROM invoices " +
+                    "WHERE serviceDate BETWEEN '{0}' AND '{1}' AND providerID='{2}'; ",
+                    packet.DateStart(), packet.DateEnd(), packet.ID()), out affectedRecords);
+                if (invoices == null || invoices.Length == 0)
                 {
-                    string memberName = "";
-                    string memberId = invoiceList[j][1].ToString();
-                    string dateOfService = invoiceList[j][5].ToString();
-                    string timeEntered = invoiceList[j][3].ToString();
-                    string serviceCode = invoiceList[j][4].ToString();
-                    double serviceFee = 0.0;
-                    for (int k = 0; k < directoryLength; ++k)
-                    {
-                        if (serviceCode.Equals(providerDirectory[k][0].ToString()))
-                        {
-                            serviceFee = Convert.ToDouble(providerDirectory[k][4]);
-                            totalFees += serviceFee;
-                        }
-                    }
-                    for (int k = 0; k < memberLength; ++k)
-                    {
-                        if (memberId.Equals(memberList[k][0]))
-                            memberName = memberList[k][1].ToString();
-                    }
-                    ++numOfServices;
-                    providerServiceList.Add(dateOfService);
-                    providerServiceList.Add(timeEntered);
-                    providerServiceList.Add(memberName);
-                    providerServiceList.Add(memberId);
-                    providerServiceList.Add(serviceCode);
-                    providerServiceList.Add(serviceFee.ToString());
-                    providerServiceList.Add("");
+                    response = "Provider has no services provided by them in the past week.";
                 }
-            }
-            // If there are services provided during this period, add them to report
-            if (numOfServices > 0)
-            {
-                providerToWrite.Add(providerServiceList.ToString());
-            }
-            providerToWrite.Add("Services This Period: " + numOfServices.ToString());
-            providerToWrite.Add("Total Fees for Services Rendered: " + totalFees.ToString());
-            providerName = providerName.Replace(' ', '_');
-            string path = providerName + packet.DateEnd() + ".txt";
-            
-            //Create and fill text file
-            System.IO.File.WriteAllLines(path, providerToWrite);
-            
-            //Return response packet
-            ResponsePacket responsePacket = new ResponsePacket(
-            packet.Action(), packet.SessionID(), "", "Custom Provider Report Generated");
+                else
+                {
+                    // A list of string lines to eventually output to the report file.
+                    List<string> lines = new List<string>();
+                    // Output, to the top of the report, the member's information we have on 
+                    // record.
+                    lines.Add(String.Format("Provider : {0} \nProvider Identification : {1} \n" +
+                        "Provider Address : {2} {3} {4} {5}", provider[0][1].ToString(),
+                        Convert.ToInt32((provider[0][0])), provider[0][2].ToString(),
+                        provider[0][3].ToString(), provider[0][4].ToString(),
+                        provider[0][5].ToString()));
 
-            return responsePacket;
+                    lines.Add("\n\tServices provided by this Provider..\n");
+
+                    float totalFee = 0.0f;
+                    
+                    // Loop through each invoice.
+                    for (int i = 0; i < invoices.Length; ++i)
+                    {
+                        // Get the service corresponding to the service provided from this invoice.
+                        object[][] service = database.ExecuteQuery(String.Format(
+                            "SELECT * FROM provider_directory WHERE serviceCode='{0}';",
+                            invoices[i][4].ToString()), out affectedRecords);
+
+                        // Get the provider corresponding to the service provided from this invoice.
+                        object[][] member = database.ExecuteQuery(String.Format(
+                            "SELECT * FROM members WHERE memberID='{0}';",
+                            invoices[i][1].ToString()), out affectedRecords);
+
+                        // Write a new line to output to the report, containing information
+                        // from this particular invoice.
+                        lines.Add(String.Format("Service Date : {0} \nDate Received: {1}\n" +
+                            "Member Name : {2}\nMember Identification : {3}\nService Code : {4}" +
+                            "\nFee : ${5}\n", invoices[i][5].ToString(), invoices[i][3].ToString(),
+                            member[0][1].ToString(), Convert.ToInt32(member[0][0]).ToString(),
+                            Convert.ToInt32(service[0][0]).ToString(),
+                            Convert.ToDouble(service[0][3]).ToString()));
+
+                        // Accumulate the total fee.
+                        totalFee += (float)Convert.ToDouble(service[0][3]);
+                    }
+                    // Add the total visits and fees to end of the list.
+                    lines.Add(String.Format("\nTotal number of visits with members : {0}\n" +
+                        "Total fee for the week : {1}", invoices.Length, totalFee));
+
+                    // Write everything to the file.
+                    File.WriteAllLines(String.Format("{0}_{1}.txt",
+                        provider[0][1].ToString(), packet.DateEnd()), lines);
+
+                    // Confirmation in response packet, we did stuff.
+                    response = "Provider report generated.";
+                }
+            
+            }
+
+            return new ResponsePacket(packet.Action(), packet.SessionID(), "", response);
         }
 
         /// <summary>

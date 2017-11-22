@@ -8,4 +8,4 @@ packages/
 .vs/
 /.vs
 /.axoCover/runs
-.coverage
+/TestResults/b266f0ce-fe39-40a2-9ece-6653c17c4efd/*.coverage
