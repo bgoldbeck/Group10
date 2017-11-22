@@ -29,14 +29,7 @@ namespace ChocAnServer
             System.IO.File.WriteAllLines(this.logFilepath, 
                 new string[] { "Initialize: " + DateTime.Now.ToString() });
         }
-
-        /// <summary>
-        /// Destructor for ChocAnServer Class
-        /// </summary>
-        ~ChocAnServer()
-        {
-        }
-
+        
         /// <summary>
         /// Processes all actions incoming from Client system
         /// Calls correct function and returns proper response packet
