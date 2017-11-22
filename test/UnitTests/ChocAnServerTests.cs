@@ -83,7 +83,9 @@ namespace UnitTests
         {
             String action = "CUSTOM_MEMBER_REPORT";
             if (wrongAction)
-                action = "CUSTOM_PROVIDER_REPORT";
+            { 
+                action = "WRONG_ACTION";
+            }
 
             return new DateRangePacket(action, "1234", "11-11-2017", "12-25-2017", "123456788");
         }
@@ -97,8 +99,9 @@ namespace UnitTests
         {
             String action = "CUSTOM_PROVIDER_REPORT";
             if (wrongAction)
-                action = "ADD_INVOICE";
-
+            { 
+                action = "WRONG_ACTION";
+            }
             return new DateRangePacket(action, "1234", "11-11-2017", "12-25-2017", "123456788");
         }
 
@@ -224,8 +227,10 @@ namespace UnitTests
         public void RequestRequestCustomProvider_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            
             ResponsePacket packet = server.ProcessAction(GenerateProviderReportDateRangePacket());
-            Assert.IsNotNull(packet);
+            //Assert.IsNotNull(packet);
+            Assert.AreNotEqual(packet, null);
         }
 
         /// <summary>

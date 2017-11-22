@@ -106,11 +106,14 @@ namespace HealthcareClientSystem
         {
             this.isFake = isFake;
 
-            // Set up the window size.
-            columnSize = 100;
-            rowSize = 40;
+            // Set up the default window size.
+            columnSize = (int)((float)Console.LargestWindowWidth / 2f);
+            rowSize = (int)((float)Console.LargestWindowHeight / 1.4f);
+        
             if(!isFake)
+            { 
                 Console.SetWindowSize(columnSize + 1, rowSize + 2);
+            }
 
             // Create the text ui instance.
             tui = new TextUI(rowSize, columnSize, isFake);
