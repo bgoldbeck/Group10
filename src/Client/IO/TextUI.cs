@@ -359,7 +359,11 @@ namespace HealthcareClientSystem.IO
                 return;
 
             Console.Clear();
-            Render();
+            for (int i = 0; i < nRows; ++i)
+            {
+                Console.WriteLine(outputBuffer[i]);
+            }
+
             return;
         }
 

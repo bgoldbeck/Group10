@@ -54,6 +54,7 @@ namespace HealthcareClientSystem.IO
             if (MockInput)
                 return;
             Console.ReadKey();
+            return;
         }
 
         /// <summary>

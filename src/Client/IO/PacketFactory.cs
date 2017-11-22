@@ -533,7 +533,7 @@ namespace HealthcareClientSystem.IO
             tui.WriteLine("\tEndDate: " + endDate);
             tui.Refresh();
 
-            tui.WriteLine("Press any key to confirm.");
+            tui.WriteLine("\nPress any key to confirm.", TextUI.TextUIJustify.CENTER);
             tui.Refresh();
 
             // Press any key to continue.
