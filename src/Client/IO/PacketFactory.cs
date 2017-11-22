@@ -120,7 +120,7 @@ namespace HealthcareClientSystem.IO
             tui.Render();
 
             // Default memberID to something we don't care about.
-            string memberID = "000000001";
+            string memberID = "999999999";
             
             // Default member status to active.
             string memberStatus = "ACTIVE";
@@ -221,7 +221,7 @@ namespace HealthcareClientSystem.IO
             tui.Render();
 
             // Some default providerID we dont care about.
-            string providerID = "000000001";
+            string providerID = "999999999";
 
             // Default provider is active.
             string providerStatus = "ACTIVE";
@@ -237,13 +237,20 @@ namespace HealthcareClientSystem.IO
                 tui.Refresh();
 
                 // Determine if the provider is active.
-                string providerStatusResponse = InputController.ReadText(
-                    1, 1, "Provider Active? [Y/y] YES [N/n] NO");
-
-                if (providerStatusResponse != "Y" || providerStatusResponse != "y")
+                string providerStatusResponse = "";
+                while (providerStatusResponse != "N" &&
+                       providerStatusResponse != "n" &&
+                       providerStatusResponse != "Y" &&
+                       providerStatusResponse != "y")
                 {
-                    // User chose provider to be suspended.
-                    providerStatus = "SUSPENDED";
+                    providerStatusResponse = InputController.ReadText(
+                                                1, 1, "Provider Active? [Y/y] YES [N/n] NO");
+
+                    if (providerStatusResponse == "N" || providerStatusResponse == "n")
+                    {
+                        // User chose member to be suspended.
+                        providerStatus = "SUSPENDED";
+                    }
                 }
             }
         
