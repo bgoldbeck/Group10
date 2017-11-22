@@ -94,7 +94,7 @@ namespace HealthcareClientSystem
             tui.WriteLine("\t3) Create Service Record");
             
             tui.WriteLine("\t9) Logout");
-            tui.WriteLine("\t0) Exit Program");
+            tui.WriteLine("\t0) Exit Terminal");
 
             tui.Render();
 
