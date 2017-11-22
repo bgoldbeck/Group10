@@ -56,6 +56,7 @@
     <Compile Include="InputControllerTests.cs" />
     <Compile Include="InvoicePacketTests.cs" />
     <Compile Include="MemberPacketTests.cs" />
+    <Compile Include="OperatorTerminalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderPacketTests.cs" />
     <Compile Include="ResponsePacketTests.cs" />

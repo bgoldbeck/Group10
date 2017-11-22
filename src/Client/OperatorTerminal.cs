@@ -33,23 +33,34 @@ namespace HealthcareClientSystem
     /// login handling.
     /// </summary>
     public class OperatorTerminal
-    {
+    { 
+        /// <summary>
+        /// an enum of all the states the program can possibly be in.
+        /// </summary>
+        public enum TerminalState
+        {
+            LOGIN, MENU, VIEW_PROVIDER_DIRECTORY,
+            ADD_MEMBER, CHECK_MEMBER_STATUS,
+            UPDATE_MEMBER, REMOVE_MEMBER, ADD_PROVIDER,
+            ADD_SERVICE_CODE, REMOVE_SERVICE_CODE, ADD_SERVICE_RECORD,
+            MAIN_ACCOUNTING_PROCEDURE, REMOVE_PROVIDER,
+            UPDATE_PROVIDER, UPDATE_SERVICE_CODE,
+            CUSTOM_MEMBER_REPORT, CUSTOM_PROVIDER_REPORT, COUNT
+        };
+
+        /// <summary>
+        /// Mock variables
+        /// </summary>
+        private static Boolean MockMode = false;
+        private static TerminalState MockState = TerminalState.LOGIN;
+        public static BasePacket MockPacket = null;
+
         /// <summary>
         /// Manages our screen space and organizes output to the console.
         /// </summary>
         protected TextUI tui;
 
-        /// <summary>
-        /// an enum of all the states the program can possibly be in.
-        /// </summary>
-        protected enum TerminalState {
-            LOGIN, MENU, VIEW_PROVIDER_DIRECTORY,
-            ADD_MEMBER, CHECK_MEMBER_STATUS,
-            UPDATE_MEMBER, REMOVE_MEMBER, ADD_PROVIDER, 
-            ADD_SERVICE_CODE, REMOVE_SERVICE_CODE, ADD_SERVICE_RECORD,
-            MAIN_ACCOUNTING_PROCEDURE, REMOVE_PROVIDER,
-            UPDATE_PROVIDER, UPDATE_SERVICE_CODE,
-            CUSTOM_MEMBER_REPORT, CUSTOM_PROVIDER_REPORT, COUNT };
+       
 
         /// <summary>
         /// The specific state the program is currently in.
@@ -224,12 +235,25 @@ namespace HealthcareClientSystem
             {
                 // Exception.
             }
+            LoginPacket loginPacket = null;
 
             // Build a login packet.
-            LoginPacket loginPacket = packetFactory.BuildPacket(tui, "LoginPacket", "", "", "", AccessLevel()) as LoginPacket;
+            if (MockMode == true)
+            {
+                loginPacket = MockPacket as LoginPacket;
+            }
+            { 
+                loginPacket = packetFactory.BuildPacket(
+                    tui, "LoginPacket", "", "", "", AccessLevel()) as LoginPacket;
+            }
 
             // Send the packet to the server and instantiate a response.
             ResponsePacket responsePacket = server.ProcessAction(loginPacket);
+
+            if (MockMode == true)
+            {
+                MockPacket = responsePacket as ResponsePacket;
+            }
 
             // Get the session id from the response packet.
             this.sessionID = responsePacket.Data();
@@ -248,8 +272,7 @@ namespace HealthcareClientSystem
                 // Something went wrong with login information, show the operator the response.
                 WriteResponse(responsePacket);
             }
-
-            return true;
+            return MockMode == true ? false : true;
         }
 
 
@@ -313,6 +336,51 @@ namespace HealthcareClientSystem
             if (!isFake)
                 Console.ReadKey();
 
+            return;
+        }
+
+        /// <summary>
+        /// Places the operator Terminal in mock mode
+        /// This does not take any input from the user
+        /// </summary>
+        public static void EnableMock()
+        {
+            MockMode = true;
+            MockState = TerminalState.LOGIN;
+            MockPacket = null;
+            return;
+        }
+        /// <summary>
+        /// Places the operator Terminal in mock mode
+        /// This does not take any input from the user
+        /// </summary>
+        public static void DisableMock()
+        {
+            MockMode = false;
+            MockState = TerminalState.LOGIN;
+            MockPacket = null;
+            return;
+        }
+
+        /// <summary>
+        /// Adds state to be mocked if the program needs to be in a state of any kind
+        /// The state is cleared whenever Mock is enabled/disabled
+        /// </summary>
+        /// <param name="state">State to set for test.</param>
+        public static void ChangeMockState(TerminalState state)
+        {
+            MockState = state;
+            return;
+        }
+
+        /// <summary>
+        /// Adds packet to be mocked if the program needs a packet of any kind
+        /// The packet is cleared whenever Mock is enabled/disabled
+        /// </summary>
+        /// <param name="packet">State to set for test.</param>
+        public static void ChangeMockPacket(BasePacket packet)
+        {
+            MockPacket = packet;
             return;
         }
     }
