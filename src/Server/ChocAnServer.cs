@@ -887,9 +887,11 @@ namespace ChocAnServer
         /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestMemberStatus(MemberPacket packet)
         {
+            // If packet passed in is null, throw exception
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected MemberPacket type.");
             }
 
             //Get the user id if the session is valid.
@@ -925,34 +927,31 @@ namespace ChocAnServer
         /// <returns>ResponsePacket</returns>
         private ResponsePacket RequestProviderDirectory(BasePacket packet)
         {
+            // If packet passed in is null, throw exception
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected BasePacket type.");
             }
-
             // Execute the query on the database and get the entire provider directory contents.
-            object[][] data = database.ExecuteQuery("SELECT * FROM provider_directory;", out int affectedRecords);
+            object[][] providerDirectory = database.ExecuteQuery("SELECT * FROM provider_directory;", out int affectedRecords);
 
             List<string> contents = new List<string>();
 
-            for (int i = 0; i < data.Length; ++i)
-            {
-                string query = String.Format("SELECT providerName from providers where providerID={0};", data[i][1].ToString());
+            contents.Add(String.Format(" {0,-26}{1,-13}{2,-15}{3,-22}{4,-13}\n", "Provider Name",
+                "Service Code", "ProviderID", "Service Name", "Service Fee"));
 
-                string line = "\t" + database.ExecuteQuery(query, out affectedRecords)[0][0].ToString();
-                    
-                for (int j = 0; j < data[0].Length; ++j)
-                {
-                    if (j == data[0].Length - 1)
-                    {
-                        line += ", " + Convert.ToDouble(data[i][j]);
-                    }
-                    else
-                    {
-                        line += ", " + data[i][j];
-                    }
-                    
-                }
+            for (int i = 0; i < providerDirectory.Length; ++i)
+            {
+                string query = String.Format("SELECT providerName from providers " +
+                    "WHERE providerID={0};", providerDirectory[i][1].ToString());
+
+                string line = String.Format(String.Format(" {0,-26}{1,-13}{2,-15}{3,-22}{4,-13}\n",
+                    database.ExecuteQuery(query, out affectedRecords)[0][0].ToString(), 
+                    providerDirectory[i][0].ToString(), providerDirectory[i][1].ToString(),
+                    providerDirectory[i][2].ToString(), 
+                    (Convert.ToDouble(providerDirectory[i][3])).ToString()));
+                
                 contents.Add(line);
 
             }
