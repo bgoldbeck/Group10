@@ -915,7 +915,8 @@ namespace ChocAnServer
             else
             {
                 response = "Found member in database.";
-                data = table[0][0].ToString();
+                if(table.Count() > 0 && table[0].Count() > 0)
+                    data = table[0][0].ToString();
             }
 
             return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, response);

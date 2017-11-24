@@ -62,5 +62,15 @@ namespace UnitTests
             var result = database.ExecuteQuery(testSqlBad, out affectedRecords);
             Assert.IsNull(result);
         }
+
+        [TestMethod]
+        public void DatabaseCenter_ExecuteQuery_Null()
+        {
+            DatabaseCenter database = GetInst();
+            int affectedRecords = 0;
+            Assert.ThrowsException<ArgumentNullException>(
+                () => database.ExecuteQuery(null, out affectedRecords)
+            );
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace UnitTests
         {
 
             OperatorTerminal.EnableMock();
-            OperatorTerminal operatorTerminal = new OperatorTerminal();
+            OperatorTerminal operatorTerminal = new OperatorTerminal(true);
             Assert.IsNotNull(operatorTerminal);
             OperatorTerminal.DisableMock();
             return;
@@ -29,7 +29,7 @@ namespace UnitTests
             OperatorTerminal.ChangeMockState(OperatorTerminal.TerminalState.LOGIN);
             OperatorTerminal.ChangeMockPacket(new LoginPacket("LOGIN", "", "123456789", "asdf", 1));
 
-            OperatorTerminal operatorTerminal = new OperatorTerminal();
+            OperatorTerminal operatorTerminal = new OperatorTerminal(true);
             operatorTerminal.Loop();
 
             // I set the MockPacket to a response pack when mock mode is enabled.
@@ -40,5 +40,20 @@ namespace UnitTests
             OperatorTerminal.DisableMock();
             return;
         }
+
+        [TestMethod]
+        public void OperatorTerminal_IsLoggedIn_Valid()
+        {
+            OperatorTerminal operatorTerminal = new OperatorTerminal(true);
+            Assert.IsFalse(operatorTerminal.IsLoggedIn());
+        }
+
+        [TestMethod]
+        public void OperatorTerminal_AccessLevel_Valid()
+        {
+            OperatorTerminal operatorTerminal = new OperatorTerminal(true);
+            Assert.AreEqual(-1, operatorTerminal.AccessLevel());
+        }
+
     }
 }
