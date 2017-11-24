@@ -125,6 +125,7 @@ namespace HealthcareClientSystem.IO
                 if (num == "" || num.Length < digitsMin || num.Length > digitsMax)
                 { 
                     Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
+                    num = "";
                 }
             }
             return Convert.ToInt32(num);
