@@ -33,10 +33,21 @@ namespace UnitTests
         {
             String action = "ADD_MEMBER";
             if (wrongAction)
-                action = "ADD_PROVIDER";
+                action = "CUSTOM_PROVIDER_REPORT";
 
             return new MemberPacket(action, "1234", "123456789", "Active",
                 "John Doe", "123 HA st", "HACity", "HA", "12345", 
+                "hah@hah.hah");
+        }
+
+        private MemberPacket GenerateTestRequestMemberPacket(Boolean wrongAction = false)
+        {
+            String action = "MEMBER_STATUS";
+            if (wrongAction)
+                action = "ADD_PROVIDER";
+
+            return new MemberPacket(action, "1234", "123456789", "Active",
+                "John Doe", "123 HA st", "HACity", "HA", "12345",
                 "hah@hah.hah");
         }
 
@@ -49,7 +60,7 @@ namespace UnitTests
         {
             String action = "ADD_PROVIDER";
             if (wrongAction)
-                action = "CUSTOM_PROVIDER_REPORT";
+                action = "ADD_SERVICE_CODE";
 
             Random random = new Random();
             return new ProviderPacket(action, "5555", "444455555", "Active",
@@ -264,6 +275,33 @@ namespace UnitTests
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
                 server.ProcessAction(GenerateMemberReportDateRangePacket(true)));
+        }
+
+        /// <summary>
+        /// Testing the main accounting procedure
+        /// </summary>
+        [TestMethod]
+        public void RequestMainAccountingProcedure_Valid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            ResponsePacket packet = server.ProcessAction(
+                new BasePacket("MAIN_ACCOUNTING_PROCEDURE", "1234"));
+        }
+
+        [TestMethod]
+        public void RequestMemberStatus_Valid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            ResponsePacket packet = server.ProcessAction(GenerateTestRequestMemberPacket());
+            Assert.IsNotNull(packet);
+        }
+
+        [TestMethod]
+        public void RequestMemberStatus_Invalid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            Assert.ThrowsException<ArgumentException>(() =>
+               server.ProcessAction(GenerateTestRequestMemberPacket(true)));
         }
     }
 }

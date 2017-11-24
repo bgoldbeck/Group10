@@ -40,5 +40,20 @@ namespace UnitTests
             OperatorTerminal.DisableMock();
             return;
         }
+
+        [TestMethod]
+        public void OperatorTerminal_IsLoggedIn_Valid()
+        {
+            OperatorTerminal operatorTerminal = new OperatorTerminal(true);
+            Assert.IsFalse(operatorTerminal.IsLoggedIn());
+        }
+
+        [TestMethod]
+        public void OperatorTerminal_AccessLevel_Valid()
+        {
+            OperatorTerminal operatorTerminal = new OperatorTerminal(true);
+            Assert.AreEqual(-1, operatorTerminal.AccessLevel());
+        }
+
     }
 }
