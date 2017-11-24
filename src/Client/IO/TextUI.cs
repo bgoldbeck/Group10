@@ -95,7 +95,7 @@ namespace HealthcareClientSystem.IO
             // Fill the entire top row with #'s
             FillRow(0, '#');
 
-            if (header != null && header != "")
+            if (header != null)
             { 
                 // Replace the header text.
                 StringBuilder topRow = new StringBuilder(outputBuffer[0]);
@@ -105,7 +105,7 @@ namespace HealthcareClientSystem.IO
                 outputBuffer[0] = topRow.ToString();
             }
 
-            if (footer != null && footer != "")
+            if (footer != null)
                 { 
                 // Fill the entire bottom row with #'s
                 FillRow(nRows - 1, '#');
