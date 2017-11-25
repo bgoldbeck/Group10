@@ -168,11 +168,6 @@ namespace ChocAnServer
                     {
                         responsePacket = RequestMainAccountingProcedure((BasePacket)basePacket);
                     }
-                    else
-                    {
-                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
-                            "Expected BasePacket", basePacket.Action()), "basePacket");
-                    }
                     break;
                 
                 /* PROVIDER TERMINAL REQUESTS */
@@ -191,11 +186,6 @@ namespace ChocAnServer
                     if (basePacket is BasePacket)
                     {
                         responsePacket = RequestProviderDirectory(basePacket);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(String.Format("{0} BasePacket is wrong type, " +
-                            "Expected BasePacket", basePacket.Action()), "basePacket");
                     }
                     break;
                 

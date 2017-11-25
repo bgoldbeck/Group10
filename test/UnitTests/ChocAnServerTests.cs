@@ -16,7 +16,7 @@ namespace UnitTests
         private InvoicePacket GenerateTestInvoicePacket(string action)
         {
             return new InvoicePacket(action, "1234", "12-12-2017 12:12:12",
-                    "12-12-2017", "123456789", "123456789", "123456", 
+                    "12-12-2017", "123456789", "123456789", "123456",
                     "Test Comments");
         }
 
@@ -28,7 +28,7 @@ namespace UnitTests
         private MemberPacket GenerateTestMemberPacket(String action)
         {
             return new MemberPacket(action, "1234", "123456789", "Active",
-                "John Doe", "123 HA st", "HACity", "HA", "12345", 
+                "John Doe", "123 HA st", "HACity", "HA", "12345",
                 "hah@hah.hah");
         }
 
@@ -48,7 +48,7 @@ namespace UnitTests
         {
             Random random = new Random();
             return new ProviderPacket(action, "5555", "444455555", "Active",
-                "NewProvider" + random.Next(0,1000000).ToString(),
+                "NewProvider" + random.Next(0, 1000000).ToString(),
                 "NewAddress" + random.Next(0, 1000000).ToString(),
                 "NewCity", "CI", "12345",
                 "heheheh@hehehh.heh", "password");
@@ -72,7 +72,7 @@ namespace UnitTests
         /// <returns></returns>
         private DateRangePacket GenerateReportDateRangePacket(String action)
         {
-            return new DateRangePacket(action, "1234", "11-11-2017", "12-25-2017", "123456788");
+            return new DateRangePacket(action, "1234", "11-11-2014", "12-25-2019", "123456788");
         }
 
 
@@ -198,7 +198,7 @@ namespace UnitTests
         public void RequestRequestCustomProvider_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
-            
+
             ResponsePacket packet = server.ProcessAction(GenerateReportDateRangePacket("CUSTOM_PROVIDER_REPORT"));
             //Assert.IsNotNull(packet);
             Assert.AreNotEqual(packet, null);
@@ -267,7 +267,7 @@ namespace UnitTests
         [TestMethod]
         public void RequestProviderDirectory_Valid()
         {
-            
+
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             ResponsePacket packet = server.ProcessAction(
                 new BasePacket("VIEW_PROVIDER_DIRECTORY", "1234"));
@@ -286,6 +286,66 @@ namespace UnitTests
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
                 server.ProcessAction(GenerateTestInvoicePacket("REMOVE_MEMBER")));
+        }
+
+        [TestMethod]
+        public void RequestRemoveProvider_Valid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            ResponsePacket packet = server.ProcessAction(GenerateTestProviderPacket("REMOVE_PROVIDER"));
+        }
+
+        [TestMethod]
+        public void RequestRemoveProvider_Invalid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            Assert.ThrowsException<ArgumentException>(() =>
+                server.ProcessAction(GenerateTestInvoicePacket("REMOVE_PROVIDER")));
+        }
+
+        [TestMethod]
+        public void UpdateMember_Valid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            ResponsePacket packet = server.ProcessAction(GenerateTestMemberPacket("UPDATE_MEMBER"));
+        }
+
+        [TestMethod]
+        public void UpdateMember_Invalid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            Assert.ThrowsException<ArgumentException>(() =>
+                server.ProcessAction(GenerateTestInvoicePacket("UPDATE_MEMBER")));
+        }
+
+        [TestMethod]
+        public void UpdateProvider_Valid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            ResponsePacket packet = server.ProcessAction(GenerateTestProviderPacket("UPDATE_PROVIDER"));
+        }
+
+        [TestMethod]
+        public void UpdateProvider_Invalid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            Assert.ThrowsException<ArgumentException>(() =>
+                server.ProcessAction(GenerateTestInvoicePacket("UPDATE_PROVIDER")));
+        }
+
+        [TestMethod]
+        public void UpdateServiceCode_Valid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            ResponsePacket packet = server.ProcessAction(GenerateServiceCodePacket("UPDATE_SERVICE_CODE"));
+        }
+
+        [TestMethod]
+        public void UpdateServiceCode_Invalid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            Assert.ThrowsException<ArgumentException>(() =>
+                server.ProcessAction(GenerateTestInvoicePacket("UPDATE_SERVICE_CODE")));
         }
     }
 }
