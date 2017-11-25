@@ -116,7 +116,9 @@ namespace HealthcareClientSystem.IO
 
             // We can't allow for less than 1 digit.
             if (digitsMin < 1)
+            {
                 digitsMin = 1;
+            }
 
             while (num == "")
             {

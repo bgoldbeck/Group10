@@ -28,6 +28,9 @@ namespace ChocAnServer
             // Open the log file, clear the contents, add the datetime to the top, close the file.
             System.IO.File.WriteAllLines(this.logFilepath, 
                 new string[] { "Initialize: " + DateTime.Now.ToString() });
+
+            WriteLogEntry(String.Format("{0,-34} : {1,-30} : {2,-50}",
+                   "SESSION_ID", "ACTION", "SERVER_RESPONSE"));
         }
         
         /// <summary>
@@ -39,7 +42,9 @@ namespace ChocAnServer
         public ResponsePacket ProcessAction(BasePacket basePacket)
         {
             if (basePacket == null)
+            { 
                 throw new ArgumentNullException("BasePacket cannot be null!");
+            }
 
             // Generic response if no action executes.
             ResponsePacket responsePacket = new ResponsePacket(
@@ -224,8 +229,8 @@ namespace ChocAnServer
             // Log any successful activity from manager or provider in database
             if (responsePacket != null && basePacket != null)
             { 
-                WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
-                    basePacket.SessionID() + ",", basePacket.Action() + ",", responsePacket.Response()));
+                WriteLogEntry(String.Format("{0,-34} : {1,-30} : {2,-50}",
+                    basePacket.SessionID() , basePacket.Action(), responsePacket.Response()));
             }
             return responsePacket;
         }
@@ -1052,10 +1057,7 @@ namespace ChocAnServer
 
                 response = "Login Successful";
             }
-
-            WriteLogEntry(String.Format("{0,-34} {1,-15} {2,-50}",
-                sessionID + ",", packet.Action() + ",", response));
-
+            
             return new ResponsePacket("LOGIN", "", sessionID, response);
         }
 
@@ -1070,7 +1072,7 @@ namespace ChocAnServer
                 // Write entry as long as it's not null.
 
                 System.IO.File.AppendAllText(this.logFilepath,
-                    DateTime.Now.ToString() + " : " + entry);
+                    DateTime.Now.ToString() + " " + entry + "\n");
             }
             
             return;

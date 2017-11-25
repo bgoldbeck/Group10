@@ -15,7 +15,6 @@ namespace SQLLiteDatabaseCenter
         private static readonly DatabaseCenter Instance = new DatabaseCenter();
         
         private SQLiteConnection connection;
-        private SQLiteDataReader reader;
 
         private DatabaseCenter()
         {
@@ -38,10 +37,7 @@ namespace SQLLiteDatabaseCenter
         /// </summary>
         public void Close()
         { 
-            if (reader != null)
-            {
-                reader.Close();
-            }
+          
             if (connection != null)
             { 
                 connection.Close();
@@ -101,9 +97,11 @@ namespace SQLLiteDatabaseCenter
                 SQLiteCommand command = connection.CreateCommand();
                 command.CommandText = query;
 
-                this.reader = command.ExecuteReader();
-                ret = SQLRetrieveTableFromReader(this.reader);
+                SQLiteDataReader reader = command.ExecuteReader();
+                ret = SQLRetrieveTableFromReader(reader);
                 affectedRecords = reader.RecordsAffected;
+
+                reader.Close();
             }
             catch (SQLiteException e)
             {
@@ -118,17 +116,17 @@ namespace SQLLiteDatabaseCenter
         /// </summary>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        private object[][] SQLRetrieveTableFromReader(SQLiteDataReader dataReader)
+        private object[][] SQLRetrieveTableFromReader(SQLiteDataReader reader)
         {
             List<List<object>> retrieval = new List<List<object>>();
 
-            while (this.reader.Read())
+            while (reader.Read())
             {
                 List<object> row = new List<object>();
 
-                for (int col = 0; col < this.reader.FieldCount; ++col)
+                for (int col = 0; col < reader.FieldCount; ++col)
                 {
-                    row.Add(SQLReadFromType(this.reader.GetFieldType(col).ToString(), this.reader, col));
+                    row.Add(SQLReadFromType(reader.GetFieldType(col).ToString(), reader, col));
                 }
                 retrieval.Add(row);
 
