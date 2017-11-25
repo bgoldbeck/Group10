@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*The ProviderPacket class is the packet that is passed in to pass the information
+ * in to allow the provider's account to be added and updated. This class is
+ * derived from the MemberPacket. The data members in this class is only the string 
+ * for the provider's password. All the other data members are derived from the base
+ * class.
+ */
+using System;
 
 
 namespace ChocAnServer.Packets

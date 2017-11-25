@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*The ResponsePacket class is the packet that is passed back from the ChocAnServer
+ * class which contains the response to the terminal. This class is derived from the BasePacket. 
+ * The data members in this class are: the string any data being returned and a string
+ * for the response.
+ */
+using System;
 
 
 namespace ChocAnServer.Packets
@@ -45,14 +46,18 @@ namespace ChocAnServer.Packets
             return this.data;
         }
         /// <summary>
-        /// This functions returns the error string stored in this class.
+        /// This function returns the error string stored in this class.
         /// </summary>
         /// <returns></returns>
         public string Response()
         {
             return this.response;
         }
-
+        /// <summary>
+        /// This function override the ToString function to take the data stored in
+        /// this class and outputs it as a string.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return String.Format(
