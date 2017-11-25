@@ -952,8 +952,13 @@ namespace ChocAnServer
                 string query = String.Format("SELECT providerName from providers " +
                     "WHERE providerID={0};", providerDirectory[i][1].ToString());
 
+                object[][] queryResults = database.ExecuteQuery(query, out affectedRecords);
+                string providerName = "Unknown Provider Name";
+                if (queryResults.Count() > 0)
+                    providerName = queryResults[0][0].ToString();
+
                 string line = String.Format(String.Format(" {0,-26}{1,-13}{2,-15}{3,-22}{4,-13}\n",
-                    database.ExecuteQuery(query, out affectedRecords)[0][0].ToString(), 
+                    providerName, 
                     providerDirectory[i][0].ToString(), providerDirectory[i][1].ToString(),
                     providerDirectory[i][2].ToString(), 
                     (Convert.ToDouble(providerDirectory[i][3])).ToString()));

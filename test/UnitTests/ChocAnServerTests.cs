@@ -303,5 +303,36 @@ namespace UnitTests
             Assert.ThrowsException<ArgumentException>(() =>
                server.ProcessAction(GenerateTestRequestMemberPacket(true)));
         }
+
+        [TestMethod]
+        public void RequestProviderDirectory_Valid()
+        {
+            
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            ResponsePacket packet = server.ProcessAction(
+                new BasePacket("VIEW_PROVIDER_DIRECTORY", "1234"));
+        }
+
+        [TestMethod]
+        public void RequestRemoveMember_Valid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            ResponsePacket packet = server.ProcessAction(
+                new MemberPacket("REMOVE_MEMBER", "1234", "123456789", "Active",
+                "John Doe", "123 HA st", "HACity", "HA", "12345",
+                "hah@hah.hah"));
+        }
+
+        [TestMethod]
+        public void RequestRemoveMember_Invalid()
+        {
+            ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
+            Assert.ThrowsException<ArgumentException>(() =>
+                server.ProcessAction(
+                    new InvoicePacket("REMOVE_MEMBER", "1234", "12-12-2017 12:12:12",
+                        "12-12-2017", "123456789", "123456789", "123456",
+                        "Test Comments"))
+                        );
+        }
     }
 }
