@@ -13,12 +13,8 @@ namespace UnitTests
         /// Helper method for generating test invoice packets
         /// </summary>
         /// <returns></returns>
-        private InvoicePacket GenerateTestInvoicePacket(Boolean wrongAction = false)
+        private InvoicePacket GenerateTestInvoicePacket(string action)
         {
-            String action = "ADD_INVOICE";
-            if (wrongAction)
-                action = "ADD_MEMBER";
-
             return new InvoicePacket(action, "1234", "12-12-2017 12:12:12",
                     "12-12-2017", "123456789", "123456789", "123456", 
                     "Test Comments");
@@ -29,23 +25,15 @@ namespace UnitTests
         /// </summary>
         /// <param name="wrongAction"></param>
         /// <returns></returns>
-        private MemberPacket GenerateTestMemberPacket(Boolean wrongAction = false)
+        private MemberPacket GenerateTestMemberPacket(String action)
         {
-            String action = "ADD_MEMBER";
-            if (wrongAction)
-                action = "CUSTOM_PROVIDER_REPORT";
-
             return new MemberPacket(action, "1234", "123456789", "Active",
                 "John Doe", "123 HA st", "HACity", "HA", "12345", 
                 "hah@hah.hah");
         }
 
-        private MemberPacket GenerateTestRequestMemberPacket(Boolean wrongAction = false)
+        private MemberPacket GenerateTestRequestMemberPacket(String action)
         {
-            String action = "MEMBER_STATUS";
-            if (wrongAction)
-                action = "ADD_PROVIDER";
-
             return new MemberPacket(action, "1234", "123456789", "Active",
                 "John Doe", "123 HA st", "HACity", "HA", "12345",
                 "hah@hah.hah");
@@ -56,12 +44,8 @@ namespace UnitTests
         /// </summary>
         /// <param name="wrongAction"></param>
         /// <returns></returns>
-        private ProviderPacket GenerateTestProviderPacket(Boolean wrongAction = false)
+        private ProviderPacket GenerateTestProviderPacket(String action)
         {
-            String action = "ADD_PROVIDER";
-            if (wrongAction)
-                action = "ADD_SERVICE_CODE";
-
             Random random = new Random();
             return new ProviderPacket(action, "5555", "444455555", "Active",
                 "NewProvider" + random.Next(0,1000000).ToString(),
@@ -75,12 +59,8 @@ namespace UnitTests
         /// </summary>
         /// <param name="wrongAction"></param>
         /// <returns></returns>
-        private ServiceCodePacket GenerateServiceCodePacket(Boolean wrongAction = false)
+        private ServiceCodePacket GenerateServiceCodePacket(String action)
         {
-            String action = "ADD_SERVICE_CODE";
-            if (wrongAction)
-                action = "CUSTOM_MEMBER_REPORT";
-
             return new ServiceCodePacket(action, "1234", "123456",
                 123.45f, "123456", "SomeServiceCode");
         }
@@ -90,31 +70,11 @@ namespace UnitTests
         /// </summary>
         /// <param name="wrongAction"></param>
         /// <returns></returns>
-        private DateRangePacket GenerateMemberReportDateRangePacket(Boolean wrongAction = false)
+        private DateRangePacket GenerateReportDateRangePacket(String action)
         {
-            String action = "CUSTOM_MEMBER_REPORT";
-            if (wrongAction)
-            { 
-                action = "ADD_SERVICE_CODE";
-            }
-
             return new DateRangePacket(action, "1234", "11-11-2017", "12-25-2017", "123456788");
         }
 
-        /// <summary>
-        /// Helper method for generating provider reports
-        /// </summary>
-        /// <param name="wrongAction"></param>
-        /// <returns></returns>
-        private DateRangePacket GenerateProviderReportDateRangePacket(Boolean wrongAction = false)
-        {
-            String action = "CUSTOM_PROVIDER_REPORT";
-            if (wrongAction)
-            { 
-                action = "ADD_INVOICE";
-            }
-            return new DateRangePacket(action, "1234", "11-11-2017", "12-25-2017", "123456788");
-        }
 
         /// <summary>
         /// Passing the wrong action should throw an exception
@@ -150,7 +110,7 @@ namespace UnitTests
         public void RequestAddInvoice_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
-            ResponsePacket packet = server.ProcessAction(GenerateTestInvoicePacket());
+            ResponsePacket packet = server.ProcessAction(GenerateTestInvoicePacket("ADD_INVOICE"));
             Assert.IsNotNull(packet);
         }
 
@@ -162,7 +122,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
-                server.ProcessAction(GenerateTestInvoicePacket(true)));
+                server.ProcessAction(GenerateTestMemberPacket("ADD_INVOICE")));
         }
 
         /// <summary>
@@ -172,7 +132,7 @@ namespace UnitTests
         public void RequestAddMember_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
-            ResponsePacket packet = server.ProcessAction(GenerateTestMemberPacket());
+            ResponsePacket packet = server.ProcessAction(GenerateTestMemberPacket("ADD_MEMBER"));
             Assert.IsNotNull(packet);
         }
 
@@ -184,7 +144,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
-                server.ProcessAction(GenerateTestMemberPacket(true)));
+                server.ProcessAction(GenerateTestInvoicePacket("ADD_MEMBER")));
         }
 
         /// <summary>
@@ -194,7 +154,7 @@ namespace UnitTests
         public void RequestAddProvider_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
-            ResponsePacket packet = server.ProcessAction(GenerateTestProviderPacket());
+            ResponsePacket packet = server.ProcessAction(GenerateTestProviderPacket("ADD_PROVIDER"));
             Assert.IsNotNull(packet);
         }
 
@@ -206,7 +166,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
-                server.ProcessAction(GenerateTestProviderPacket(true)));
+                server.ProcessAction(GenerateTestMemberPacket("ADD_PROVIDER")));
         }
 
         /// <summary>
@@ -216,7 +176,7 @@ namespace UnitTests
         public void RequestAddServiceCode_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
-            ResponsePacket packet = server.ProcessAction(GenerateServiceCodePacket());
+            ResponsePacket packet = server.ProcessAction(GenerateServiceCodePacket("ADD_SERVICE_CODE"));
             Assert.IsNotNull(packet);
         }
 
@@ -228,7 +188,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
-                server.ProcessAction(GenerateServiceCodePacket(true)));
+                server.ProcessAction(GenerateTestMemberPacket("ADD_SERVICE_CODE")));
         }
 
         /// <summary>
@@ -239,7 +199,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             
-            ResponsePacket packet = server.ProcessAction(GenerateProviderReportDateRangePacket());
+            ResponsePacket packet = server.ProcessAction(GenerateReportDateRangePacket("CUSTOM_PROVIDER_REPORT"));
             //Assert.IsNotNull(packet);
             Assert.AreNotEqual(packet, null);
         }
@@ -252,7 +212,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
-                server.ProcessAction(GenerateProviderReportDateRangePacket(true)));
+                server.ProcessAction(GenerateTestMemberPacket("CUSTOM_PROVIDER_REPORT")));
         }
 
         /// <summary>
@@ -262,7 +222,7 @@ namespace UnitTests
         public void RequestRequestCustomMember_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
-            ResponsePacket packet = server.ProcessAction(GenerateMemberReportDateRangePacket());
+            ResponsePacket packet = server.ProcessAction(GenerateReportDateRangePacket("CUSTOM_MEMBER_REPORT"));
             Assert.IsNotNull(packet);
         }
 
@@ -274,7 +234,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
-                server.ProcessAction(GenerateMemberReportDateRangePacket(true)));
+                server.ProcessAction(GenerateTestMemberPacket("CUSTOM_MEMBER_REPORT")));
         }
 
         /// <summary>
@@ -292,7 +252,7 @@ namespace UnitTests
         public void RequestMemberStatus_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
-            ResponsePacket packet = server.ProcessAction(GenerateTestRequestMemberPacket());
+            ResponsePacket packet = server.ProcessAction(GenerateTestRequestMemberPacket("MEMBER_STATUS"));
             Assert.IsNotNull(packet);
         }
 
@@ -301,7 +261,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
-               server.ProcessAction(GenerateTestRequestMemberPacket(true)));
+               server.ProcessAction(GenerateTestInvoicePacket("MEMBER_STATUS")));
         }
 
         [TestMethod]
@@ -317,10 +277,7 @@ namespace UnitTests
         public void RequestRemoveMember_Valid()
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
-            ResponsePacket packet = server.ProcessAction(
-                new MemberPacket("REMOVE_MEMBER", "1234", "123456789", "Active",
-                "John Doe", "123 HA st", "HACity", "HA", "12345",
-                "hah@hah.hah"));
+            ResponsePacket packet = server.ProcessAction(GenerateTestMemberPacket("REMOVE_MEMBER"));
         }
 
         [TestMethod]
@@ -328,11 +285,7 @@ namespace UnitTests
         {
             ChocAnServer.ChocAnServer server = new ChocAnServer.ChocAnServer();
             Assert.ThrowsException<ArgumentException>(() =>
-                server.ProcessAction(
-                    new InvoicePacket("REMOVE_MEMBER", "1234", "12-12-2017 12:12:12",
-                        "12-12-2017", "123456789", "123456789", "123456",
-                        "Test Comments"))
-                        );
+                server.ProcessAction(GenerateTestInvoicePacket("REMOVE_MEMBER")));
         }
     }
 }
