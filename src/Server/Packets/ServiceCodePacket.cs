@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿/*The ServiceCodePacket class is the packet that is passed in to pass the information
+ * in to allow the service code to be added or updated. This class is
+ * derived from the BasePacket. The data members in this class are: the float for
+ * the fee of the service, the string for the id of the service, the string for the
+ * name, and the provider ID of the provider that provided that service.
+ */
+using System;
 
 namespace ChocAnServer.Packets
 {
@@ -76,7 +77,10 @@ namespace ChocAnServer.Packets
             return this.name;
         }
 
-        //
+        /// <summary>
+        /// This method returrns the string stored in the ProviderID data member.
+        /// </summary>
+        /// <returns></returns>
         public string ProviderID()
         {
             return this.providerID;
