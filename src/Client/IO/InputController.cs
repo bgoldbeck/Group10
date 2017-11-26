@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Copyright 2017 <Brandon Goldbeck,  > 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace HealthcareClientSystem.IO
 {
+    /// <summary>
+    /// This class handles input from the user and is used as a static class throughout the
+    /// program. Its job is to make sure the use types in specific input matching certain 
+    /// parameters.
+    /// </summary>
     public class InputController
     {
         /// <summary>
@@ -65,7 +71,9 @@ namespace HealthcareClientSystem.IO
         /// <param name="isDigit"></param>
         /// <param name="isPositive"></param>
         /// <param name="length"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// The string the user typed or "" if the user typed the wrong parameters.
+        /// </returns>
         private static string ReadLine(bool isDigit, bool isPositive)
         {
      
@@ -106,10 +114,24 @@ namespace HealthcareClientSystem.IO
         }
 
         /// <summary>
-        /// 
+        /// Reads an integer value from the user. Takes steps to ensure the length and positive 
+        /// nature of the integer are correct according to the parameters as they are set.
         /// </summary>
-        /// <param name="digits"></param>
-        /// <returns></returns>
+        /// <param name="digitsMin">
+        /// Minimum # of digits the integer can be.
+        /// </param>
+        /// <param name="digitsMax">
+        /// Maximum # of digits the integer can be.
+        /// </param>
+        /// <param name="isPositive">
+        /// Should the number be positive?
+        /// </param>
+        /// <param name="context">
+        /// Context of the input, so the user knows what they should type.
+        /// </param>
+        /// <returns>
+        /// The integer in the specified parameters range.
+        /// </returns>
         public static int ReadInteger(int digitsMin, int digitsMax, bool isPositive, string context = "ID")
         { 
             string num = "";
@@ -123,10 +145,14 @@ namespace HealthcareClientSystem.IO
             while (num == "")
             {
                 Console.Write("Enter " + context + ": ");
+                // Get the input from the user.
                 num = InputController.ReadLine(true, isPositive);
+
+                // Ensure the input was good.
                 if (num == "" || num.Length < digitsMin || num.Length > digitsMax)
                 { 
                     Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
+                    // Number was bad, reset the input.
                     num = "";
                 }
             }
@@ -134,17 +160,29 @@ namespace HealthcareClientSystem.IO
         }
 
         /// <summary>
-        /// 
+        /// Gets input string from the user of a string that matches the parameters set.
         /// </summary>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="lengthMin">
+        /// Minimum length of the string.
+        /// </param>
+        /// <param name="lengthMax">
+        /// Maximum length of the string.
+        /// </param>
+        /// <param name="context">
+        /// Context of the input, so the user knows what to type.
+        /// </param>
+        /// <returns>
+        /// The input within the specified range of the parameters.
+        /// </returns>
         public static string ReadText(int lengthMin, int lengthMax, string context = "Text")
         {
+            // Strings cant be negative in length.
             if (lengthMin < 0)
             {
                 lengthMin = 1;
             }
 
+            // The minimum length should not be greater than the maximum.
             if (lengthMin > lengthMax)
             {
                 lengthMin = lengthMax;
@@ -155,16 +193,17 @@ namespace HealthcareClientSystem.IO
             while (text == "")
             {
                 Console.Write("Enter " + context + ": ");
+
+                // Get the user input.
                 text = InputController.ReadLine(false, false);
+
+                // Ensure the input is in the range of the parameters.
                 if ((text == "" && lengthMin > 0) || 
                     text.Length < lengthMin || text.Length > lengthMax)
                 {
-                    text = "";
                     Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
-                }
-                else
-                {
-                    break;
+                    // On bad input, reset the input.
+                    text = "";
                 }
             }
             
