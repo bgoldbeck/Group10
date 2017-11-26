@@ -430,7 +430,7 @@ namespace HealthcareClientSystem.IO
             tui.Refresh();
 
             // Some default service code we don't care about.
-            string serviceCode = "000001";
+            string serviceCode = "100001";
 
             if (action == "UPDATE_SERVICE_CODE")
             {

@@ -16,7 +16,7 @@ namespace HealthcareClientSystem
         /// <summary>
         /// Constructor for the ProviderTerminalClass -> calls base class constructor
         /// </summary>
-        public ProviderTerminal() : base()
+        public ProviderTerminal(Boolean isFaked = false) : base(isFaked)
         {
             updateDelegates[(int)TerminalState.VIEW_PROVIDER_DIRECTORY] = ViewProviderDirectoryUpdate;
             updateDelegates[(int)TerminalState.CHECK_MEMBER_STATUS] = CheckMemberStatus;
@@ -37,7 +37,7 @@ namespace HealthcareClientSystem
             WriteResponse(responsePacket);
 
             // Pause for the user to look at the response.
-            Console.ReadLine();
+            InputController.ReadText(0,100);
 
             // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
@@ -79,6 +79,7 @@ namespace HealthcareClientSystem
             {
                 // Exception.
             }
+
             tui.WriteLine("Provider Terminal [Menu]", TextUI.TextUIJustify.CENTER);
             //tui.WriteLine("        " + (frame++).ToString());
             tui.WriteLine("");
@@ -86,9 +87,6 @@ namespace HealthcareClientSystem
             tui.WriteLine("");
             tui.WriteLine("    MENU OPTIONS ");
             tui.WriteLine("\t1) View Provider Directory");
-           
-            
-          
 
             tui.WriteLine("\t2) Check Member Status");
             tui.WriteLine("\t3) Create Service Record");
@@ -98,7 +96,7 @@ namespace HealthcareClientSystem
 
             tui.Render();
 
-            string userInput = Console.ReadLine();
+            string userInput = InputController.ReadText(0, 100);
 
             // Depending on user input, we change the state to match.
 

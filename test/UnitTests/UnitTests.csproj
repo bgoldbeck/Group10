@@ -67,6 +67,7 @@
     <Compile Include="LoginPacketTests.cs" />
     <Compile Include="PacketFactoryTests.cs" />
     <Compile Include="ManagerTerminalTests.cs" />
+    <Compile Include="ProviderTerminalTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="db.sqlite">

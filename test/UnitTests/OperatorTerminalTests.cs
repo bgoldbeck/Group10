@@ -54,6 +54,5 @@ namespace UnitTests
             OperatorTerminal operatorTerminal = new OperatorTerminal(true);
             Assert.AreEqual(-1, operatorTerminal.AccessLevel());
         }
-
     }
 }
