@@ -309,7 +309,7 @@ namespace HealthcareClientSystem
 
             tui.Render();
 
-            string userInput = Console.ReadLine();
+            string userInput = InputController.ReadText(0, 100);
 
             // Depending on user input, we change the state to match.
             switch (userInput)

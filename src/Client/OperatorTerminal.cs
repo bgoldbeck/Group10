@@ -224,6 +224,23 @@ namespace HealthcareClientSystem
         }
 
         /// <summary>
+        /// For testing the update delegates wirthout risking infinite loop of conventional means.
+        /// ONLY USE FOR UNIT TESTS
+        /// </summary>
+        /// <param name="terminalState"></param>
+        /// <returns>Whether or not the console will continue to run</returns>
+        public bool _RunUpdateDelegateOnce(TerminalState terminalState)
+        {
+            currentState = terminalState;
+            userID = "123456789";
+            if (updateDelegates[(int)terminalState] != null)
+            {
+                return updateDelegates[(int)terminalState]();
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Build a login packet from user input from the packet factory. Send
         /// the packet to the server for processing. The server will send back a 
         /// session id if login was successful.
