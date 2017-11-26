@@ -8,6 +8,9 @@ namespace UnitTests
     [TestClass]
     public class ProviderTerminalTests
     {
+        /// <summary>
+        /// Access level is 0 by default
+        /// </summary>
         [TestMethod]
         public void AccessLevel_Tests()
         {
@@ -15,7 +18,10 @@ namespace UnitTests
             var accessLevel = providerTerminal.AccessLevel();
             Assert.AreEqual(0, accessLevel);
         }
-
+        
+        /// <summary>
+        /// Run thru possible inputs for this menu
+        /// </summary>
         [TestMethod]
         public void MenuUpdate_Tests()
         {
@@ -33,6 +39,9 @@ namespace UnitTests
             }
         }
 
+        /// <summary>
+        /// Viewing the provider directory
+        /// </summary>
         [TestMethod]
         public void ProviderDirectory_Tests()
         {
@@ -44,6 +53,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Test status of a member
+        /// </summary>
         [TestMethod]
         public void MemberStatus_Tests()
         {

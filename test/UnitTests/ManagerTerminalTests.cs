@@ -20,6 +20,9 @@ namespace UnitTests
         public string SamplePassword = "password";
         private string SampleFee = "45.67";
 
+        /// <summary>
+        /// Make sure constructor doesnt error out
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_Constructor_Tests()
         {
@@ -28,6 +31,9 @@ namespace UnitTests
             return;
         }
 
+        /// <summary>
+        /// Access level is 1 for this terminal
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_AccessLevel_Tests()
         {
@@ -36,6 +42,9 @@ namespace UnitTests
             return;
         }
 
+        /// <summary>
+        /// Adding a member in this terminal
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_AddMemberUpdate()
         {
@@ -54,7 +63,10 @@ namespace UnitTests
 
             InputController.DisableMock();
         }
-
+        
+        /// <summary>
+        /// Adding provider in this terminal
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_AddProviderUpdate()
         {
@@ -75,6 +87,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Adding service code
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_AddServiceCodeUpdate()
         {
@@ -90,6 +105,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Removing member
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_RemoveMemberUpdate()
         {
@@ -102,6 +120,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Removing provider
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_RemoveProviderUpdate()
         {
@@ -114,6 +135,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Custom member report
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_CustomMemberReport()
         {
@@ -126,6 +150,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Customer provider report
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_CustomProviderReport()
         {
@@ -157,6 +184,9 @@ namespace UnitTests
             }
         }
 
+        /// <summary>
+        /// Adding a service record
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_AddServiceRecord()
         {
@@ -172,6 +202,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Updating a member record
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_UpdateMemberUpdate()
         {
@@ -191,6 +224,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Updating providerse
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_UpdateProviderUpdate()
         {
@@ -211,6 +247,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Updating service codes
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_UpdateServiceCodeUpdate()
         {
@@ -226,6 +265,9 @@ namespace UnitTests
             InputController.DisableMock();
         }
 
+        /// <summary>
+        /// Updating main accounting procedure
+        /// </summary>
         [TestMethod]
         public void ManagerTerminal_MainAccountProcedure()
         {
