@@ -33,11 +33,10 @@ namespace HealthcareClientSystem
             ResponsePacket responsePacket = server.ProcessAction(new MemberPacket("MEMBER_STATUS", sessionID,
                 InputController.ReadInteger(9, 9, true, "MemberID").ToString(), "", "", "", "", "", "", ""));
 
-            // Write the response packet to the terminal
+            // Write the response packet to the terminal. 
+            // Will pause until the user presses a key.
             WriteResponse(responsePacket);
-
-            // Pause for the user to look at the response.
-            InputController.ReadText(0,100);
+            
 
             // Just go straight back to menu. We are done.
             currentState = TerminalState.MENU;
