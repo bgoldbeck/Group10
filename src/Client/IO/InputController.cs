@@ -194,12 +194,16 @@ namespace HealthcareClientSystem.IO
                 text = InputController.ReadLine(false, false);
 
                 // Ensure the input is in the range of the parameters.
-                if ((text == "" && lengthMin > 0) || 
+                if ((text == "" && lengthMin > 0) ||
                     text.Length < lengthMin || text.Length > lengthMax)
                 {
                     Console.WriteLine("\n\tBad " + context + "!" + " Please try again.\n");
                     // On bad input, reset the input.
                     text = "";
+                }
+                else
+                {
+                    break;
                 }
             }
             
