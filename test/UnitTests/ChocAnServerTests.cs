@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using ChocAnServer;
 using ChocAnServer.Packets;
 
 namespace UnitTests
