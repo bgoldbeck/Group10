@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using HealthcareClientSystem;
 using HealthcareClientSystem.IO;
 
 

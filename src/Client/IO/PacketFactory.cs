@@ -1,13 +1,7 @@
 ﻿// Copyright 2017 <Brandon Goldbeck,  > 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using ChocAnServer.Packets;
-using HealthcareClientSystem;
 
 namespace HealthcareClientSystem.IO
 {
