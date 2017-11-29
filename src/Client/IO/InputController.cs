@@ -1,5 +1,4 @@
-﻿// Copyright 2017 <Brandon Goldbeck,  > 
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace HealthcareClientSystem.IO

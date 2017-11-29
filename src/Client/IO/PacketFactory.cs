@@ -1,6 +1,4 @@
-﻿// Copyright 2017 <Brandon Goldbeck,  > 
-
-using System;
+﻿using System;
 using ChocAnServer.Packets;
 
 namespace HealthcareClientSystem.IO
