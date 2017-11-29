@@ -115,7 +115,6 @@ namespace HealthcareClientSystem
             // Set each updateDelegate.
             updateDelegates[(int)TerminalState.LOGIN] = LoginUpdate;
             updateDelegates[(int)TerminalState.MENU] = MenuUpdate;
-            updateDelegates[(int)TerminalState.ADD_SERVICE_RECORD] = AddServiceRecordUpdate;
 
             // Initially, no user logged in.
             sessionID = "";
@@ -129,26 +128,6 @@ namespace HealthcareClientSystem
 
         }
 
-        /// <summary>
-        /// The operator entered the add service record state and now must fill out an
-        /// invoice packet to submit to the server. The packet will process on the server
-        /// and return a response that can be viewed and inspected to see what took place
-        /// on the server-side.
-        /// </summary>
-        /// <returns>boolean</returns>
-        protected bool AddServiceRecordUpdate()
-        {
-            // Fill out the new invoice packet from the user input and send it off to the server.
-            ResponsePacket responsePacket = server.ProcessAction(
-                packetFactory.BuildPacket(tui, "InvoicePacket", "ADD_INVOICE", sessionID, userID) as InvoicePacket);
-
-            // Write the response packet to the terminal
-            WriteResponse(responsePacket);
-
-            // Just go straight back to menu. We are done.
-            currentState = TerminalState.MENU;
-            return true;
-        }
 
         /// <summary>
         /// The main program loop, we loop until the user decides to exit the

@@ -234,11 +234,15 @@ namespace HealthcareClientSystem.IO
         /// Write a string array to the buffer, breaking it up into groups.
         /// The user will need to cycle through the list.
         /// </summary>
-        /// <param name="s"></param>
-        /// <param name="groupSize"></param>
-        public void WriteList(string[] s, int groupSize = 10)
+        /// <param name="outputs">
+        /// An array of strings to output as groups to the screen frame.
+        /// </param>
+        /// <param name="groupSize">
+        /// The number of strings to print on each screen frame.
+        /// </param>
+        public void WriteList(string[] outputs, int groupSize = 10)
         {
-            if (s == null)
+            if (outputs == null)
             {
                 // Throw exception.
                 throw new NullReferenceException("String array 's' was null");
@@ -246,7 +250,7 @@ namespace HealthcareClientSystem.IO
 
             // Do this after exception cases.
             if (isFake)
-                s.ToList().ForEach(x => Debug.WriteLine(x));
+                outputs.ToList().ForEach(x => Debug.WriteLine(x));
 
             // Correct any bad group sizes.
             if (groupSize <= 0)
@@ -254,39 +258,39 @@ namespace HealthcareClientSystem.IO
                 // Auto-correct the stupid user.
                 groupSize = 2;
             }
-            int n = s.Length;
+            int numerator = outputs.Length;
 
-            int d = groupSize; // n things at a time.
-            int q = n / d;
-            int r = n % d;
+            int denominator = groupSize; // n things at a time.
+            int quotient = numerator / denominator;
+            int remainder = numerator % denominator;
 
-            //C
-            for (int i = 0; i < q; ++i)
+            // Loop through and display all groups.
+            for (int i = 0; i < quotient; ++i)
             {
-                for (int j = 0; j < d; ++j)
+                for (int j = 0; j < denominator; ++j)
                 {
-                    this.WriteLine(s[i * d + j]);
+                    this.WriteLine(outputs[i * denominator + j]);
                 }
-                this.WriteLine("Please type 'n' for next grouping.", TextUIJustify.CENTER);
+                this.WriteLine("Please type 'any' key for next grouping.", TextUIJustify.CENTER);
                 this.Render();
                 if (!isFake)
-                { 
-                    Console.ReadKey();
+                {
+                    InputController.PressAnyKey();
                 }
                 this.ClearBuffer();
             }
-            if (r > 0)
+            // Display the last group.
+            if (remainder > 0)
             { 
-                this.WriteLine("Remainder.", TextUIJustify.CENTER);
-                for (int i = 0; i < r; ++i)
+                for (int i = 0; i < remainder; ++i)
                 {
-                    this.WriteLine(s[d * q + i]);
+                    this.WriteLine(outputs[denominator * quotient + i]);
                 }
                 this.Render();
             }
             if (!isFake)
-            { 
-                Console.ReadKey();
+            {
+                InputController.PressAnyKey();
             }
             return;
         }
@@ -294,8 +298,12 @@ namespace HealthcareClientSystem.IO
         /// <summary>
         /// Write a specified character to a single row in the buffer.
         /// </summary>
-        /// <param name="row"></param>
-        /// <param name="ch"></param>
+        /// <param name="row">
+        /// The row in the screen space to render the characters to.
+        /// </param>
+        /// <param name="ch">
+        /// The character to render to the output terminal screen space.
+        /// </param>
         private void FillRow(int row, char ch)
         {
             if (row < 0 || row > nRows)

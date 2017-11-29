@@ -298,10 +298,6 @@ namespace HealthcareClientSystem
 
             tui.WriteLine(" ");
 
-            tui.WriteLine("\tf) Add Invoice");
-
-            tui.WriteLine(" ");
-
             tui.WriteLine("\tm) Execute Main Accounting Procedure");
 
             tui.WriteLine(" ");
@@ -347,9 +343,6 @@ namespace HealthcareClientSystem
                     break;
                 case "x":
                     currentState = TerminalState.CUSTOM_PROVIDER_REPORT;
-                    break;
-                case "f":
-                    currentState = TerminalState.ADD_SERVICE_RECORD;
                     break;
                 case "m":
                     currentState = TerminalState.MAIN_ACCOUNTING_PROCEDURE;

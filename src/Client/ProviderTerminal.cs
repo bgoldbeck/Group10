@@ -20,6 +20,7 @@ namespace HealthcareClientSystem
         {
             updateDelegates[(int)TerminalState.VIEW_PROVIDER_DIRECTORY] = ViewProviderDirectoryUpdate;
             updateDelegates[(int)TerminalState.CHECK_MEMBER_STATUS] = CheckMemberStatus;
+            updateDelegates[(int)TerminalState.ADD_SERVICE_RECORD] = AddServiceRecordUpdate;
         }
 
         /// <summary>
@@ -69,6 +70,27 @@ namespace HealthcareClientSystem
         }
 
         /// <summary>
+        /// The operator entered the add service record state and now must fill out an
+        /// invoice packet to submit to the server. The packet will process on the server
+        /// and return a response that can be viewed and inspected to see what took place
+        /// on the server-side.
+        /// </summary>
+        /// <returns>boolean</returns>
+        protected bool AddServiceRecordUpdate()
+        {
+            // Fill out the new invoice packet from the user input and send it off to the server.
+            ResponsePacket responsePacket = server.ProcessAction(
+                packetFactory.BuildPacket(tui, "InvoicePacket", "ADD_INVOICE", sessionID, userID) as InvoicePacket);
+
+            // Write the response packet to the terminal
+            WriteResponse(responsePacket);
+
+            // Just go straight back to menu. We are done.
+            currentState = TerminalState.MENU;
+            return true;
+        }
+
+        /// <summary>
         /// Updates menu
         /// </summary>
         /// <returns>true, unless exceptions are thrown</returns>
@@ -79,7 +101,8 @@ namespace HealthcareClientSystem
                 // Exception.
             }
 
-            tui.WriteLine("Provider Terminal [Menu]", TextUI.TextUIJustify.CENTER);
+            tui.WriteLine(String.Format("Provider Terminal [ID:{0}]", 
+                userID), TextUI.TextUIJustify.CENTER);
             //tui.WriteLine("        " + (frame++).ToString());
             tui.WriteLine("");
             tui.WriteLine("");
