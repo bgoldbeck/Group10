@@ -318,13 +318,13 @@ namespace ChocAnServer
                     packet.Name(), packet.Address(), packet.City(), packet.State(), 
                     packet.Zip(), packet.Email());
 
+            // Build the response string depending if we added a member.
+            string response = affectedRecords > 0 ? "Member saved on record." : "Failed to save member on record.";
+
             object[][] table = database.ExecuteQuery(query, out affectedRecords);
 
             memberID = Convert.ToInt32(table[0][0]);
 
-            // Build the response string depending if we added a member.
-            string response = affectedRecords > 0 ? "Member saved on record." : "Failed to save member on record.";
-           
             return new ResponsePacket(
                 packet.Action(), packet.SessionID(), memberID.ToString(), response);
         }

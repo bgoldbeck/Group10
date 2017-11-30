@@ -161,7 +161,10 @@ namespace HealthcareClientSystem.IO
             tui.Refresh();
 
             // Get the member's zip code.
-            string memberZip = InputController.ReadInteger(0, 5, true, "Member Zip").ToString();
+            string memberZip = InputController.ReadInteger(5, 5, true, "Member Zip").ToString();
+
+            //Makes sure the zip code is 5 digits.
+            memberZip = memberZip.PadLeft(5).Replace(" ", "0");
 
             // Show the zip.
             tui.WriteLine("\tMemberZip: " + memberZip);
@@ -266,6 +269,9 @@ namespace HealthcareClientSystem.IO
             // Get the provider's zip code.
             string providerZip = InputController.ReadInteger(
                 5, 5, true, "Provider Zip").ToString();
+
+            //Makes sure the zip code is 5 digits.
+            providerZip = providerZip.PadLeft(5).Replace(" ", "0");
 
             // Show the provider's zip.
             tui.WriteLine("\tProviderZip: " + providerZip);
