@@ -17,12 +17,12 @@ We include one built for Windows for convenience.
 ### Linux ###
 * Install the latest Mono and related tools from http://www.mono-project.com/download/
 * Download the source code for System.Data.SQLite from https://system.data.sqlite.org
-* Extract from the archive and cd into sqlite-netFx-full-source-<version number>/System.Data.SQLite
-* Build System.Data.SQLite.dll with "msbuild System.Data.SQLite.2013.csproj"
-* cd into sqlite-netFx-full-source-<version number>/setup
-* Build libSQLite.Interop.so using the compile-interop-assembly-debug.sh script
-* To build the ChocAn software, delete CS300_TermProject.sln then run msbuild in the folder you cloned into
-* Copy System.Data.SQLite.dll and libSQLite.Interop.so from sqlite-netFx-full-source-<version number>/bin/2013/Debug/bin/ into the directory containing the ChocAn executable.
+* Extract from the archive and `cd sqlite-netFx-full-source-\<version number\>/System.Data.SQLite`
+* Build System.Data.SQLite.dll with `msbuild System.Data.SQLite.2013.csproj`
+* `cd ../setup
+* Build libSQLite.Interop.so using `./compile-interop-assembly-debug.sh`
+* To build the ChocAn software, delete CS300_TermProject.sln then run `msbuild` in the folder you cloned into
+* Copy System.Data.SQLite.dll and libSQLite.Interop.so from `sqlite-netFx-full-source-\<version number\>/bin/2013/Debug/bin/` into the directory containing the ChocAn executable.
 
 ## Who do I talk to? ##
 
