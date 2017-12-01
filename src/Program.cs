@@ -12,7 +12,8 @@ public class Program
     static void Main()
     {
         // Mmmmm. This new background color is nice.
-        Console.BackgroundColor = ConsoleColor.Blue;
+        Console.BackgroundColor = ConsoleColor.DarkMagenta;
+        Console.ForegroundColor = ConsoleColor.Green;
         bool running = true;
 
         while (running)
