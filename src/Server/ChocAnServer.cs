@@ -498,8 +498,7 @@ namespace ChocAnServer
             else
             {
                 // Execute the query to gather the invoices.
-                string query = String.Format(
-                    "SELECT * FROM invoices " +
+                string query = String.Format("SELECT * FROM invoices " +
                     "WHERE serviceDate BETWEEN '{0}' AND '{1}' AND memberID='{2}'; ",
                     packet.DateStart(), packet.DateEnd(), packet.ID());
 
@@ -515,7 +514,7 @@ namespace ChocAnServer
                     // Output, to the top of the report, the member's information we have on 
                     // record.
                     lines.Add(String.Format("Member : {0} \nMember Identification : {1} \n" +
-                        "Member Address : {2} {3} {4} {5}", member[0][1].ToString(), 
+                        "Member Address : {2}, {3}, {4} {5}", member[0][1].ToString(), 
                         Convert.ToInt32((member[0][0])), member[0][2].ToString(), 
                         member[0][3].ToString(), member[0][4].ToString(), 
                         member[0][5].ToString()));
@@ -571,8 +570,7 @@ namespace ChocAnServer
 
             // Attempt to get the member by the id from the packet.
             object[][] provider = database.ExecuteQuery(String.Format(
-                "SELECT * FROM providers WHERE providerID='{0}'", packet.ID()), 
-                out int affectedRecords);
+                "SELECT * FROM providers WHERE providerID='{0}'", packet.ID()), out int affectedRecords);
 
             if (provider == null || provider.Length == 0)
             {
@@ -581,8 +579,7 @@ namespace ChocAnServer
             else
             {
                 // Execute the query to gather the invoices.
-                object[][] invoices = database.ExecuteQuery(String.Format(
-                    "SELECT * FROM invoices " +
+                object[][] invoices = database.ExecuteQuery(String.Format("SELECT * FROM invoices " +
                     "WHERE serviceDate BETWEEN '{0}' AND '{1}' AND providerID='{2}'; ",
                     packet.DateStart(), packet.DateEnd(), packet.ID()), out affectedRecords);
                 if (invoices == null || invoices.Length == 0)
@@ -596,7 +593,7 @@ namespace ChocAnServer
                     // Output, to the top of the report, the member's information we have on 
                     // record.
                     lines.Add(String.Format("Provider : {0} \nProvider Identification : {1} \n" +
-                        "Provider Address : {2} {3} {4} {5}", provider[0][1].ToString(),
+                        "Provider Address : {2}, {3}, {4} {5}", provider[0][1].ToString(),
                         Convert.ToInt32((provider[0][0])), provider[0][2].ToString(),
                         provider[0][3].ToString(), provider[0][4].ToString(),
                         provider[0][5].ToString()));
@@ -892,7 +889,7 @@ namespace ChocAnServer
             string userID = GetUserIDBySession(packet.SessionID());
 
             //Some sort of accesslevel authentication is needed now...
-
+            
             // Build the query string from the packet.
             string query = String.Format("SELECT memberStatus FROM members WHERE " +
              "memberID='{0}';", packet.ID().ToString());
@@ -902,7 +899,7 @@ namespace ChocAnServer
             string response = "";
             string data = "";
 
-            if (data == null)
+            if (table == null)
             {
                 response = "Could not find member in database.";
             }
@@ -910,7 +907,9 @@ namespace ChocAnServer
             {
                 response = "Found member in database.";
                 if(table.Count() > 0 && table[0].Count() > 0)
+                { 
                     data = table[0][0].ToString();
+                }
             }
 
             return new ResponsePacket("MEMBER_STATUS", packet.SessionID(), data, response);
@@ -944,8 +943,9 @@ namespace ChocAnServer
                 object[][] queryResults = database.ExecuteQuery(query, out affectedRecords);
                 string providerName = "Unknown Provider Name";
                 if (queryResults.Count() > 0)
+                { 
                     providerName = queryResults[0][0].ToString();
-
+                }
                 string line = String.Format(String.Format(" {0,-26}{1,-13}{2,-15}{3,-22}{4,-13}\n",
                     providerName, 
                     providerDirectory[i][0].ToString(), providerDirectory[i][1].ToString(),
@@ -1010,12 +1010,6 @@ namespace ChocAnServer
             object[][] userdata = database.ExecuteQuery(String.Format("SELECT * FROM users " +
                 "WHERE userID = {0} LIMIT 1;", packet.ID()), out int affectedRecords);
 
-            /*string resp = "";
-
-            for (int i = 0; i < data[0].Length; i++)
-            {
-                resp += String.Format("{0} ", data[0][i]);
-            }*/
 
             if (userdata.Length == 0)
                 response = "Login Failed: Invalid UserID";
@@ -1064,8 +1058,7 @@ namespace ChocAnServer
             if (entry != null)
             {
                 // Write entry as long as it's not null.
-
-                System.IO.File.AppendAllText(this.logFilepath,
+                System.IO.File.WriteAllText(this.logFilepath,
                     DateTime.Now.ToString() + " " + entry + "\n");
             }
             
