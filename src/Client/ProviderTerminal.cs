@@ -1,16 +1,18 @@
-﻿/*The ProviderTerminal is a temporary provider terminal used for software validation till 
- * Comm’R’us finishes the actual terminal. This job of the terminal is to allow a 
- * provider to login and access the features that they are expecting to use. The
- * class is derived from the OperatorTerminal class. This class allows a provider
- * to access the login functionality and then lets them have access to all the 
- * functionality that a provider needs.
- * */
-using System;
+﻿using System;
 using ChocAnServer.Packets;
 using HealthcareClientSystem.IO;
 
 namespace HealthcareClientSystem
 {
+    /// <summary>
+    /// The ProviderTerminal is a temporary provider terminal used for software
+    /// validation till Comm’R’us finishes the actual terminal.
+    /// This job of the terminal is to allow a provider to login
+    /// and access the features that they are expecting to use.
+    /// The class is derived from the OperatorTerminal class.
+    /// This class allows a provider to access the login functionality and
+    /// then lets them have access to all the functionality that a provider needs.
+    /// </summary>
     public class ProviderTerminal : OperatorTerminal
     {
         /// <summary>

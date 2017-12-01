@@ -1,12 +1,14 @@
-﻿/*The BasePacketTests class is for testing all the inputs into each function of
-  the BasePacket class.
-*/
+﻿
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ChocAnServer.Packets;
 
 namespace UnitTests
 {
+    /// <summary>
+    /// The BasePacketTests class is for testing all the inputs into each
+    /// function of the BasePacket class.
+    /// </summary>
     [TestClass]
     public class BasePacketTests
     {

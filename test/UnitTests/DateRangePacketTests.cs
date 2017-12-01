@@ -1,12 +1,13 @@
-﻿/*The DateRangePacketTests class is for testing all the inputs into each function of
-  the DateRangePacket class.
-*/
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ChocAnServer.Packets;
 
 namespace UnitTests
 {
+    /// <summary>
+    /// The DateRangePacketTests class is for testing all the inputs
+    /// into each function of the DateRangePacket class.
+    /// </summary>
     [TestClass]
     public class DateRangePacketTests
     {

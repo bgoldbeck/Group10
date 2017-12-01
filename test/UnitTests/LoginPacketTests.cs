@@ -1,12 +1,13 @@
-﻿/*The LoginPacketTests class is for testing all the inputs into each function of
-  the LoginPacket class.
-*/
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ChocAnServer.Packets;
 
 namespace UnitTests
 {
+    /// <summary>
+    /// The LoginPacketTests class is for testing all the inputs into each
+    /// function of the LoginPacket class.
+    /// </summary>
     [TestClass]
     public class LoginPacketTests
     {

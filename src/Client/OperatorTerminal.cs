@@ -1,14 +1,14 @@
-﻿/*This class is will be the virtual base type for the derived terminal object types.
- *It manages shared functionality, such as looping the program, adding an invoice, and
- *login handling.
- */
-using System;
+﻿using System;
 using ChocAnServer.Packets;
 using HealthcareClientSystem.IO;
 
 namespace HealthcareClientSystem
 {
-
+    /// <summary>
+    /// This class is will be the virtual base type for the derived terminal
+    /// object types. It manages shared functionality,
+    /// such as looping the program, adding an invoice, and login handling.
+    /// </summary>
     public class OperatorTerminal
     { 
         /// <summary>
@@ -180,7 +180,7 @@ namespace HealthcareClientSystem
         }
 
         /// <summary>
-        /// For testing the update delegates wirthout risking infinite loop of conventional means.
+        /// For testing the update delegates without risking infinite loop of conventional means.
         /// ONLY USE FOR UNIT TESTS
         /// </summary>
         /// <param name="terminalState"></param>

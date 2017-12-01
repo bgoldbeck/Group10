@@ -1,12 +1,13 @@
-﻿/*The MemberPacketTests class is for testing all the inputs into each function of
-  the MemberPacket class.
-*/
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ChocAnServer.Packets;
 
 namespace UnitTests
 {
+    /// <summary>
+    /// The MemberPacketTests class is for testing all the inputs into
+    /// each function of the MemberPacket class.
+    /// </summary>
     [TestClass]
     public class MemberPacketTests
     {

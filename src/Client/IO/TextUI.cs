@@ -6,6 +6,11 @@ using System.Text;
 
 namespace HealthcareClientSystem.IO
 {
+    /// <summary>
+    /// This the subsystem that displays the output on the terminal
+    /// in an organized format. Its primary jobs are to take in strings
+    /// and display them onto the screen.
+    /// </summary>
     public class TextUI
     {
         public enum TextUIJustify { LEFT, CENTER, RIGHT, COUNT };

@@ -1,16 +1,18 @@
-﻿/*The ManagerTerminal erminal is a temporary manager terminal used for software validation till 
- * Comm’R’us finishes the actual terminal. This job of the terminal is to allow a 
- * manager to login and access the features that they are expecting to use. The
- * class is derived from the OperatorTerminal class. This class allows a manager
- * to access the login functionality and then lets them have access to all the 
- * functionality that a manager needs.
- * */
-using System;
+﻿using System;
 using ChocAnServer.Packets;
 using HealthcareClientSystem.IO;
 
 namespace HealthcareClientSystem
 {
+    /// <summary>
+    /// The ManagerTerminal is a temporary manager terminal used for
+    /// software validation till Comm’R’us finishes the actual terminal.
+    /// This job of the terminal is to allow a manager to login and access
+    /// the features that they are expecting to use. The class is derived
+    /// from the OperatorTerminal class. This class allows a manager to access
+    /// the login functionality and then lets them have access to all the
+    /// functionality that a manager needs.
+    /// </summary>
     public class ManagerTerminal : OperatorTerminal
     {
         
@@ -360,7 +362,7 @@ namespace HealthcareClientSystem
         }
 
         ///<summary>
-        /// ????????????
+        /// Returns 1 for a manager
         ///</summary>
         ///<returns>1</returns>
         public override int AccessLevel()

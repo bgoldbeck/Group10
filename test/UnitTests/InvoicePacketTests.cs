@@ -1,12 +1,13 @@
-﻿/*The InvoicePacketTests class is for testing all the inputs into each function of
-  the InvoicePacket class.
-*/
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ChocAnServer.Packets;
 
 namespace UnitTests
 {
+    /// <summary>
+    /// The InvoicePacketTests class is for testing all the inputs into
+    /// each function of the InvoicePacket class.
+    /// </summary>
     [TestClass]
     public class InvoicePacketTests
     {

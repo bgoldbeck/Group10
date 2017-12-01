@@ -10,6 +10,14 @@ using System.IO;
 
 namespace ChocAnServer
 {
+    /// <summary>
+    /// The ChocAn server is the subsystem whose job is to allow
+    /// the provider and manager terminal to indirectly interact
+    /// with the database. This is done by having all the function
+    /// calls to and from this subsystem to be packets. The jobs
+    /// of this class is to break apart the packets and turns
+    /// them into an SQL statement to send to the Database center class.
+    /// </summary>
     public class ChocAnServer
     {
         // Private Class Variables

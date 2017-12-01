@@ -1,9 +1,4 @@
-﻿/*The DatabaseCenter links the server to the database layer. It’s sole 
- * responsibility is communicating with the database. The database center will 
- * execute generic queries to retrieve, store, and format information from/to the 
- * database. 
-*/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
@@ -12,6 +7,12 @@ using System.IO;
 
 namespace SQLLiteDatabaseCenter
 {
+    /// <summary>
+    /// The DatabaseCenter links the server to the database layer.
+    /// It’s sole responsibility is communicating with the database.
+    /// The database center will execute generic queries to retrieve,
+    /// store, and format information from/to the database.
+    /// </summary>
     public class DatabaseCenter
     {
         private static readonly DatabaseCenter Instance = new DatabaseCenter();
