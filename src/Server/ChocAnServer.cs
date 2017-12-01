@@ -367,7 +367,7 @@ namespace ChocAnServer
                 providerID = Convert.ToInt32(table[0][0]);
 
                 query = String.Format("INSERT INTO users (userID, passwordKey, isActive, status, accessLevel)" + " VALUES(" +
-                    "'{0}', '{1}', {2}, '{3}', {4});", providerID, packet.Password(), 1, "Active", 0);
+                    "'{0}', '{1}', {2}, '{3}', {4});", providerID, PBKDF2Hash(packet.Password(), "thisisarandomsaltthatshouldntbeguessed"), 1, "Active", 0);
 
                 database.ExecuteQuery(query, out affectedRecords);
 
@@ -945,6 +945,7 @@ namespace ChocAnServer
                 if (queryResults.Count() > 0)
                 { 
                     providerName = queryResults[0][0].ToString();
+
                 }
                 string line = String.Format(String.Format(" {0,-26}{1,-13}{2,-15}{3,-22}{4,-13}\n",
                     providerName, 
@@ -993,6 +994,20 @@ namespace ChocAnServer
         }
 
         /// <summary>
+        /// Secure hashing function
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="salt"></param>
+        /// <returns>string</returns>
+        public static string PBKDF2Hash(string text, string salt)
+        {
+            var saltBytes = Encoding.UTF8.GetBytes(salt);
+            var pbkdf2 = new Rfc2898DeriveBytes(text, saltBytes, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            return BitConverter.ToString(hash).Replace("-", string.Empty);
+        }
+
+        /// <summary>
         /// Login procedure
         /// </summary>
         /// <param name="packet"></param>
@@ -1002,41 +1017,53 @@ namespace ChocAnServer
             if (packet == null)
             {
                 // Exception.
+                throw new ArgumentNullException("packet", "Argument passed in was null, expected LoginPacket type.");
             }
+
+            //Hash the provided password to prepare for comparison.
+            string hashedPassword = PBKDF2Hash(packet.Password(), "thisisarandomsaltthatshouldntbeguessed");
 
             string sessionID = "";
             string response = "";
-
+            //Lets see if the user exists.
             object[][] userdata = database.ExecuteQuery(String.Format("SELECT * FROM users " +
                 "WHERE userID = {0} LIMIT 1;", packet.ID()), out int affectedRecords);
 
-
+            //Handle if there is no user for the userID that was provided.
             if (userdata.Length == 0)
                 response = "Login Failed: Invalid UserID";
-            else if (!userdata[0][1].ToString().Equals(packet.Password(), StringComparison.Ordinal))
-                response = String.Format("Login Failed: Incorrect password {0} != {1}", userdata[0][1].ToString(), packet.Password());
+            //Check the password to ensure that it matches.
+            else if (!userdata[0][1].ToString().Equals(hashedPassword, StringComparison.Ordinal))
+                response = String.Format("Login Failed: Incorrect password {0} != {1}", userdata[0][1].ToString(), hashedPassword);
             else if (Convert.ToInt32(userdata[0][2]) != 1)
+            //Notify the user if the account has been deactivated.
                 response = "Login Failed: Account inactive";
+            //If a user is not authorized for this type of terminal, return an error.
             else if (Convert.ToInt32(userdata[0][4]) != packet.AccessLevel())
                 response = "Login Failed: You do not have access to this terminal";
+            //If all the above statements were not taken, we have a successful login!
             else
             {
+                //MD5 is only used here to give a standard-formatted session ID.
                 Random rng = new Random();
                 sessionID = GetMD5Hash(rng.Next().ToString());
 
+                //Create the session expiration time.
                 DateTime date = new DateTime(DateTime.Now.Ticks);
                 date = date.AddHours(18); //Add 18 hours so the session expires 18 hours from NOW.
 
-
+                //See if there is already a session, if there is we are going to update it.
                 object[][] session = database.ExecuteQuery(String.Format("SELECT * FROM sessions " +
                     "WHERE userID = '{0}' LIMIT 1;", userdata[0][0]), out affectedRecords);
 
+                //Update existing session with new ID and expiration time.
                 if (session.Length != 0)
                 {
                     database.ExecuteQuery(String.Format("UPDATE sessions " +
                         "SET sessionKey = '{0}', expirationTime = '{1}' " +
                         "WHERE userID = '{2}';", sessionID, date.ToString(), userdata[0][0]), out affectedRecords);
                 }
+                //If there is no existing session, create it.
                 else
                 {
                     database.ExecuteQuery(String.Format("INSERT INTO sessions(userID, expirationTime, sessionKey) " +
@@ -1045,7 +1072,7 @@ namespace ChocAnServer
 
                 response = "Login Successful";
             }
-            
+            //Return the response packet with the sessionID (if successful) and the human-readable response.
             return new ResponsePacket("LOGIN", "", sessionID, response);
         }
 
