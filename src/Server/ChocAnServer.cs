@@ -705,7 +705,7 @@ namespace ChocAnServer
             if (affectedRecords > 0)
             {
                 query = String.Format("UPDATE users SET passwordKey='{0}', isActive='{1}', status='{2}' WHERE userID='{3}';",
-                    packet.Password(), providerValid, packet.Status(), packet.ID());
+                    PBKDF2Hash(packet.Password(), "thisisarandomsaltthatshouldntbeguessed"), providerValid, packet.Status(), packet.ID());
 
                 database.ExecuteQuery(query, out affectedRecords);
 
