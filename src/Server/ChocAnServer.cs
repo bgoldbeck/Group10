@@ -1094,7 +1094,7 @@ namespace ChocAnServer
             {
                 // Write entry as long as it's not null.
                 System.IO.File.AppendAllText(this.logFilepath,
-                    DateTime.Now.ToString() + " " + entry + "\n");
+                    DateTime.Now.ToString() + " " + entry + "\r\n");
             }
             
             return;

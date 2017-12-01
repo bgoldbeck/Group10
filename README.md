@@ -24,7 +24,19 @@ We include one built for Windows for convenience.
 * To build the ChocAn software, delete CS300_TermProject.sln then run `msbuild` in the folder you cloned into
 * Copy System.Data.SQLite.dll and libSQLite.Interop.so from `sqlite-netFx-full-source-\<version number\>/bin/2013/Debug/bin/` into the directory containing the ChocAn executable.
 
+## How do I log in? ##
+* Provider Terminal: 
+  * Username: 100000000 
+  * Password: asdf
+* Manager Terminal
+  * Username: 123456789
+  * Password: asdf
+ 
 ## Who do I talk to? ##
 
 * Repo owner or admin
 * Other community or team contact
+
+## How do I read the text file outputs from the terminal? ##
+
+* Use a text editor (*NOT* Notepad...please.)
