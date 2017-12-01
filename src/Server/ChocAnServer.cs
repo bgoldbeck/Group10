@@ -1034,9 +1034,9 @@ namespace ChocAnServer
                 response = "Login Failed: Invalid UserID";
             //Check the password to ensure that it matches.
             else if (!userdata[0][1].ToString().Equals(hashedPassword, StringComparison.Ordinal))
-                response = String.Format("Login Failed: Incorrect password {0} != {1}", userdata[0][1].ToString(), hashedPassword);
+                response = "Login Failed: Incorrect password {0} != {1}";
             else if (Convert.ToInt32(userdata[0][2]) != 1)
-            //Notify the user if the account has been deactivated.
+                //Notify the user if the account has been deactivated.
                 response = "Login Failed: Account inactive";
             //If a user is not authorized for this type of terminal, return an error.
             else if (Convert.ToInt32(userdata[0][4]) != packet.AccessLevel())
